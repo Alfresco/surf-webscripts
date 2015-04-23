@@ -21,8 +21,8 @@
       </license>
    </licenses>
    <scm>
-      <connection>https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/trunk</connection>
-      <developerConnection>https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/trunk</developerConnection>
+      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/trunk</connection>
+      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/trunk</developerConnection>
    </scm>
    <prerequisites>
      <maven>3.0.3</maven>
