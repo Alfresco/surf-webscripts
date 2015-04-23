@@ -3,7 +3,7 @@
 
    <groupId>org.springframework.extensions.surf</groupId>
    <artifactId>spring-surf-webscripts-parent</artifactId>
-   <version>5.1</version>
+   <version>5.1.1-SNAPSHOT</version>
    <name>Spring Surf WebScripts</name>
    <description>Spring Surf WebScript modules</description>
    <packaging>pom</packaging>
@@ -21,8 +21,8 @@
       </license>
    </licenses>
    <scm>
-      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/tags/5.1</connection>
-      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/tags/5.1</developerConnection>
+      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/trunk</connection>
+      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/trunk</developerConnection>
    </scm>
    <prerequisites>
      <maven>3.0.3</maven>
