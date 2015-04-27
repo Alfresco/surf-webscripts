@@ -31,11 +31,11 @@
    <distributionManagement>
       <repository>
           <id>alfresco-internal</id>
-          <url>https://artifacts.alfresco.com/nexus/content/repositories/internal-staging</url>
+          <url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
       </repository>
       <snapshotRepository>
           <id>alfresco-internal-snapshots</id>
-          <url>https://artifacts.alfresco.com/nexus/content/repositories/internal-snapshots</url>
+          <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
       </snapshotRepository>      
    </distributionManagement>
 
@@ -179,9 +179,10 @@
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>2.5.2</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>        
             </plugin>
         </plugins>
