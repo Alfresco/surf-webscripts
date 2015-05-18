@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2009 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of the Spring Surf Extension project.
  *
@@ -35,6 +35,8 @@ import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
+import org.htmlparser.tags.DoctypeTag;
+import org.htmlparser.tags.ProcessingInstructionTag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
@@ -473,9 +475,14 @@ public class StringUtils
                 // get the tag and process it and its attributes
                 Tag tag = (Tag)node;
                 
+                // process the XML declaration
+                if (tag instanceof ProcessingInstructionTag)
+                {
+                    buf.append(tag.toTagHtml());
+                    continue;
+                }
                 // get the tag name - automatically converted to upper case
                 String tagname = tag.getTagName();
-
                 if (firstNode)
                 {
                     firstNode = false;
@@ -489,6 +496,11 @@ public class StringUtils
                             continue;
                         }
                     }
+                }
+                if (overrideDocTypePass && tag instanceof DoctypeTag)
+                {
+                    // doctype tag was already added
+                    continue;
                 }
 
                 // only allow a whitelist of safe tags i.e. remove SCRIPT etc.
@@ -583,7 +595,8 @@ public class StringUtils
                         {
                             processNodes(buf, tag.getChildren().elements(), encode, false);
                         }
-                        if (tag.getEndTag() != null)
+                        // add the end-tag only if the tag is not a self-closing one <tag attr="val"/>
+                        if (tag.getEndTag() != null && tag.getEndTag() != tag)
                         {
                             buf.append(tag.getEndTag().toHtml());
                         }

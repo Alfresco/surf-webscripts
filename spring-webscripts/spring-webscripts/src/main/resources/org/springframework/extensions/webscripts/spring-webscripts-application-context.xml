@@ -453,6 +453,10 @@
             <value>SELECT</value>
             <value>TEXTAREA</value>
             <value>STRIKE</value>
+            <value>ABBR</value>
+            <value>SECTION</value>
+            <value>FIGURE</value>
+            <value>FIGCAPTION</value>
          </set>
       </property>
       <!-- The set of HTML tag attributes that are to be removed before rendering -->
