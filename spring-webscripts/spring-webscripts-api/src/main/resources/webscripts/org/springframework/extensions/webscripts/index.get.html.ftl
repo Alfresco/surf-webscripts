@@ -39,7 +39,7 @@
              <tr><td><a href="${url.serviceContext}/index/failures">Browse failed Web Scripts</a></td></tr>
              </#if>
              <tr><td><a href="${url.serviceContext}/api/javascript/debugger">Alfresco Javascript Debugger</a></td></tr>
-             <tr><td><a href="${url.serviceContext}/modules/deploy">Module Deployment</a></td></tr>
+             <!--<tr><td><a href="${url.serviceContext}/modules/deploy">Module Deployment</a></td></tr>-->
           </table>
           <br/>
           <table>
@@ -47,30 +47,7 @@
           </table>
       </form>
       <br/>
-      <form action="${url.serviceContext}/caches/dependency/clear" method="post">
-          <table>
-             <tr><td><input type="submit" name="submit" value="Clear Dependency Caches"/></td></tr>
-          </table>
-      </form>
-      <#if surfbugEnabled??>
-          <br/>
-          <br/>
-          <span class="mainSubTitle">SurfBug</span>
-          <table>
-            <tr align="left"><td>Current Status: <#if surfbugEnabled>Enabled<#else>Disabled</#if></td></tr>
-          </table>
-          <form action="${url.serviceContext}/surfBugStatus" method="post">
-              <table><tr><td>
-              <#if surfbugEnabled>
-                  <input type="hidden" name="statusUpdate" value="disabled"/>
-                  <input type="submit" name="submit" value="Disable SurfBug"/>
-              <#else>
-                  <input type="hidden" name="statusUpdate" value="enabled"/>
-                  <input type="submit" name="submit" value="Enable SurfBug"/>
-              </#if>
-              </td></tr></table>
-          </form>
-       </#if>
+      
       </div>
    </body>
 </html>
