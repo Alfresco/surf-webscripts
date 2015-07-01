@@ -44,7 +44,8 @@ public final class ResourceUrlMethod implements TemplateMethodModelEx
     /**
      * Construct
      * 
-     * @param basePath  base path used to construct absolute url
+     * @param req WebScriptRequest
+     * @param res WebScriptResponse
      */
     public ResourceUrlMethod(WebScriptRequest req, WebScriptResponse res)
     {

@@ -70,7 +70,7 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
     private int cacheSize = 256;
 
     /**
-     * @param defaultEncoding
+     * @param defaultEncoding String
      */
     public void setDefaultEncoding(String defaultEncoding)
     {

@@ -55,7 +55,7 @@ public class ScriptProcessorRegistry
     /**
      * Sets the name of the default script processor
      * 
-     * @param defaultScriptProcessor    the name of the default script processor
+     * @param defaultScriptProcessorName    the name of the default script processor
      */
     public void setDefaultScriptProcessor(String defaultScriptProcessorName)
     {
@@ -76,8 +76,8 @@ public class ScriptProcessorRegistry
      * Registers a script processor
      * 
      * @param   scriptProcessor     the script processor to register
-     * @param   extension
-     * @param   name
+     * @param   extension String
+     * @param   name String
      */
     public void registerScriptProcessor(ScriptProcessor scriptProcessor, String extension, String name)
     {
@@ -164,7 +164,7 @@ public class ScriptProcessorRegistry
      * If a script processor cannot be matched, the default
      * script processor will be returned.
      * 
-     * @param path the path
+     * @param scriptContent ScriptContent
      * 
      * @return the script processor
      */

@@ -47,8 +47,8 @@ public class ScriptableWrappedMap implements ScriptableMap, Wrapper
     /**
      * Construction
      * 
-     * @param scope
-     * @param map
+     * @param scope Scriptable
+     * @param map Map<Object, Object>
      * 
      * @return  scriptable wrapped map
      */
@@ -60,7 +60,7 @@ public class ScriptableWrappedMap implements ScriptableMap, Wrapper
     /**
      * Construct
      * 
-     * @param map
+     * @param map Map
      */
     public ScriptableWrappedMap(Map map)
     {
@@ -70,8 +70,8 @@ public class ScriptableWrappedMap implements ScriptableMap, Wrapper
     /**
      * Construct
      * 
-     * @param scope
-     * @param map
+     * @param scope Scriptable
+     * @param map Map
      */
     public ScriptableWrappedMap(Scriptable scope, Map map)
     {

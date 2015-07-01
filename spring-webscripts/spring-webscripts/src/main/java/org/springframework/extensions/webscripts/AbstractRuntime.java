@@ -366,9 +366,9 @@ public abstract class AbstractRuntime implements Runtime
     /**
      * Execute script given the specified context
      * 
-     * @param scriptReq
-     * @param scriptRes
-     * @param auth
+     * @param scriptReq WebScriptRequest
+     * @param scriptRes WebScriptResponse
+     * @param auth Authenticator
      * 
      * @throws IOException
      */
@@ -381,7 +381,7 @@ public abstract class AbstractRuntime implements Runtime
     /**
      * Get code specific Status Template path
      * 
-     * @param statusCode
+     * @param statusCode int
      * @return  path
      */
     protected StatusTemplate getStatusCodeTemplate(int statusCode)
@@ -392,7 +392,7 @@ public abstract class AbstractRuntime implements Runtime
     /**
      * Get format Status Template path
      * 
-     * @param format
+     * @param format String
      * @return  path
      */
     protected StatusTemplate getFormatStatusTemplate(String format)
@@ -486,8 +486,8 @@ public abstract class AbstractRuntime implements Runtime
     /**
      * Helper to retrieve real (last) Web Script Request in a stack of wrapped Web Script requests
      * 
-     * @param request
-     * @return
+     * @param request WebScriptRequest
+     * @return WebScriptRequest
      */
     protected static WebScriptRequest getRealWebScriptRequest(WebScriptRequest request)
     {
@@ -502,8 +502,8 @@ public abstract class AbstractRuntime implements Runtime
     /**
      * Helper to retrieve real (last) Web Script Response in a stack of wrapped Web Script responses
      * 
-     * @param response
-     * @return
+     * @param response WebScriptResponse
+     * @return WebScriptResponse
      */
     protected static WebScriptResponse getRealWebScriptResponse(WebScriptResponse response)
     {

@@ -28,8 +28,8 @@ import org.dom4j.Element;
 
 /**
  * <p>Representation of the configuration of a module that provides an extension. Modules consist
- * of {@link Customization} and {@link AdvancedComponent} instances. They can optionally be configured
- * with a {@link ExtensionModuleEvaluator} that determines whether or not the module should be 
+ * of {@link Customization} and AdvancedComponent instances. They can optionally be configured
+ * with a ExtensionModuleEvaluator that determines whether or not the module should be
  * applied to a request.</p>
  * 
  * @author David Draper

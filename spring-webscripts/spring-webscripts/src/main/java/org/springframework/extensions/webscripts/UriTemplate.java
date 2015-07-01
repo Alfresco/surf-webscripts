@@ -45,7 +45,7 @@ public class UriTemplate
     /**
      * Construct
      * 
-     * @param template
+     * @param template String
      */
     public UriTemplate(String template)
     {
@@ -92,11 +92,11 @@ public class UriTemplate
     /**
      * Helper for constructing regular expression (escaping regex chars where necessary)
      * 
-     * @param template
-     * @param start
-     * @param end
-     * @param regex
-     * @return
+     * @param template String
+     * @param start int
+     * @param end int
+     * @param regex StringBuilder
+     * @return int
      */
     private int appendTemplate(String template, int start, int end, StringBuilder regex)
     {

@@ -34,7 +34,7 @@ public interface ConnectorProvider
 	/**
 	 * Builds a Connector object mounted against the given endpoint
 	 * 
-	 * @param endpoint
+	 * @param endpoint String
 	 * 
 	 * @return the connector object
 	 */

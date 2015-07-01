@@ -40,7 +40,7 @@ public abstract class BaseProcessorExtension implements ProcessorExtension
 	/**
 	 * Sets the processor list.
 	 * 
-	 * @param processor		  The processor list
+	 * @param processors		  The processor list
 	 */
 	public void setProcessors(List<Processor> processors)
 	{
@@ -64,7 +64,7 @@ public abstract class BaseProcessorExtension implements ProcessorExtension
 	/**
 	 * Sets the extension name.
 	 * 
-	 * @param extensionName the extension name
+	 * @param extension the extension name
 	 */
 	public void setExtensionName(String extension)
 	{

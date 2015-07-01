@@ -50,10 +50,10 @@ public class WebScriptExceptionTest extends TestCase
     }
 
     /**
-     * @param req
-     * @param expectedStatus
-     * @param expectedResponse
-     * @return
+     * @param req Request
+     * @param expectedStatus int
+     * @param expectedResponse String
+     * @return Response
      * @throws IOException
      */
     private Response sendRequest(Request req, int expectedStatus, String expectedResponse) throws IOException

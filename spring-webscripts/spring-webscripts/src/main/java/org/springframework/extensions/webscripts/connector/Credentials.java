@@ -56,14 +56,14 @@ public interface Credentials
     /**
      * Removes a given property
      * 
-     * @param key
+     * @param key String
      */
     public void removeProperty(String key);
     
     /**
      * Removes all properties
      * 
-     * @param key
+     * @param key String
      */
     public void removeAllProperties(String key);
     
@@ -80,7 +80,7 @@ public interface Credentials
      * A persistent credential is written to a persistent vault.
      * A non-persistent credential is loaded into the vault but never stored
      * 
-     * @return
+     * @return boolean
      */
     public boolean isPersistent();    
 }

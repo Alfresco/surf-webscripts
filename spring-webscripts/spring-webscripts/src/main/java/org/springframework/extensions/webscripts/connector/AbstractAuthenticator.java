@@ -99,7 +99,8 @@ public abstract class AbstractAuthenticator implements Authenticator, Applicatio
     /**
      * Retrieves headers from response and stores onto the Connector Session
      * 
-     * @param response
+     * @param response Response
+     * @param connectorSession ConnectorSession
      */
     protected void processResponse(Response response, ConnectorSession connectorSession)
     {

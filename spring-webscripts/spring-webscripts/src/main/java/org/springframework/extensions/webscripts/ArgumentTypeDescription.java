@@ -129,9 +129,9 @@ public class ArgumentTypeDescription extends AbstractBaseDescription
     /**
      * Constructor with shortName, description and defaultValue
      * 
-     * @param shortName
-     * @param description
-     * @param defaultValue
+     * @param shortName String
+     * @param description String
+     * @param defaultValue String
      */
     public ArgumentTypeDescription(String shortName, String description, String defaultValue)
     {

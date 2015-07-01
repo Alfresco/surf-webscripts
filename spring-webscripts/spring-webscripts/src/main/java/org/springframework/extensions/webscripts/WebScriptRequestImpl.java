@@ -56,7 +56,7 @@ public abstract class WebScriptRequestImpl implements WebScriptRequest
     /**
      * Construction
      * 
-     * @param runtime
+     * @param runtime Runtime
      */
     public WebScriptRequestImpl(Runtime runtime)
     {

@@ -51,7 +51,7 @@ public class ModelWriter extends Writer
     
     /**
      * <p>Returns the current {@link ExtensibilityContent} being written to.</p>
-     * @return
+     * @return ExtensibilityContent
      */
     public ExtensibilityContent getCurrentBufferElement()
     {

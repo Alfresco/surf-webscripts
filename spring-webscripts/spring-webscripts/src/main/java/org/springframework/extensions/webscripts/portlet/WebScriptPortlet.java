@@ -140,8 +140,8 @@ public class WebScriptPortlet implements Portlet
     /**
      * Render Web Script view
      * 
-     * @param req
-     * @param res
+     * @param req RenderRequest
+     * @param res RenderResponse
      * @throws PortletException
      * @throws PortletSecurityException
      * @throws IOException
@@ -211,9 +211,10 @@ public class WebScriptPortlet implements Portlet
 
         /**
          * Construct
-         * @param req
-         * @param res
-         * @param requestUrl
+         * @param container RuntimeContainer
+         * @param req RuntimeContainer
+         * @param res RenderResponse
+         * @param requestUrl String
          */
         public PortletRuntime(RuntimeContainer container, RenderRequest req, RenderResponse res, String requestUrl)
         {

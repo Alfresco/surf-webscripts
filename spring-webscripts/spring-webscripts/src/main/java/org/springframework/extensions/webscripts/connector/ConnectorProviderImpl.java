@@ -44,7 +44,7 @@ public class ConnectorProviderImpl implements ConnectorProvider
     /**
      * Sets the connector service.
      * 
-     * @param connectorService
+     * @param connectorService ConnectorService
      */
     public void setConnectorService(ConnectorService connectorService)
     {

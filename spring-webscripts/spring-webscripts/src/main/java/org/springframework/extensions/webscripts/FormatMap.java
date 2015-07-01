@@ -39,7 +39,7 @@ public class FormatMap implements InitializingBean
     /**
      * Sets the Format Registry
      * 
-     * @param registry
+     * @param registry FormatRegistry
      */
     public void setRegistry(FormatRegistry registry)
     {
@@ -49,7 +49,7 @@ public class FormatMap implements InitializingBean
     /**
      * Sets the User Agent for which the formats apply
      * 
-     * @param agent
+     * @param agent String
      */
     public void setAgent(String agent)
     {
@@ -59,7 +59,7 @@ public class FormatMap implements InitializingBean
     /**
      * Sets the formats
      * 
-     * @param formats
+     * @param formats Map<String, String>
      */
     public void setFormats(Map<String, String> formats)
     {
@@ -69,7 +69,7 @@ public class FormatMap implements InitializingBean
     /**
      * Sets the mimetypes
      *  
-     * @param mimetypes
+     * @param mimetypes Map<String, String>
      */
     public void setMimetypes(Map<String, String> mimetypes)
     {

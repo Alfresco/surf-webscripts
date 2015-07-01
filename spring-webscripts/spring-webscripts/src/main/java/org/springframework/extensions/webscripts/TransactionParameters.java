@@ -53,7 +53,7 @@ public class TransactionParameters implements Description.RequiredTransactionPar
     /**
      * Sets capability
      * 
-     * @param capability
+     * @param capability TransactionCapability
      */
     public void setCapability(TransactionCapability capability)
     {
@@ -72,7 +72,7 @@ public class TransactionParameters implements Description.RequiredTransactionPar
     /**
      * Sets required
      * 
-     * @param required
+     * @param required RequiredTransaction
      */
     public void setRequired(RequiredTransaction required)
     {
@@ -91,7 +91,7 @@ public class TransactionParameters implements Description.RequiredTransactionPar
     /**
      * Sets buffer size
      * 
-     * @param bufferSize
+     * @param bufferSize int
      */
     public void setBufferSize(int bufferSize)
     {

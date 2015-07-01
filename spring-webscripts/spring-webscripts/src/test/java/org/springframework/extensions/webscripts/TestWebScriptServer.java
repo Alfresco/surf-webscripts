@@ -85,7 +85,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
     
     
     /**
-     * @param configService
+     * @param configService ConfigService
      */
     public void setConfigService(ConfigService configService)
     {
@@ -95,7 +95,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
     /**
      * Sets the Web Script Runtime Context
      * 
-     * @param container
+     * @param container RuntimeContainer
      */
     public void setContainer(RuntimeContainer container)
     {
@@ -103,7 +103,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
     }
 
     /**
-     * @param authenticatoFactory
+     * @param authenticatorFactory ServletAuthenticatorFactory
      */
     public void setServletAuthenticatorFactory(ServletAuthenticatorFactory authenticatorFactory)
     {
@@ -113,7 +113,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
     /**
      * Sets the Messages resource bundle
      * 
-     * @param messages
+     * @param messages MessageSource
      * @throws IOException
      */
     public void setMessages(MessageSource messages)
@@ -155,7 +155,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
      * Gets the server properties
      * 
      * @return  server properties
-     * @throws Exception
      */
 	public ServerProperties getServerProperties()
 	{
@@ -287,8 +286,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
     /**
      * Create a Mock HTTP Servlet Request
      * 
-     * @param method
-     * @param uri
+     * @param method String
+     * @param uri String
      * @return  mock http servlet request
      * @throws UnsupportedEncodingException 
      * @throws MalformedURLException 

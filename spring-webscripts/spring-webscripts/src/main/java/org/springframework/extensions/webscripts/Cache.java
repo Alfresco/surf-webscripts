@@ -48,7 +48,7 @@ public class Cache implements Description.RequiredCache
     /**
      * Construct
      * 
-     * @param requiredCache
+     * @param requiredCache Description.RequiredCache
      */
     public Cache(Description.RequiredCache requiredCache)
     {
@@ -66,7 +66,7 @@ public class Cache implements Description.RequiredCache
     }
     
     /**
-     * @param neverCache
+     * @param neverCache boolean
      */
     public void setNeverCache(boolean neverCache)
     {
@@ -82,7 +82,7 @@ public class Cache implements Description.RequiredCache
     }
     
     /**
-     * @param isPublic
+     * @param isPublic boolean
      */
     public void setIsPublic(boolean isPublic)
     {
@@ -98,7 +98,7 @@ public class Cache implements Description.RequiredCache
     }
     
     /**
-     * @param lastModified
+     * @param lastModified Date
      */
     public void setLastModified(Date lastModified)
     {
@@ -146,7 +146,7 @@ public class Cache implements Description.RequiredCache
     }
     
     /**
-     * @param mustRevalidate
+     * @param mustRevalidate boolean
      */
     public void setMustRevalidate(boolean mustRevalidate)
     {

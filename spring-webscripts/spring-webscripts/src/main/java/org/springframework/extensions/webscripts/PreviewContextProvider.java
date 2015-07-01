@@ -36,7 +36,7 @@ public interface PreviewContextProvider
     /**
      * Sets the default store id
      * 
-     * @param defaultStoreId
+     * @param defaultStoreId String
      */
     public void setDefaultStoreId(String defaultStoreId);
     
@@ -50,7 +50,7 @@ public interface PreviewContextProvider
     /**
      * Sets the default webapp id
      * 
-     * @param defaultWebappId
+     * @param defaultWebappId String
      */
     public void setDefaultWebappId(String defaultWebappId);
     

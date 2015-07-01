@@ -60,7 +60,7 @@ public class ExtensibilityContainer extends PresentationContainer implements Han
     
     /**
      * <p>Sets the {@link WebScriptExtensibilityModuleHandler} for this {@link Container}.</p>
-     * @param extensibilityModuleHandler
+     * @param extensibilityModuleHandler WebScriptExtensibilityModuleHandler
      */
     public void setExtensibilityModuleHandler(WebScriptExtensibilityModuleHandler extensibilityModuleHandler)
     {
@@ -157,7 +157,7 @@ public class ExtensibilityContainer extends PresentationContainer implements Han
      * for the lifetime of the request as different modules may be applied to the same WebScript for different requests.</p>
      * 
      * @param webScriptId The id of the WebScript to cache the extended bundle against.
-     * @param extensionBUndle The extended bundle to cache.
+     * @param extensionBundle The extended bundle to cache.
      */
     public void addExtensionBundleToCache(String webScriptId, WebScriptPropertyResourceBundle extensionBundle)
     {
@@ -209,7 +209,7 @@ public class ExtensibilityContainer extends PresentationContainer implements Han
     }
 
     /**
-     * <p>The list of {@link ExtensionModule} instances that have been evaluated as applicable to
+     * <p>The list of {@code ExtensionModule} instances that have been evaluated as applicable to
      * this RequestContext. This is set to <code>null</code> when during instantiation and is only
      * properly set the first time the <code>getEvaluatedModules</code> method is invoked. This ensures
      * that module evaluation only occurs once per request.</p>
@@ -217,11 +217,11 @@ public class ExtensibilityContainer extends PresentationContainer implements Han
     private ThreadLocal<List<BasicExtensionModule>> evaluatedModules = new ThreadLocal<List<BasicExtensionModule>>();
     
     /**
-     * <p>Retrieve the list of {@link ExtensionModule} instances that have been evaluated as applicable
-     * for the current request. If this list has not yet been populated then use the {@link ExtensibilityModuleHandler}
+     * <p>Retrieve the list of {@code ExtensionModule} instances that have been evaluated as applicable
+     * for the current request. If this list has not yet been populated then use the {@code ExtensibilityModuleHandler}
      * configured in the Spring application context to evaluate them.</p>
      * 
-     * @return A list of {@link ExtensionModule} instances that are applicable to the current request.
+     * @return A list of {@code ExtensionModule} instances that are applicable to the current request.
      */
     public List<BasicExtensionModule> getEvaluatedModules()
     {
@@ -249,7 +249,7 @@ public class ExtensibilityContainer extends PresentationContainer implements Han
     /**
      * <p>This is a local {@link ConfigImpl} instance that will only be used when extension modules are employed. It will
      * initially be populated with the default "static" global configuration taken from the {@link ConfigService} associated
-     * with this {@link RequestContext} but then updated to include global configuration provided by extension modules that
+     * with this {@code RequestContext} but then updated to include global configuration provided by extension modules that
      * have been evaluated to be applied to the current request.</p>
      */
     private ThreadLocal<ConfigImpl> globalConfig = new ThreadLocal<ConfigImpl>();
@@ -257,7 +257,7 @@ public class ExtensibilityContainer extends PresentationContainer implements Han
     /**
      * <p>This map represents {@link ConfigSection} instances mapped by area. It  will only be used when extension modules are 
      * employed. It will initially be populated with the default "static" configuration taken from the {@link ConfigService} associated
-     * with this {@link RequestContext} but then updated to include configuration provided by extension modules that have been evaluated 
+     * with this {@code RequestContext} but then updated to include configuration provided by extension modules that have been evaluated
      * to be applied to the current request.</p>
      */
     private ThreadLocal<Map<String, List<ConfigSection>>> sectionsByArea = new ThreadLocal<Map<String,List<ConfigSection>>>();
@@ -265,7 +265,7 @@ public class ExtensibilityContainer extends PresentationContainer implements Han
     /**
      * <p>A list of {@link ConfigSection} instances that are only applicable to the current request. It  will only be used when extension modules are 
      * employed. It will initially be populated with the default "static" configuration taken from the {@link ConfigService} associated
-     * with this {@link RequestContext} but then updated to include configuration provided by extension modules that have been evaluated 
+     * with this {@code RequestContext} but then updated to include configuration provided by extension modules that have been evaluated
      * to be applied to the current request.</p>
      */
     private ThreadLocal<List<ConfigSection>> sections = new ThreadLocal<List<ConfigSection>>();

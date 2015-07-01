@@ -139,9 +139,9 @@ public class ResourceDescription extends AbstractBaseDescription
     /**
      * Constructor with shortname, description and scriptIds
      * 
-     * @param shortName
-     * @param description
-     * @param scriptIds
+     * @param shortName String
+     * @param description String
+     * @param scriptIds String[]
      */
     public ResourceDescription(String shortName, String description, String[] scriptIds)
     {

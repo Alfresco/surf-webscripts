@@ -31,9 +31,9 @@ public interface ServletAuthenticatorFactory
 	/**
 	 * Create Servlet Authenticator
 	 * 
-	 * @param req
-	 * @param res
-	 * @return
+	 * @param req WebScriptServletRequest
+	 * @param res WebScriptServletResponse
+	 * @return Authenticator
 	 */
     public Authenticator create(WebScriptServletRequest req, WebScriptServletResponse res);
 }

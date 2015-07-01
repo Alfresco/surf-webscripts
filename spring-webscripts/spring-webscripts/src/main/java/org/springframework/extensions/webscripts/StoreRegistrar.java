@@ -55,7 +55,7 @@ public class StoreRegistrar implements ApplicationContextAware
     /**
      * Sets the store
      * 
-     * @param store
+     * @param store Store
      */
     public void setStore(Store store)
     {
@@ -65,7 +65,7 @@ public class StoreRegistrar implements ApplicationContextAware
     /**
      * Sets the search path
      * 
-     * @param searchPath
+     * @param searchPath SearchPath
      */
     public void setSearchPath(SearchPath searchPath)
     {
@@ -75,7 +75,7 @@ public class StoreRegistrar implements ApplicationContextAware
     /**
      * Identifies whether to prepend or not
      * 
-     * @param prepend
+     * @param prepend boolean
      */
     public void setPrepend(boolean prepend)
     {
@@ -85,7 +85,7 @@ public class StoreRegistrar implements ApplicationContextAware
     /**
      * Overrides the id of the search path to use
      * 
-     * @return
+     * @return String
      */
     protected String getSearchPathId()
     {

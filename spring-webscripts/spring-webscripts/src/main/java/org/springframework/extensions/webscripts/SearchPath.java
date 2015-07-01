@@ -44,7 +44,7 @@ public class SearchPath implements ApplicationContextAware, ApplicationListener
     private Collection<Store> searchPath = Collections.emptyList();
 
     /**
-     * @param searchPath
+     * @param searchPath List<Store>
      */
     public void setSearchPath(List<Store> searchPath)
     {
@@ -118,7 +118,7 @@ public class SearchPath implements ApplicationContextAware, ApplicationListener
     /**
      * Gets the Web Script Store for the given Store path
      * 
-     * @param storePath
+     * @param storePath String
      * @return  store (or null, if not found)
      */
     public Store getStore(String storePath)

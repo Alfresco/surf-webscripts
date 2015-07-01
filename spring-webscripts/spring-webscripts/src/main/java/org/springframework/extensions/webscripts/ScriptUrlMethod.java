@@ -56,7 +56,8 @@ public final class ScriptUrlMethod implements TemplateMethodModelEx
     /**
      * Construct
      * 
-     * @param basePath  base path used to construct absolute url
+     * @param req WebScriptRequest
+     * @param res WebScriptResponse
      */
     public ScriptUrlMethod(WebScriptRequest req, WebScriptResponse res)
     {

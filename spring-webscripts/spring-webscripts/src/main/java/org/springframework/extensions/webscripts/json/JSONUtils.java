@@ -173,7 +173,7 @@ public class JSONUtils
     /**
      * Takes a JSON array and converts it to a native JS array.
      * 
-     * @param jsonObject        the json array
+     * @param jsonArray        the json array
      * @return NativeObject     the created native array
      */
     @ScriptMethod
@@ -210,8 +210,8 @@ public class JSONUtils
     /**
      * Build a JSON string for a native object
      * 
-     * @param nativeObject
-     * @param writer
+     * @param nativeObject NativeObject
+     * @param writer JSONWriter
      * @throws IOException 
      */
     private void nativeObjectToJSONString(NativeObject nativeObject, JSONWriter writer) throws IOException
@@ -234,8 +234,8 @@ public class JSONUtils
     /**
      * Build JSON string for a native array
      * 
-     * @param nativeArray
-     * @param writer
+     * @param nativeArray NativeArray
+     * @param writer JSONWriter
      * @throws IOException 
      */
     private void nativeArrayToJSONString(NativeArray nativeArray, JSONWriter writer) throws IOException
@@ -293,7 +293,7 @@ public class JSONUtils
      * Convert value to JSON string
      * 
      * @param value         Java object value
-     * @param JSONWriter    JSONWriter for output stream
+     * @param writer    JSONWriter for output stream
      * @throws IOException 
      */
     private void valueToJSONString(Object value, JSONWriter writer) throws IOException

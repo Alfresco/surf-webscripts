@@ -133,8 +133,9 @@ public abstract class WebScriptRequestURLImpl extends WebScriptRequestImpl
      * 
      * Note: It's assumed scriptUrl contains context path
      * 
-     * @param scriptUrl
-     * @param serviceMatch
+     * @param runtime Runtime
+     * @param scriptUrl String
+     * @param serviceMatch Match
      */
     public WebScriptRequestURLImpl(Runtime runtime, String scriptUrl, Match serviceMatch)
     {
@@ -144,8 +145,9 @@ public abstract class WebScriptRequestURLImpl extends WebScriptRequestImpl
     /**
      * Construct
      * 
-     * @param scriptUrlParts
-     * @param serviceMatch
+     * @param runtime Runtime
+     * @param scriptUrlParts String[]
+     * @param serviceMatch Match
      */
     public WebScriptRequestURLImpl(Runtime runtime, String[] scriptUrlParts, Match serviceMatch)
     {

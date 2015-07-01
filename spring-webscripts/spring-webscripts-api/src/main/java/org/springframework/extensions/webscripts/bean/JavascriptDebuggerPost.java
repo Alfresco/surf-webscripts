@@ -39,7 +39,7 @@ public class JavascriptDebuggerPost extends DeclarativeWebScript
     
     
     /**
-     * @param ticketComponent
+     * @param debugger ScriptDebugger
      */
     public void setDebugger(ScriptDebugger debugger)
     {

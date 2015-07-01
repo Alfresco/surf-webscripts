@@ -81,7 +81,6 @@ public final class GUID
      * 
      * @param secure    true to use SecureRandom
      * 
-     * @return the random guid
      */
     private void getRandomGUID(final boolean secure)
     {

@@ -77,14 +77,14 @@ public interface Description extends BaseDescriptionDocument
         /**
          * Get transaction capability (readonly,readwrite)
          * 
-         * @return
+         * @return TransactionCapability
          */
         public TransactionCapability getCapability();
         
         /**
          * Get buffer size (for caching transactional response)
          * 
-         * @return
+         * @return int
          */
         public int getBufferSize();
     }
@@ -211,7 +211,7 @@ public interface Description extends BaseDescriptionDocument
     
     /**
      * Gets the required level of caching
-     * @return
+     * @return RequiredCache
      */
     public RequiredCache getRequiredCache();
     

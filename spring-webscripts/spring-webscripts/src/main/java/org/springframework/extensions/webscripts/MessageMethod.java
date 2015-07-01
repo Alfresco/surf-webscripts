@@ -55,7 +55,7 @@ public final class MessageMethod extends AbstractMessageHelper implements Templa
     /**
      * Constructor
      * 
-     * @param webscript
+     * @param webscript WebScript
      */
     public MessageMethod(WebScript webscript)
     {

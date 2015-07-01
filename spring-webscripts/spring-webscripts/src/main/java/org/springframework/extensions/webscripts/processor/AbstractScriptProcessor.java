@@ -48,7 +48,7 @@ public abstract class AbstractScriptProcessor extends BaseRegisterableScriptProc
     private ScriptLoader scriptLoader;    
     
     /**
-     * @param searchPath
+     * @param searchPath SearchPath
      */
     public void setSearchPath(SearchPath searchPath)
     {
@@ -78,7 +78,7 @@ public abstract class AbstractScriptProcessor extends BaseRegisterableScriptProc
     /**
      * Add any configured processor model extensions to the model.
      * 
-     * @param model
+     * @param model Object
      */
     protected void addProcessorModelExtensions(Object model)
     {

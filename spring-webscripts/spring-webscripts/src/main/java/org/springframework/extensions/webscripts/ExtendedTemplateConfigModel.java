@@ -42,12 +42,15 @@ public class ExtendedTemplateConfigModel extends TemplateConfigModel
 {
    private static Log logger = LogFactory.getLog(ExtendedTemplateConfigModel.class);
 
-   /**
-    * Constructor
-    * 
-    * @param configService ConfigService instance
-    * @param scriptConfig The script's config as XML string
-    */
+    /**
+     * Constructor
+     *
+     * @param configService ConfigService instance
+     * @param xmlConfig String
+     * @param globalConfig ConfigImpl
+     * @param sectionsByArea Map<String, List<ConfigSection>>
+     * @param sections List<ConfigSection>
+     */
    public ExtendedTemplateConfigModel(ConfigService configService,
                                                String xmlConfig,
                                                ConfigImpl globalConfig,

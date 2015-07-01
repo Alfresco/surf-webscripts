@@ -71,8 +71,9 @@ public class WebScriptServletRequest extends WebScriptRequestImpl
      * Construction
      *
      * @param container  request generator
-     * @param req
-     * @param serviceMatch
+     * @param req HttpServletRequest
+     * @param serviceMatch Match
+     * @param serverProperties ServerProperties
      */
     public WebScriptServletRequest(Runtime container, HttpServletRequest req, Match serviceMatch, ServerProperties serverProperties)
     {

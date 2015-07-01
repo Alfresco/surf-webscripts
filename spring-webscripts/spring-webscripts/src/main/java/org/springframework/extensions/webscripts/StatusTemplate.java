@@ -26,8 +26,8 @@ public class StatusTemplate
     /**
      * Construct
      * 
-     * @param path
-     * @param format
+     * @param path String
+     * @param format String
      */
     public StatusTemplate(String path, String format)
     {

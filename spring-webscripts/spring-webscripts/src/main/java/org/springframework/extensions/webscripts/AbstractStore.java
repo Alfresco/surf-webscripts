@@ -49,7 +49,7 @@ public abstract class AbstractStore implements Store
      * 
      * Read only prevents users from performing creates, updates and removes
      * 
-     * @param readOnly
+     * @param readOnly boolean
      */
     public void setReadOnly(boolean readOnly)
     {
@@ -59,7 +59,7 @@ public abstract class AbstractStore implements Store
     /**
      * Whether the store is in read-only mode
      * 
-     * @return
+     * @return boolean
      */
     public boolean isReadOnly()
     {
@@ -69,7 +69,7 @@ public abstract class AbstractStore implements Store
     /**
      * Sets the preview context provider
      * 
-     * @param previewContextProvider
+     * @param previewContextProvider PreviewContextProvider
      */
     public void setPreviewContextProvider(PreviewContextProvider previewContextProvider)
     {

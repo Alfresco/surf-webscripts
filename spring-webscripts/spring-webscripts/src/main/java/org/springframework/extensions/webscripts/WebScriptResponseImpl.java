@@ -33,7 +33,7 @@ public abstract class WebScriptResponseImpl implements WebScriptResponse
     /**
      * Construct
      * 
-     * @param runtime
+     * @param runtime Runtime
      */
     public WebScriptResponseImpl(Runtime runtime)
     {

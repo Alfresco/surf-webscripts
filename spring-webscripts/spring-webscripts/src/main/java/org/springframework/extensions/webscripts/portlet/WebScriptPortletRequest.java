@@ -44,9 +44,10 @@ public class WebScriptPortletRequest extends WebScriptRequestURLImpl
     /**
      * Construct
      * 
-     * @param req
-     * @param scriptUrl
-     * @param serviceMatch
+     * @param container Runtime
+     * @param req PortletRequest
+     * @param scriptUrl String
+     * @param serviceMatch Match
      */
     public WebScriptPortletRequest(Runtime container, PortletRequest req, String scriptUrl, Match serviceMatch)
     {
@@ -56,9 +57,10 @@ public class WebScriptPortletRequest extends WebScriptRequestURLImpl
     /**
      * Construct
      * 
-     * @param req
-     * @param scriptUrlParts
-     * @param serviceMatch
+     * @param container Runtime
+     * @param req PortletRequest
+     * @param scriptUrlParts String[]
+     * @param serviceMatch Match
      */
     public WebScriptPortletRequest(Runtime container, PortletRequest req, String[] scriptUrlParts, Match serviceMatch)
     {

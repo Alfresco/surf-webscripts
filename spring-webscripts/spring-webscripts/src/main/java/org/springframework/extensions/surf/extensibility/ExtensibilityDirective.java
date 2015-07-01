@@ -21,7 +21,7 @@ import freemarker.template.TemplateDirectiveModel;
 
 /**
  * <p>Although this is currently an interface that defines no methods. It's existence allows us to support 
- * generics in the {@list ExtensibilityModel} and also provides a location for defining new methods should
+ * generics in the {@link ExtensibilityModel} and also provides a location for defining new methods should
  * they be required at a later date.
  * 
  * @author David Draper

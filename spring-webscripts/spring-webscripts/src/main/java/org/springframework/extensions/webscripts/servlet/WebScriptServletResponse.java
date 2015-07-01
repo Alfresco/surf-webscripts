@@ -52,7 +52,8 @@ public class WebScriptServletResponse extends WebScriptResponseImpl
     /**
      * Construct
      * 
-     * @param res
+     * @param container Runtime
+     * @param res HttpServletResponse
      */
     public WebScriptServletResponse(Runtime container, HttpServletResponse res)
     {

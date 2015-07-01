@@ -39,7 +39,7 @@ public interface ExtensibilityDirectiveData
 {
     /**
      * <p>Returns the id of FreeMarker directive represented by implementing instance.</p> 
-     * @return
+     * @return String
      */
     public String getId();
     
@@ -57,13 +57,13 @@ public interface ExtensibilityDirectiveData
      * part of an extension. Any action that has an effect on the existing model (such as "remove" or "replace") will always require
      * target information.</p>
      * 
-     * @return
+     * @return String
      */
     public String getTarget();
     
     /**
      * <p>Returns the name of the associated {@link ExtensibilityDirective} type.</p>
-     * @return
+     * @return String
      */
     public String getDirectiveName();
     
@@ -78,7 +78,7 @@ public interface ExtensibilityDirectiveData
      * <p>Creates a new instance of the type of {@link OpenModelElement} for with the associated {@link ExtensibilityDirective}. In almost
      * all cases this would be expected to be an instance of {@link OpenModelElementImpl}.</p>
      * 
-     * @return
+     * @return OpenModelElement
      */
     public OpenModelElement createOpen();
 
@@ -87,15 +87,15 @@ public interface ExtensibilityDirectiveData
      * implementation returned could be varied depending upon the function of the {@link ExtensibilityDirective}. Where standard rendering
      * of the associated {@link TemplateDirectiveBody} will occur, a {@link DefaultExtensibilityContent} will most likely be returned.</p>
      * 
-     * @return
+     * @return OpenModelElement
      */
     public ContentModelElement createContentModelElement();
     
     /**
      * <p>Creates a new instance of the type of {@link CloseModelElement} for with the associated {@link ExtensibilityDirective}. In almost
-     * all cases this would be expected to be an instance of {@link CloseModelElementImpl}.</p>
+     * all cases this would be expected to be an instance of {@link org.springframework.extensions.surf.extensibility.impl.CloseModelElementImpl}.</p>
      * 
-     * @return
+     * @return CloseModelElement
      */
     public CloseModelElement createClose();
     

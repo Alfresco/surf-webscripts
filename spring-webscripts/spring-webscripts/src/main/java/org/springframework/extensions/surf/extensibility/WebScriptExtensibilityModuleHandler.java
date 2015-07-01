@@ -42,7 +42,7 @@ public class WebScriptExtensibilityModuleHandler
 
     /**
      * <p>A setter provided so that the Spring configuration can set the {@link SearchPath}</p>
-     * @param configurationSearchPath
+     * @param configurationSearchPath SearchPath
      */
     public void setConfigurationSearchPath(SearchPath configurationSearchPath)
     {

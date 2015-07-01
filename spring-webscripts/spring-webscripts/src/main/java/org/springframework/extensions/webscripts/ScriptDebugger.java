@@ -128,7 +128,7 @@ public class ScriptDebugger implements Runnable
     /**
      * Is Debugger visible?
      * 
-     * @return
+     * @return boolean
      */
     public boolean isVisible()
     {
@@ -138,7 +138,7 @@ public class ScriptDebugger implements Runnable
     /**
      * Is Debugger active?
      * 
-     * @return
+     * @return boolean
      */
     public boolean isActive()
     {

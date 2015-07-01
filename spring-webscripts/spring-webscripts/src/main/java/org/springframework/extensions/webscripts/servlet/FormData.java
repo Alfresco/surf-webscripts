@@ -63,7 +63,7 @@ public class FormData implements Serializable
     /**
      * Construct
      * 
-     * @param req
+     * @param req HttpServletRequest
      */
     public FormData(HttpServletRequest req)
     {
@@ -195,7 +195,7 @@ public class FormData implements Serializable
         /**
          * Construct
          * 
-         * @param file
+         * @param file FileItem
          */
         public FormField(FileItem file)
         {

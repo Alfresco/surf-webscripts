@@ -34,7 +34,7 @@ public abstract class AbstractBaseDescription implements BaseDescription
     /**
      * Sets the service id
      * 
-     * @param id
+     * @param id String
      */
     public void setId(String id)
     {
@@ -52,7 +52,7 @@ public abstract class AbstractBaseDescription implements BaseDescription
     /**
      * Sets the service short name
      * 
-     * @param shortName
+     * @param shortName String
      */
     public void setShortName(String shortName)
     {
@@ -62,7 +62,7 @@ public abstract class AbstractBaseDescription implements BaseDescription
     /**
      * Sets the service description
      * 
-     * @param description
+     * @param description String
      */
     public void setDescription(String description)
     {
@@ -138,8 +138,8 @@ public abstract class AbstractBaseDescription implements BaseDescription
     /**
      * Utility function for comparing two strings
      * 
-     * @param text1
-     * @param text2
+     * @param text1 String
+     * @param text2 String
      * @return true if text2 is same as text1
      */
     protected boolean compareField(String text1, String text2)
@@ -172,9 +172,9 @@ public abstract class AbstractBaseDescription implements BaseDescription
     /**
      * Constructor with id, shortName and description
      * 
-     * @param id
-     * @param shortName
-     * @param description
+     * @param id String
+     * @param shortName String
+     * @param description String
      */
     public AbstractBaseDescription(String id, String shortName,
             String description)

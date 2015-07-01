@@ -33,7 +33,7 @@ public interface Registry
     /**
      * Gets a Web Script Package
      * 
-     * @param packagePath
+     * @param packagePath String
      * @return  web script path representing package
      */
     public Path getPackage(String packagePath);
@@ -41,7 +41,7 @@ public interface Registry
     /**
      * Gets a Web Script URL
      * 
-     * @param uriPath
+     * @param uriPath String
      * @return  web script path representing uri
      */
     public Path getUri(String uriPath);
@@ -53,7 +53,7 @@ public interface Registry
      * - To get all families, pass /
      * - To get a specific family, pass /{familyName}
      * 
-     * @param familyPath
+     * @param familyPath String
      * @return  web script path representing family
      */
     public Path getFamily(String familyPath);
@@ -65,7 +65,7 @@ public interface Registry
      * - To get all lifecycles, pass /
      * - To get a specific lifecycle, pass /{lifecycleName}
      * 
-     * @param lifecyclePath
+     * @param lifecyclePath String
      * @return  web script path representing family
      */
     public Path getLifecycle(String lifecyclePath);

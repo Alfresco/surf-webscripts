@@ -76,7 +76,7 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
      * If it must exist, but it doesn't exist, an exception is thrown
      * on initialisation of the store
      *
-     * @param mustExist
+     * @param mustExist boolean
      */
     public void setMustExist(boolean mustExist)
     {
@@ -404,7 +404,7 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
      * Gets a resource for a document path.  The resource will either live in the class path as a class
      * file or as an entry in one of the JAR files on the class path.
      * 
-     * @param documentPath
+     * @param documentPath String
      * 
      * @return Resource or null if not found
      */
@@ -423,7 +423,7 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
      * in the class path as either a class file or as an entry within one of the JAR files in the
      * class path.
      * 
-     * @param locationPattern
+     * @param locationPattern String
      * 
      * @return Resource[] of resource that match location pattern - can be empty but never null
      * 
@@ -457,7 +457,7 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
      * A resource path includes the base path and is descriptive of the resource relative to the root of the
      * resource tree.
      * 
-     * @param documentPath
+     * @param documentPath String
      * 
      * @return resource path
      */
@@ -475,7 +475,7 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
      * A resource path includes the base path and is descriptive of the resource relative to the root of the
      * resource tree.
      * 
-     * @param resourcePath
+     * @param resourcePath String
      * 
      * @return document path
      */
@@ -600,8 +600,8 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
     /**
      * Helper method for creating fully qualified paths
      * 
-     * @param path
-     * @param relativePath
+     * @param path String
+     * @param relativePath String
      * 
      * @return full qualified path
      */
@@ -798,9 +798,9 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
         /**
          * Construct
          *
-         * @param basePath
-         * @param path
-         * @param location
+         * @param basePath String
+         * @param path String
+         * @param location Resource
          */
         public ClassPathScriptLocation(String basePath, String path, Resource location)
         {

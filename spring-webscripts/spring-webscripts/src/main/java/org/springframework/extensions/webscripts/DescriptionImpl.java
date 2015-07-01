@@ -120,7 +120,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the script path
      * 
-     * @param scriptPath
+     * @param scriptPath String
      */
     public void setScriptPath(String scriptPath)
     {
@@ -138,7 +138,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the Package  (path version of getScriptPath)
      * 
-     * @param package
+     * @param scriptPackage Path
      */
     public void setPackage(Path scriptPackage)
     {
@@ -156,7 +156,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the service kind
      * 
-     * @param kind
+     * @param kind String
      */
     public void setKind(String kind)
     {
@@ -172,7 +172,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     }
 
     /**
-     * @param family the family to set
+     * @param familys the family to set
      */
     public void setFamilys(Set<String> familys)
     {
@@ -190,7 +190,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the required level of authentication
      * 
-     * @param requiredAuthentication
+     * @param requiredAuthentication RequiredAuthentication
      */
     public void setRequiredAuthentication(RequiredAuthentication requiredAuthentication)
     {
@@ -235,7 +235,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the transaction parameters
      * 
-     * @param transactionParameters
+     * @param transactionParameters RequiredTransactionParameters
      */
     public void setRequiredTransactionParameters(RequiredTransactionParameters transactionParameters)
     {
@@ -254,7 +254,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the required cache
      * 
-     * @param requiredCache
+     * @param requiredCache RequiredCache
      */
     public void setRequiredCache(RequiredCache requiredCache)
     {
@@ -272,7 +272,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the format style
      * 
-     * @param formatStyle
+     * @param formatStyle FormatStyle
      */
     public void setFormatStyle(FormatStyle formatStyle)
     {
@@ -290,7 +290,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the service http method
      * 
-     * @param httpMethod
+     * @param httpMethod String
      */
     public void setMethod(String httpMethod)
     {
@@ -308,7 +308,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the service URIs
      * 
-     * @param uris
+     * @param uris String[]
      */
     public void setUris(String[] uris)
     {
@@ -326,7 +326,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the default response format
      * 
-     * @param defaultFormat
+     * @param defaultFormat String
      */
     public void setDefaultFormat(String defaultFormat)
     {
@@ -344,7 +344,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the negotiated formats
      * 
-     * @param defaultFormat
+     * @param negotiatedFormats NegotiatedFormat[]
      */
     public void setNegotiatedFormats(NegotiatedFormat[] negotiatedFormats)
     {
@@ -362,7 +362,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets Web Script custom extensions
      * 
-     * @param extensions
+     * @param extensions Map<String, Serializable>
      */
     public void setExtensions(Map<String, Serializable> extensions)
     {
@@ -388,7 +388,7 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Sets the lifecycle
      * 
-     * @param lifecycle
+     * @param lifecycle Lifecycle
      */
     public void setLifecycle(Lifecycle lifecycle)
     {
@@ -942,10 +942,10 @@ public class DescriptionImpl extends AbstractBaseDescriptionDocument implements 
     /**
      * Constructor with id, shortName, description and url
      * 
-     * @param id
-     * @param shortName
-     * @param description
-     * @param url
+     * @param id String
+     * @param shortName String
+     * @param description String
+     * @param url String
      */
     public DescriptionImpl(String id, String shortName, String description,String url)
     {

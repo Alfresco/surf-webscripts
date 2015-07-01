@@ -86,8 +86,8 @@ public final class ScriptCredentialVault
     /**
      * Returns whether the given endpoint credentials are stored on this vault
      * 
-     * @param endpointId
-     * @return
+     * @param endpointId String
+     * @return boolean
      */
     public boolean hasCredentials(String endpointId)
     {
@@ -98,8 +98,8 @@ public final class ScriptCredentialVault
      * Creates new credentials and binds them into this vault.
      * If the credentials already exist, the old ones will be returned
      * 
-     * @param endpointId
-     * @return
+     * @param endpointId String
+     * @return ScriptCredentials
      */
     public ScriptCredentials newCredentials(String endpointId)
     {
@@ -119,7 +119,7 @@ public final class ScriptCredentialVault
     /**
      * Removes credentials from the vault
      * 
-     * @param endpointId
+     * @param endpointId String
      */
     public void removeCredentials(String endpointId)
     {

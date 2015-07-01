@@ -97,17 +97,17 @@ public class Customization
      * <p>CSS depdendencies are defined as follows:
      * <pre>
      * <{@code dependencies}>
-     *    <{@code css}><{@code/css>
+     *    <{@code css}><{@code}/css>
      *    <{@code css media="screen"}><{@code}/css>
      *    <{@code css media="print"}><{@code}/css>
      * <{@code /dependencies}></pre>
      * If no "media" attribute is specified then "screen" will be used by default.
      * </p>
      * 
-     * @param elementName
-     * @param dependencyElementName
-     * @param sourceElement
-     * @return
+     * @param elementName String
+     * @param dependencyElementName String
+     * @param sourceElement Element
+     * @return Map
      */
     @SuppressWarnings("unchecked")
     private Map<String, List<String>> getCssDependencies(String elementName, String dependencyElementName, Element sourceElement)

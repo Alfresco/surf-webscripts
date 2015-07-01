@@ -209,7 +209,6 @@ public class JSScriptProcessor extends AbstractScriptProcessor implements Script
      * 
      * @return the content from the resource, null if not recognised format
      * 
-     * @throws ConfigServiceRuntimeException on any IO or ContentIO error
      */
     public String loadScriptResource(String resource)
     {
@@ -267,7 +266,6 @@ public class JSScriptProcessor extends AbstractScriptProcessor implements Script
      * 
      * @return result of the script execution, can be null.
      * 
-     * @throws ConfigServiceRuntimeException
      */
     private Object executeScriptImpl(Script script, Map<String, Object> model, boolean secure)
     {

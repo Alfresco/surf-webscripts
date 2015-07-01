@@ -40,8 +40,8 @@ public class PathImpl implements Path
     /**
      * Helper to concatenate paths
      * 
-     * @param path1
-     * @param path2
+     * @param path1 String
+     * @param path2 String
      * @return  concatenated path
      */
     public static String concatPath(String path1, String path2)
@@ -53,7 +53,7 @@ public class PathImpl implements Path
     /**
      * Construct
      * 
-     * @param path
+     * @param path String
      */
     public PathImpl(String path)
     {
@@ -77,7 +77,7 @@ public class PathImpl implements Path
     /**
      * Associate Web Script with Path
      * 
-     * @param script
+     * @param script WebScript
      */
     public void addScript(WebScript script)
     {

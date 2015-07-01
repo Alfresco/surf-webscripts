@@ -43,7 +43,6 @@ public interface ScriptProcessor
      * @param path  script path
      * @param model  model
      * @return  script result
-     * @throws ScriptException
      */
     public Object executeScript(String path, Map<String, Object> model);
 
@@ -61,7 +60,6 @@ public interface ScriptProcessor
      * 
      * TODO: Remove this method when value conversion is truly hidden within script engine
      * 
-     * @param path   the path to the file
      * @param value  value to unwrap
      * @return  unwrapped value
      */

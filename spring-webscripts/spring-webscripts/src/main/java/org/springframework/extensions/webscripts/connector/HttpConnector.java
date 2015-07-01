@@ -158,8 +158,8 @@ public class HttpConnector extends AbstractConnector
     /**
      * Stamps headers onto the remote client
      * 
-     * @param remoteClient
-     * @param context
+     * @param remoteClient RemoteClient
+     * @param context ConnectorContext
      */
     protected void applyRequestHeaders(RemoteClient remoteClient, ConnectorContext context)
     {
@@ -204,7 +204,8 @@ public class HttpConnector extends AbstractConnector
     /**
      * Stamps Credentials values onto the remote client
      * 
-     * @param remoteClient
+     * @param remoteClient RemoteClient
+     * @param context ConnectorContext
      */
     protected void applyRequestAuthentication(RemoteClient remoteClient, ConnectorContext context)
     {
@@ -223,7 +224,8 @@ public class HttpConnector extends AbstractConnector
     /**
      * Retrieves cookie headers from response and stores back onto the Connector Session
      * 
-     * @param response
+     * @param remoteClient RemoteClient
+     * @param response Response
      */
     protected void processResponse(RemoteClient remoteClient, Response response)
     {

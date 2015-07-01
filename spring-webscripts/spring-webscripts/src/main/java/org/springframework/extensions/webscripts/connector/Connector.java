@@ -159,7 +159,7 @@ public interface Connector
     /**
      * Sets the connector session
      * 
-     * @param connectorSession
+     * @param connectorSession ConnectorSession
      */
     public void setConnectorSession(ConnectorSession connectorSession);
     

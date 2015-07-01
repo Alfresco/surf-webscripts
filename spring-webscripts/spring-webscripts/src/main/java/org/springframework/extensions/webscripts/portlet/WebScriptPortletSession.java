@@ -35,7 +35,7 @@ public class WebScriptPortletSession implements WebScriptSession
     /**
      * Construct
      * 
-     * @param session
+     * @param session PortletSession
      */
     public WebScriptPortletSession(PortletSession session)
     {

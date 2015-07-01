@@ -54,7 +54,7 @@ public class TemplateProcessorRegistry
     /**
      * Sets the name of the default template processor
      * 
-     * @param defaultTemplateProcessor    the name of the default template processor
+     * @param defaultTemplateProcessorName    the name of the default template processor
      */    
     public void setDefaultTemplateProcessor(String defaultTemplateProcessorName)
     {
@@ -75,8 +75,8 @@ public class TemplateProcessorRegistry
      * Registers a template processor
      * 
      * @param   templateProcessor     the template processor to register
-     * @param   extension
-     * @param   name
+     * @param   extension String
+     * @param   name String
      */
     public void registerTemplateProcessor(TemplateProcessor templateProcessor, String extension, String name)
     {

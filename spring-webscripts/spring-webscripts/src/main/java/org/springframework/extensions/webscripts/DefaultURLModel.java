@@ -28,8 +28,7 @@ public class DefaultURLModel implements URLModel
     /**
      * Construct
      * 
-     * @param req
-     * @param res
+     * @param req WebScriptRequest
      */
     protected DefaultURLModel(WebScriptRequest req)
     {

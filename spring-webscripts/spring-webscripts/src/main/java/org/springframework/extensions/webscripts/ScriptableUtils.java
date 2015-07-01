@@ -132,7 +132,7 @@ public class ScriptableUtils
     /**
      * Converts an xml string to a freemarker node model
      * 
-     * @param xml
+     * @param xml String
      * 
      * @return freemarker node model
      */

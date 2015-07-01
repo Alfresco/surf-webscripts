@@ -93,7 +93,6 @@ public class WebScriptViewResolver extends AbstractWebScriptViewResolver impleme
     /**
      * Initializes the view resolver
      * 
-     * @throws ServletException
      */
     public void onBootstrap()
     {

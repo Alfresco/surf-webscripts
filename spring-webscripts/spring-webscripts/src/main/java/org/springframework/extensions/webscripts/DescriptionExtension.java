@@ -37,7 +37,7 @@ public interface DescriptionExtension
      * Gets the custom description extensions
      * 
      * @param serviceDescPath  path to service doc
-     * @param serviceDesc  service doc input stream
+     * @param servicedesc  service doc input stream
      * @return  extensions mapped by name
      */
     public Map<String, Serializable> parseExtensions(String serviceDescPath, InputStream servicedesc);

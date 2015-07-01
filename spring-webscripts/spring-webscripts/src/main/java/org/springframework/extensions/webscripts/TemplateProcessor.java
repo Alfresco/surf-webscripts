@@ -31,7 +31,7 @@ public interface TemplateProcessor
     /**
      * Determines if a template exists
      * 
-     * @param template
+     * @param template String
      * @return  true => exists
      */
     public boolean hasTemplate(String template);

@@ -142,7 +142,7 @@ public class WebScriptServlet extends HttpServlet
     /**
      * Servlet specific initialisation
      * 
-     * @param context
+     * @param context ApplicationContext
      */
     protected void initServlet(ApplicationContext context)
     {

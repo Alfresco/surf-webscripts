@@ -53,7 +53,7 @@ public class PackageDescriptionDocument extends AbstractBaseDescriptionDocument
     /**
      * Sets the Package  (path version of getScriptPath)
      * 
-     * @param package
+     * @param scriptPackage Path
      */
     public void setPackage(Path scriptPackage)
     {
@@ -103,7 +103,7 @@ public class PackageDescriptionDocument extends AbstractBaseDescriptionDocument
     }
 
     /**
-     * @param resouceDescription
+     * @param resouceDescription ResourceDescription
      */
     public void addResourceDescription(ResourceDescription resouceDescription)
     {
@@ -188,10 +188,9 @@ public class PackageDescriptionDocument extends AbstractBaseDescriptionDocument
     /**
      * Constructor with id, shortName, description and definition
      * 
-     * @param id
-     * @param shortName
-     * @param description
-     * @param definition
+     * @param id String
+     * @param shortName String
+     * @param description String
      */
     public PackageDescriptionDocument(String id, String shortName, String description)
     {

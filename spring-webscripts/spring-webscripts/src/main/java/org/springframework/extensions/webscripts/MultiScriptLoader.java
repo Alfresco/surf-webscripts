@@ -31,7 +31,7 @@ public class MultiScriptLoader implements ScriptLoader
     /**
      * Construct
      * 
-     * @param loaders
+     * @param loaders ScriptLoader[]
      */
     public MultiScriptLoader(ScriptLoader[] loaders)
     {

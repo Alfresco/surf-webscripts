@@ -63,7 +63,7 @@ public class ScriptRemote
     /**
      * Sets the Connector Service.
      * 
-     * @param connectorService
+     * @param connectorService ConnectorService
      */
     public void setConnectorService(ConnectorService connectorService)
     {
@@ -73,7 +73,7 @@ public class ScriptRemote
     /**
      * Sets the connector provider.
      * 
-     * @param connectorProvider
+     * @param connectorProvider ConnectorProvider
      */
     public void setConnectorProvider(ConnectorProvider connectorProvider)
     {
@@ -182,7 +182,7 @@ public class ScriptRemote
     /**
      * Returns a list of the application endpoint ids
      * 
-     * @return
+     * @return String[]
      */
     @ScriptMethod
     (
@@ -205,8 +205,8 @@ public class ScriptRemote
     /**
      * Returns the name of an endpoint
      * 
-     * @param endpointId
-     * @return
+     * @param endpointId String
+     * @return String
      */
     @ScriptMethod
     (
@@ -233,8 +233,8 @@ public class ScriptRemote
     /**
      * Returns the description of an endpoint
      * 
-     * @param endpointId
-     * @return
+     * @param endpointId String
+     * @return String
      */
     @ScriptMethod
     (
@@ -271,7 +271,7 @@ public class ScriptRemote
     /**
      * Returns the configured URL for the given endpoint
      * 
-     * @param endpointId
+     * @param endpointId String
      * 
      * @return the endpoint url
      */

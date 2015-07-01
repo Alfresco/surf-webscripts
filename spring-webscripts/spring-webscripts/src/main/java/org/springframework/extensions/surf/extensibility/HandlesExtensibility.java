@@ -36,7 +36,7 @@ public interface HandlesExtensibility
 {
     /**
      * <p>This indicates that although extensibility is handled it has been temporarily suppressed</p>
-     * @return
+     * @return boolean
      */
     public boolean isExtensibilitySuppressed();
     
@@ -44,7 +44,7 @@ public interface HandlesExtensibility
      * <p>Should be implemented to return an {@link ExtensibilityModel} if one is currently being built. If a model
      * is not being built then this should return null.</p>
      * 
-     * @return
+     * @return ExtensibilityModel
      */
     public ExtensibilityModel getCurrentExtensibilityModel();
     
@@ -72,8 +72,8 @@ public interface HandlesExtensibility
      * <p>Returns an HTML Spring defining the JavaScript and CSS resource dependencies defined by extending
      * modules.</p>
      * 
-     * @param pathBeingProcessed
-     * @param model
+     * @param pathBeingProcessed String
+     * @param model Map<String, Object>
      */
     public void updateExtendingModuleDependencies(String pathBeingProcessed, Map<String, Object> model);
     
@@ -134,12 +134,12 @@ public interface HandlesExtensibility
     public ScriptConfigModel getExtendedScriptConfigModel(String xmlConfig);
     
     /**
-     * <p>Creates a new {@link ExtendedTemplateConfigModel} instance which contains configuration provided by the extensions that
+     * <p>Creates a new {@link org.springframework.extensions.webscripts.ExtendedTemplateConfigModel} instance which contains configuration provided by the extensions that
      * have been evaluated to be processed. This method will return <code>null</code> if it is not possible to create a new instance
      * which may be the case for many reasons.</p>
      * 
      * @param xmlConfig Optional additional XML configuration to include. This is typically provided by WebScripts.
-     * @return A new {@link ExtendedTemplateConfigModel} or <code>null</code> if one could not be created. 
+     * @return A new {@link org.springframework.extensions.webscripts.ExtendedTemplateConfigModel} or <code>null</code> if one could not be created.
      */
     public TemplateConfigModel getExtendedTemplateConfigModel(String xmlConfig);
     

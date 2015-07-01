@@ -222,7 +222,7 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         /**
          * Instantiates a new remote connector descriptor.
          * 
-         * @param elem the elem
+         * @param el the elem
          */
         ConnectorDescriptor(Element el)
         {
@@ -272,7 +272,7 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         /**
          * Instantiates a new remote authenticator descriptor.
          * 
-         * @param elem the elem
+         * @param el the elem
          */
         AuthenticatorDescriptor(Element el)
         {
@@ -314,7 +314,7 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         /**
          * Instantiates a new remote endpoint descriptor.
          * 
-         * @param elem the elem
+         * @param el the elem
          */
         EndpointDescriptor(Element el)
         {

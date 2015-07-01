@@ -33,8 +33,8 @@ public class PathUtil
      * can safeguard to avoid penalities associated with loading development time
      * information that might be present in search paths.
      * 
-     * @param path
-     * @return
+     * @param path String
+     * @return boolean
      */
     public static boolean isDevelopmentEnvironmentPath(String path)
     {

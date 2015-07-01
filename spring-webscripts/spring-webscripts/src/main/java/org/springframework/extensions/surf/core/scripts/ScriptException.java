@@ -28,7 +28,7 @@ public class ScriptException extends PlatformRuntimeException
     private static final long serialVersionUID = 1739480648583299623L;
 
     /**
-     * @param msgId
+     * @param msgId String
      */
     public ScriptException(String msgId)
     {
@@ -36,8 +36,8 @@ public class ScriptException extends PlatformRuntimeException
     }
 
     /**
-     * @param msgId
-     * @param cause
+     * @param msgId String
+     * @param cause Throwable
      */
     public ScriptException(String msgId, Throwable cause)
     {
@@ -45,8 +45,8 @@ public class ScriptException extends PlatformRuntimeException
     }
     
     /**
-     * @param msgId
-     * @param params
+     * @param msgId String
+     * @param params Object[]
      */
     public ScriptException(String msgId, Object[] params)
     {
@@ -54,9 +54,9 @@ public class ScriptException extends PlatformRuntimeException
     }
     
     /**
-     * @param msgId
-     * @param msgParams
-     * @param cause
+     * @param msgId String
+     * @param msgParams Object[]
+     * @param cause Throwable
      */
     public ScriptException(String msgId, Object[] msgParams, Throwable cause)
     {

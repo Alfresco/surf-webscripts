@@ -44,11 +44,11 @@ public class WebScriptViewRuntime extends WebScriptServletRuntime
      * Construction
      * 
      * @param url           View name URL
-     * @param container
-     * @param authFactory
-     * @param req
-     * @param res
-     * @param serverProperties
+     * @param container RuntimeContainer
+     * @param authFactory ServletAuthenticatorFactory
+     * @param req HttpServletRequest
+     * @param res HttpServletResponse
+     * @param serverProperties ServerProperties
      */
     public WebScriptViewRuntime(String url, RuntimeContainer container, ServletAuthenticatorFactory authFactory, HttpServletRequest req, HttpServletResponse res, ServerProperties serverProperties)
     {

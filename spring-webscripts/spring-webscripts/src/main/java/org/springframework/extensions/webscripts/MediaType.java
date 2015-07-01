@@ -183,7 +183,7 @@ public class MediaType
     /**
      * Simple exampe usage
      * 
-     * @param args
+     * @param args String[]
      */
     public static void main(String[] args)
     {

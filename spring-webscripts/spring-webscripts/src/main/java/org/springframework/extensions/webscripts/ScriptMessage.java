@@ -32,7 +32,7 @@ public final class ScriptMessage extends AbstractMessageHelper
     /**
      * Constructor
      * 
-     * @param webscript
+     * @param webscript WebScript
      */
     public ScriptMessage(WebScript webscript)
     {

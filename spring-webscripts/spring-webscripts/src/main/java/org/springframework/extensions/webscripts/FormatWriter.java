@@ -47,16 +47,16 @@ public interface FormatWriter<Type>
     /**
      * Converts Java object to mimetype
      * 
-     * @param object
-     * @param output
+     * @param object Type
+     * @param output Writer
      */
     public void write(Type object, Writer output);
     
     /**
      * Converts Java object to mimetype
      * 
-     * @param object
-     * @param output
+     * @param object Type
+     * @param output OutputStream
      */
     public void write(Type object, OutputStream output);
     

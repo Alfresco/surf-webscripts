@@ -34,8 +34,8 @@ public final class NegotiatedFormat
     /**
      * Construct
      * 
-     * @param mediaType
-     * @param format
+     * @param mediaType MediaType
+     * @param format String
      */
     public NegotiatedFormat(MediaType mediaType, String format)
     {

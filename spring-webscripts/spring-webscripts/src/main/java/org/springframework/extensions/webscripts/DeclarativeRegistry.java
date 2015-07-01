@@ -112,7 +112,7 @@ public class DeclarativeRegistry
     // 
     
     /**
-     * @param defaultWebScript
+     * @param defaultWebScript String
      */
     public void setDefaultWebScript(String defaultWebScript)
     {
@@ -120,7 +120,7 @@ public class DeclarativeRegistry
     }
 
     /**
-     * @param uriIndex
+     * @param uriIndex UriIndex
      */
     public void setUriIndex(UriIndex uriIndex)
     {
@@ -128,7 +128,7 @@ public class DeclarativeRegistry
     }
     
     /**
-     * @param searchPath
+     * @param searchPath SearchPath
      */
     public void setSearchPath(SearchPath searchPath)
     {
@@ -136,7 +136,7 @@ public class DeclarativeRegistry
     }
 
     /**
-     * @param container
+     * @param container Container
      */
     public void setContainer(Container container)
     {
@@ -534,7 +534,7 @@ public class DeclarativeRegistry
     /**
      * Register a Web Script Package
      * 
-     * @param script
+     * @param script WebScript
      */
     private Path registerPackage(WebScript script)
     {
@@ -558,7 +558,7 @@ public class DeclarativeRegistry
     /**
      * Register a Web Script Family
      * 
-     * @param script
+     * @param script WebScript
      */
     private void registerFamily(WebScript script)
     {
@@ -588,7 +588,7 @@ public class DeclarativeRegistry
     /**
      * Register a lifecycle
      * 
-     * @param script
+     * @param script WebScript
      */
     private void registerLifecycle(WebScript script)
     {
@@ -610,7 +610,7 @@ public class DeclarativeRegistry
     /**
      * Register a Web Script URI
      * 
-     * @param script
+     * @param script WebScript
      */
     private void registerURIs(WebScript script)
     {
@@ -643,7 +643,7 @@ public class DeclarativeRegistry
      * @param store web script store 
      * @param packageDescPath package description document path
      * @param packageDoc package description document input stream
-     * @return
+     * @return PackageDescriptionDocument
      */
     private PackageDescriptionDocument createPackageDescription(Store store, String packageDescPath, InputStream packageDoc)
     {
@@ -684,7 +684,7 @@ public class DeclarativeRegistry
      * @param store web script store
      * @param schemaDescPath schema description document path
      * @param schemaDoc schema description document input stream
-     * @return
+     * @return SchemaDescriptionDocument
      */
     private SchemaDescriptionDocument createSchemaDescription(Store store, String schemaDescPath, InputStream schemaDoc)
     {
@@ -723,9 +723,9 @@ public class DeclarativeRegistry
     /**
      * Creates an Web Script Description
      * 
-     * @param store
-     * @param serviceDescPath
-     * @param serviceDoc
+     * @param store Store
+     * @param serviceDescPath String
+     * @param serviceDoc InputStream
      * 
      * @return  web script service description
      */

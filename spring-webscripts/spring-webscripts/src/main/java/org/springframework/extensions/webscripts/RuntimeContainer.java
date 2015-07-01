@@ -33,8 +33,9 @@ public interface RuntimeContainer extends Container
     /**
      * Execute the script in the context of the provided request and response
      * 
-     * @param scriptReq
-     * @param scriptRes
+     * @param scriptReq WebScriptRequest
+     * @param scriptRes WebScriptResponse
+     * @param auth Authenticator
      */
     public void executeScript(WebScriptRequest scriptReq, WebScriptResponse scriptRes, Authenticator auth)
         throws IOException;
@@ -49,8 +50,8 @@ public interface RuntimeContainer extends Container
     /**
      * Pre-authenticate container, if required
      * 
-     * @param auth
-     * @param required
+     * @param auth Authenticator
+     * @param required RequiredAuthentication
      */
     public boolean authenticate(Authenticator auth, RequiredAuthentication required);
 }

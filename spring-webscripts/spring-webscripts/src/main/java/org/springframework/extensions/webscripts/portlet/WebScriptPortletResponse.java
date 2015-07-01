@@ -47,7 +47,8 @@ public class WebScriptPortletResponse extends WebScriptResponseImpl
     /**
      * Construct
      * 
-     * @param res
+     * @param container Runtime
+     * @param res RenderResponse
      */
     WebScriptPortletResponse(Runtime container, RenderResponse res)
     {

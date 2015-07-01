@@ -59,7 +59,7 @@ public class FormatRegistry
     /**
      * Set default Reader
      * 
-     * @param defaultReader
+     * @param defaultReader FormatReader<Object>
      */
     public void setDefaultReader(FormatReader<Object> defaultReader)
     {
@@ -69,8 +69,7 @@ public class FormatRegistry
     /**
      * Add a reader
      * 
-     * @param mimetype
-     * @param reader
+     * @param reader FormatReader<Object>
      */
     public void addReader(FormatReader<Object> reader)
     {
@@ -83,8 +82,7 @@ public class FormatRegistry
     /**
      * Add a writer
      * 
-     * @param mimetype
-     * @param writer
+     * @param writer FormatReader<Object>
      */
     public void addWriter(FormatWriter<Object> writer)
     {
@@ -98,8 +96,8 @@ public class FormatRegistry
     /**
      * Add formats
      * 
-     * @param agent
-     * @param formatsToAdd
+     * @param agent String
+     * @param formatsToAdd Map<String, String>
      */
     public void addFormats(String agent, Map<String, String> formatsToAdd)
     {
@@ -135,8 +133,8 @@ public class FormatRegistry
     /**
      * Add mimetypes
      * 
-     * @param agent
-     * @param mimetypesToAdd
+     * @param agent String
+     * @param mimetypesToAdd Map<String, String>
      */
     public void addMimetypes(String agent, Map<String, String> mimetypesToAdd)
     {
@@ -172,8 +170,8 @@ public class FormatRegistry
     /**
      * Gets the mimetype for the specified user agent and format
      * 
-     * @param agent
-     * @param format
+     * @param agent String
+     * @param format String
      * @return  mimetype (or null, if one is not registered)
      */
     public String getMimeType(String agent, String format)
@@ -200,8 +198,8 @@ public class FormatRegistry
     /**
      * Gets the format for the specified user agent and mimetype
      * 
-     * @param agent
-     * @param mimetype
+     * @param agent String
+     * @param mimetype String
      * @return  format (or null, if one is not registered)
      */
     public String getFormat(String agent, String mimetype)
@@ -228,7 +226,7 @@ public class FormatRegistry
     /**
      * Gets a Format Reader
      * 
-     * @param mimetype
+     * @param mimetype String
      * @return  reader
      */
     public FormatReader<Object> getReader(String mimetype)
@@ -255,8 +253,8 @@ public class FormatRegistry
     /**
      * Gets a Format Writer
      * 
-     * @param object
-     * @param mimetype
+     * @param object Object
+     * @param mimetype String
      * 
      * @return  writer
      */
@@ -279,7 +277,7 @@ public class FormatRegistry
     /**
      * Generalize Mimetype
      * 
-     * @param mimetype
+     * @param mimetype String
      * @return  generalized mimetype (null, if no generalization can be made)
      */
     public String generalizeMimetype(String mimetype)

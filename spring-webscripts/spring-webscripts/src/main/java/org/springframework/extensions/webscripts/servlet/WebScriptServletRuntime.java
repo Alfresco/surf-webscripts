@@ -54,12 +54,12 @@ public class WebScriptServletRuntime extends AbstractRuntime
 
     /**
      * Construct
-     * 
-     * @param registry
-     * @param serviceRegistry
-     * @param authenticator
-     * @param req
-     * @param res
+     *
+     * @param container RuntimeContainer
+     * @param authFactory ServletAuthenticatorFactory
+     * @param req HttpServletRequest
+     * @param res HttpServletResponse
+     * @param serverProperties ServerProperties
      */
     public WebScriptServletRuntime(RuntimeContainer container, ServletAuthenticatorFactory authFactory, HttpServletRequest req, HttpServletResponse res, ServerProperties serverProperties)
     {
@@ -190,8 +190,8 @@ public class WebScriptServletRuntime extends AbstractRuntime
     /**
      * Helper to get HttpServletRequest from Web Script Request
      * 
-     * @param request
-     * @return
+     * @param request WebScriptRequest
+     * @return HttpServletRequest
      */
     public static HttpServletRequest getHttpServletRequest(WebScriptRequest request)
     {
@@ -206,8 +206,8 @@ public class WebScriptServletRuntime extends AbstractRuntime
     /**
      * Helper to get HttpServletResponse from Web Script Response
      * 
-     * @param response
-     * @return
+     * @param response WebScriptResponse
+     * @return HttpServletResponse
      */
     public static HttpServletResponse getHttpServletResponse(WebScriptResponse response)
     {

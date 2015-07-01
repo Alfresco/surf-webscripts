@@ -67,7 +67,7 @@ public class WebscriptDocumentTest extends AbstractWebScriptServerTest
     }
 
     /**
-     * @return
+     * @return ClassPathStore
      */
     public ClassPathStore getClassPathStore()
     {
@@ -75,14 +75,14 @@ public class WebscriptDocumentTest extends AbstractWebScriptServerTest
     }
 
     /**
-     * @return
+     * @return AbstractRuntimeContainer
      */
     public AbstractRuntimeContainer getWebscriptContainer() {
         return (AbstractRuntimeContainer) (getTestServer().getApplicationContext().getBean("webscripts.container"));
     }
 
     /**
-     * @return
+     * @return Registry
      */
     public Registry getWebscriptRegistry() {
         return getWebscriptContainer().getRegistry();

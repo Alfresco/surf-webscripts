@@ -37,7 +37,7 @@ public class FormatAdaptorSet implements InitializingBean
     /**
      * Sets the Format Registry
      * 
-     * @param registry
+     * @param registry FormatRegistry
      */
     public void setRegistry(FormatRegistry registry)
     {
@@ -47,7 +47,7 @@ public class FormatAdaptorSet implements InitializingBean
     /**
      * Sets the readers
      * 
-     * @param readers
+     * @param readers Set<FormatReader<Object>>
      */
     public void setReaders(Set<FormatReader<Object>> readers)
     {
@@ -57,7 +57,7 @@ public class FormatAdaptorSet implements InitializingBean
     /**
      * Sets the writers
      * 
-     * @param writers
+     * @param writers Set<FormatWriter<Object>>
      */
     public void setWriters(Set<FormatWriter<Object>> writers)
     {

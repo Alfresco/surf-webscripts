@@ -325,8 +325,8 @@ public abstract class AbstractWebScript implements WebScript
     /**
      * <p>Find the last index of the "/" and return 0 if it does not occur (rather than -1). The purpose of this
      * method is exclusively for use with the String.substring method for finding the unqualified name of a WebScript.</p>
-     * @param str
-     * @return
+     * @param str String
+     * @return int
      */
     private static int lastSlashIndex(final String str)
     {
@@ -510,9 +510,9 @@ public abstract class AbstractWebScript implements WebScript
      * </ol>
      * The repeat but with the default {@link Locale}. Finally lookup <descid>.properties
      * </p>
-     * @param description The current {@link WebScript} {@link Description}.
+     * @param path String
      * @param locale The requested {@link Locale}.
-     * @return
+     * @return LinkedHashSet<String>
      */
     @SuppressWarnings("static-access")
     private LinkedHashSet<String> buildLocalePathList(final String path, final Locale locale)
@@ -559,7 +559,7 @@ public abstract class AbstractWebScript implements WebScript
      * </p>
      * @param description The current {@link WebScript} {@link Description}.
      * @param locale The requested {@link Locale}.
-     * @return
+     * @return LinkedHashSet<String>
      */
     private LinkedHashSet<String> buildLocalePathList(Description description, Locale locale)
     {
@@ -570,7 +570,7 @@ public abstract class AbstractWebScript implements WebScript
     /**
      * Helper to retrieve a ResourceBundle wrapper from a store path.
      * 
-     * @param path
+     * @param path String
      * @return ResourceBundle
      * @throws IOException
      */
@@ -602,7 +602,7 @@ public abstract class AbstractWebScript implements WebScript
 	 * 
 	 * Note: This method caches the script to request format mapping
 	 * 
-	 * @param mimetype
+	 * @param mimetype String
 	 * @return  execute script
 	 */
 	protected ScriptDetails getExecuteScript(String mimetype)
@@ -690,7 +690,7 @@ public abstract class AbstractWebScript implements WebScript
      * @param req  web script request
      * @param res  web script response
      * @param script    script details
-     * @param customModel  custom model entries
+     * @param customParams  Map<String, Object>
      * 
      * @return  script model
      */
@@ -765,7 +765,7 @@ public abstract class AbstractWebScript implements WebScript
      * 
      * @param req  web script request
      * @param res  web script response
-     * @param customModel  custom model entries
+     * @param customParams  Map<String, Object>
      *
      * @return  template model
      */
@@ -1156,9 +1156,9 @@ public abstract class AbstractWebScript implements WebScript
      * 
      * Note: This method caches template search results
      * 
-     * @param scriptId
-     * @param statusCode
-     * @param format
+     * @param scriptId String
+     * @param statusCode int
+     * @param format String
      * @return  status template (or null if not found)
      */
     protected StatusTemplate getStatusTemplate(String scriptId, int statusCode, String format)
@@ -1209,9 +1209,9 @@ public abstract class AbstractWebScript implements WebScript
     /**
      * Find a script specific status template
      * 
-     * @param scriptId
-     * @param statusCode
-     * @param format
+     * @param scriptId String
+     * @param statusCode int
+     * @param format String
      * @return  status template (or null, if not found)
      */
     private StatusTemplate getScriptStatusTemplate(String scriptId, int statusCode, String format)
@@ -1235,9 +1235,9 @@ public abstract class AbstractWebScript implements WebScript
     /**
      * Find a package specific status template
      * 
-     * @param scriptPath
-     * @param statusCode
-     * @param format
+     * @param scriptPath Path
+     * @param statusCode int
+     * @param format String
      * @return  status template (or null, if not found)
      */
     private StatusTemplate getPackageStatusTemplate(Path scriptPath, int statusCode, String format)
@@ -1265,7 +1265,7 @@ public abstract class AbstractWebScript implements WebScript
     /**
      * Find default status template
      * 
-     * @param statusCode
+     * @param statusCode int
      * @return  status template
      */
     private StatusTemplate getDefaultStatusTemplate(int statusCode)

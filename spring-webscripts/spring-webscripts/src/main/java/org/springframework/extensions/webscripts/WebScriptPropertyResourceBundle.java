@@ -92,8 +92,8 @@ public class WebScriptPropertyResourceBundle extends ResourceBundle
      * <p>Constructor for instantiating from an existing {@link ResourceBundle}. This calls the <code>merge</code>
      * method to copy the properties from the bundle into the <code>resources</code> map.
      * 
-     * @param baseBundle
-     * @param resourcePath
+     * @param baseBundle ResourceBundle
+     * @param resourcePath String
      */
     public WebScriptPropertyResourceBundle(ResourceBundle baseBundle, String resourcePath)
     {
@@ -107,7 +107,6 @@ public class WebScriptPropertyResourceBundle extends ResourceBundle
      * instance. This will override any values mapped to duplicate keys in the current merged properties.</p>
      * 
      * @param resourceBundle The <code>ResourceBundle</code> to merge the properties of.
-     * @return <code>true</code> if the bundle was successfully merged and <code>false</code> otherwise. 
      */
     public void merge(String bundlePath, ResourceBundle resourceBundle)
     {

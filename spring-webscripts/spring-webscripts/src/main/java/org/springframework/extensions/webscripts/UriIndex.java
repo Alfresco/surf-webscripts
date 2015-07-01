@@ -38,8 +38,8 @@ public interface UriIndex
     /**
      * Register a URI with a Web Script
      * 
-     * @param script
-     * @param uri
+     * @param script WebScript
+     * @param uri String
      */
     public void registerUri(WebScript script, String uri);
     

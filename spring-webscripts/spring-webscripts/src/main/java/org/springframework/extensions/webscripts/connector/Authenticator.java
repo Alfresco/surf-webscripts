@@ -54,9 +54,9 @@ public interface Authenticator
     /**
      * Returns whether the current connector session has been authenticated or not
      * 
-     * @param endpoint
-     * @param connectorSession
-     * @return
+     * @param endpoint String
+     * @param connectorSession ConnectorSession
+     * @return boolean
      */
     public boolean isAuthenticated(String endpoint, ConnectorSession connectorSession);
 }

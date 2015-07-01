@@ -144,7 +144,7 @@ public class WebScriptJSFResponse extends WebScriptResponseImpl implements WebSc
    }
 
    /**
-    * @see org.springframework.extensions.webscripts.WebScriptResponse#setCache()
+    * @see org.springframework.extensions.webscripts.WebScriptResponse#setCache(Cache)
     */
    public void setCache(Cache cache)
    {

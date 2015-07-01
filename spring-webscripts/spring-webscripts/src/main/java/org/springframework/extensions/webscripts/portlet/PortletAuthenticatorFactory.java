@@ -34,9 +34,9 @@ public interface PortletAuthenticatorFactory
 	/**
 	 * Create Authenticator
 	 * 
-	 * @param req
-	 * @param res
-	 * @return
+	 * @param req RenderRequest
+	 * @param res RenderResponse
+	 * @return Authenticator
 	 */
     public Authenticator create(RenderRequest req, RenderResponse res);
 }

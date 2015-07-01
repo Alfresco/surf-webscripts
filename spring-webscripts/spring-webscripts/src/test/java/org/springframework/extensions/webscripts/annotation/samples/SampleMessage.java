@@ -54,7 +54,7 @@ public class SampleMessage
     {
     }
     /**
-     * @param msg
+     * @param msg String
      */
     public SampleMessage(String msg)
     {
@@ -81,8 +81,8 @@ public class SampleMessage
     }
 
     /**
-     * @param regex
-     * @return
+     * @param regex String
+     * @return String[]
      */
     @ScriptMethod 
     (

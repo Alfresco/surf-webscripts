@@ -381,7 +381,6 @@ public final class JSONWriter
      * @param obj    Java object of basic data types or List or Map.
      * @param writer JSONWriter for output
      * 
-     * @return JSON string.
      */
     public static void encodeToJSON(final Object obj, final JSONWriter writer) throws IOException
     {

@@ -82,10 +82,10 @@ public class IndexAll extends DeclarativeWebScript
      * 
      * @param filteredParent  parent path
      * @param path  path to filter
-     * @param packageFilter
-     * @param urlFilter
-     * @param familyFilter
-     * @return
+     * @param packageFilter String
+     * @param urlFilter String
+     * @param familyFilter String
+     * @return PathImpl
      */
     private PathImpl filterPath(PathImpl filteredParent, Path path, String packageFilter, String urlFilter, String familyFilter)
     {
@@ -112,11 +112,11 @@ public class IndexAll extends DeclarativeWebScript
     /**
      * Include Web Script given filters?
      * 
-     * @param script
-     * @param packageFilter
-     * @param urlFilter
-     * @param familyFilter
-     * @return
+     * @param script WebScript
+     * @param packageFilter String
+     * @param urlFilter String
+     * @param familyFilter String
+     * @return boolean
      */
     private boolean includeWebScript(WebScript script, String packageFilter, String urlFilter, String familyFilter)
     {

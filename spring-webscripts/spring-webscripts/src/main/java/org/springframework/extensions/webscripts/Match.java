@@ -53,8 +53,10 @@ public final class Match
     /**
      * Construct
      * 
-     * @param templateVars
-     * @param script
+     * @param templatePath String
+     * @param templateVars Map<String, String>
+     * @param matchPath String
+     * @param script WebScript
      */
     public Match(String templatePath, Map<String, String> templateVars, String matchPath, WebScript script)
     {
@@ -67,8 +69,10 @@ public final class Match
     
     /**
      * Construct
-     * 
-     * @param templatePath
+     *
+     * @param templatePath String
+     * @param templateVars Map<String, String>
+     * @param matchPath String
      */
     public Match(String templatePath, Map<String, String> templateVars, String matchPath)
     {

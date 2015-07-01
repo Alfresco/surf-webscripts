@@ -70,7 +70,7 @@ public abstract class AbstractTemplateProcessor extends BaseRegisterableTemplate
     }    
                 
     /**
-     * @param searchPath
+     * @param searchPath SearchPath
      */
     public void setSearchPath(SearchPath searchPath)
     {
@@ -121,7 +121,7 @@ public abstract class AbstractTemplateProcessor extends BaseRegisterableTemplate
     /**
      * Add any configured processor model extensions to the model.
      * 
-     * @param model
+     * @param model Object
      */
     protected void addProcessorModelExtensions(Object model)
     {

@@ -85,8 +85,8 @@ public class WebScriptException extends PlatformRuntimeException implements Stat
     /**
      * Attach an advanced description of the status code associated to this exception
      * 
-     * @param template  status template
-     * @param model  template model
+     * @param statusTemplate  status template
+     * @param statusModel  template model
      * @deprecated
      */
     public void setStatusTemplate(final StatusTemplate statusTemplate, final Map<String, Object> statusModel)

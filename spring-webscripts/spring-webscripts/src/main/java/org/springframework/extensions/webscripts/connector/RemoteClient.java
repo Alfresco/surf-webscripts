@@ -240,7 +240,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
      * This allows the ticket mechanism to be repurposed for non-Alfresco
      * implementations that may require similar argument passing
      * 
-     * @param ticket
+     * @param ticketName String
      */
     public void setTicketName(String ticketName)
     {
@@ -370,7 +370,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
     /**
      * Sets the authentication ticket to use. Will be used for all future call() requests.
      * 
-     * @param ticket
+     * @param ticket String
      */
     public void setTicket(String ticket)
     {
@@ -380,7 +380,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
     /**
      * Returns the authentication ticket
      * 
-     * @return
+     * @return String
      */
     public String getTicket()
     {
@@ -390,8 +390,8 @@ public class RemoteClient extends AbstractClient implements Cloneable
     /**
      * Basic HTTP auth. Will be used for all future call() requests.
      * 
-     * @param user
-     * @param pass
+     * @param user String
+     * @param pass String
      */
     public void setUsernamePassword(String user, String pass)
     {
@@ -400,7 +400,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
     }
 
     /**
-     * @param requestContentType     the POST request "Content-Type" header value to set
+     * @param contentType     the POST request "Content-Type" header value to set
      *        NOTE: this value is reset to the defaultContentType value after a call() is made. 
      */
     public void setRequestContentType(String contentType)
@@ -418,7 +418,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
     }
 
     /**
-     * @param requestMethod  the request Method to set i.e. one of GET/POST/PUT/DELETE etc.
+     * @param method  the request Method to set i.e. one of GET/POST/PUT/DELETE etc.
      *        if not set, GET will be assumed unless an InputStream is supplied during call()
      *        in which case POST will be used unless the request method overrides it with PUT.
      *        NOTE: this value is reset to the default of GET after a call() is made. 
@@ -444,7 +444,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
      * These request properties are applied to the connection when
      * the connection is called. Will be used for all future call() requests.
      * 
-     * @param requestProperties
+     * @param requestProperties Map<String, String>
      */
     public void setRequestProperties(Map<String, String> requestProperties)
     {
@@ -1434,7 +1434,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
      * Create and configure an HttpClient per thread based on Pooled connection manager.
      * Proxy route will be applied the client based on current settings.
      * 
-     * @param url
+     * @param url URL
      * @return HttpClient
      */
     protected HttpClient createHttpClient(URL url)
@@ -1484,9 +1484,9 @@ public class RemoteClient extends AbstractClient implements Cloneable
      * Create HTTP proxy host for the given system host and port properties.
      * If the properties are not set, no proxy will be created.
      * 
-     * @param hostProperty
-     * @param portProperty
-     * @param defaultPort
+     * @param hostProperty String
+     * @param portProperty String
+     * @param defaultPort int
      * 
      * @return HttpHost if appropriate properties have been set, null otherwise
      */

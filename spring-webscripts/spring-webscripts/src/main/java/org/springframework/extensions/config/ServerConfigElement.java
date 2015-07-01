@@ -85,7 +85,7 @@ public class ServerConfigElement extends ConfigElementAdapter implements ServerP
    }
 
    /**
-    * @param scheme
+    * @param scheme String
     */
    public void setScheme(String scheme)
    {
@@ -101,7 +101,7 @@ public class ServerConfigElement extends ConfigElementAdapter implements ServerP
    }
 
    /**
-    * @param hostname
+    * @param hostname String
     */
    public void setHostName(String hostname)
    {
@@ -117,7 +117,7 @@ public class ServerConfigElement extends ConfigElementAdapter implements ServerP
    }
 
    /**
-    * @param port
+    * @param port Integer
     */
    public void setPort(Integer port)
    {

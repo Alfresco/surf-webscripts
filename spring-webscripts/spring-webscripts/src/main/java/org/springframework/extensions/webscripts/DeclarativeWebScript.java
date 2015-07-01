@@ -273,7 +273,7 @@ public class DeclarativeWebScript extends AbstractWebScript
      * 
      * @param req webscript request
      * @param res webscript response
-     * @return
+     * @return Map
      * @throws IOException
      */
     public  Map<String, Object> getTemplateModel(WebScriptRequest req, WebScriptResponse res) throws IOException

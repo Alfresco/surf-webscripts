@@ -98,7 +98,7 @@ public class Status
     }
     
     /**
-     * @param exception
+     * @param exception Throwable
      */
     public void setException(Throwable exception)
     {
@@ -114,7 +114,7 @@ public class Status
     }
     
     /**
-     * @param message
+     * @param message String
      */
     public void setMessage(String message)
     {
@@ -146,8 +146,8 @@ public class Status
     }
 
     /**
-     * @see javax.servlet.http.HTTPServletResponse
-     * 
+     * @see javax.servlet.http.HttpServletResponse
+     *
      * @param code  status code
      */
     public void setCode(int code)
@@ -175,8 +175,8 @@ public class Status
     }
     
     /**
-     * @see javax.servlet.http.HTTPServletResponse
-     * 
+     * @see javax.servlet.http.HttpServletResponse
+     *
      * @param location  location response-header
      */
     public void setLocation(String location)

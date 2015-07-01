@@ -34,7 +34,7 @@ public class WebScriptStatus
     /**
      * Construct
      * 
-     * @param status
+     * @param status Status
      */
     public WebScriptStatus(Status status)
     {
@@ -42,7 +42,7 @@ public class WebScriptStatus
     }
     
     /**
-     * @param exception
+     * @param exception Throwable
      */
     public void setException(Throwable exception)
     {
@@ -58,7 +58,7 @@ public class WebScriptStatus
     }
     
     /**
-     * @param message
+     * @param message String
      */
     public void setMessage(String message)
     {
@@ -90,7 +90,7 @@ public class WebScriptStatus
     }
 
     /**
-     * @see javax.servlet.http.HTTPServletResponse
+     * @see javax.servlet.http.HttpServletResponse
      * 
      * @param code  status code
      */

@@ -35,7 +35,7 @@ public class WebScriptServletSession implements WebScriptSession
     /**
      * Construct
      * 
-     * @param session
+     * @param session HttpSession
      */
     public WebScriptServletSession(HttpSession session)
     {

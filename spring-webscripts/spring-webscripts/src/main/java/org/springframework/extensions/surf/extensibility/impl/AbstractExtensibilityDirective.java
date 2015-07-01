@@ -76,7 +76,8 @@ public abstract class AbstractExtensibilityDirective extends AbstractFreeMarkerD
     /**
      * Requires a DirectiveModel to contribute to.
      * 
-     * @param model
+     * @param directiveName String
+     * @param model ExtensibilityModel
      */
     public AbstractExtensibilityDirective(String directiveName, ExtensibilityModel model)
     {
@@ -97,7 +98,6 @@ public abstract class AbstractExtensibilityDirective extends AbstractFreeMarkerD
      * @param id The id of the current directive invocation
      * @param action The action of the current directive invocation
      * @param target The target of the current directive invocation (this could be null)
-     * @param directiveName The name of the directive
      * @param params The parameters used by the directive invocation.
      * @param body The {@link TemplateDirectiveBody} of the current directive invocation.
      * @param env The current FreeMarker template {@link Environment}
@@ -160,7 +160,8 @@ public abstract class AbstractExtensibilityDirective extends AbstractFreeMarkerD
      * method but this has been abstracted into its own method so that extending directives can easily modify the default 
      * behaviour of this action.</p>
      *   
-     * @param directiveData
+     * @param directiveData ExtensibilityDirectiveData
+     * @param params Map<String, Object>
      * @throws TemplateException
      * @throws IOException
      */
@@ -174,7 +175,7 @@ public abstract class AbstractExtensibilityDirective extends AbstractFreeMarkerD
      * method but this has been abstracted into its own method so that extending directives can easily modify the default 
      * behaviour of this action.</p>
      *   
-     * @param directiveData
+     * @param directiveData ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -188,7 +189,7 @@ public abstract class AbstractExtensibilityDirective extends AbstractFreeMarkerD
      * method but this has been abstracted into its own method so that extending directives can easily modify the default 
      * behaviour of this action.</p>
      *   
-     * @param directiveData
+     * @param directiveData ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -202,7 +203,7 @@ public abstract class AbstractExtensibilityDirective extends AbstractFreeMarkerD
      * method but this has been abstracted into its own method so that extending directives can easily modify the default 
      * behaviour of this action.</p>
      *   
-     * @param directiveData
+     * @param directiveData ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -216,7 +217,7 @@ public abstract class AbstractExtensibilityDirective extends AbstractFreeMarkerD
      * method but this has been abstracted into its own method so that extending directives can easily modify the default 
      * behaviour of this action.</p>
      *   
-     * @param directiveData
+     * @param directiveData ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */

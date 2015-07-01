@@ -27,7 +27,7 @@ public interface WrappingWebScriptResponse extends WebScriptResponse
     /**
      * Get Web Script request wrapped by this request
      * 
-     * @return
+     * @return WebScriptResponse
      */
     public WebScriptResponse getNext();
 }

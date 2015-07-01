@@ -143,7 +143,7 @@ public class RemoteStore extends AbstractStore
     /**
      * Sets the base path to send to the remote store
      * 
-     * @param path 
+     * @param path String
      */
     public void setPath(String path)
     {
@@ -172,7 +172,7 @@ public class RemoteStore extends AbstractStore
      * Sets the store's web application id to bind to within the designated store
      * This is meaningful for WCM Web Project stores.
      * 
-     * @param webappId
+     * @param webappId String
      */
     public void setWebappId(String webappId)
     {
@@ -193,7 +193,7 @@ public class RemoteStore extends AbstractStore
      * Gets the store's web application id binding
      * This is meaningful for WCM Web Project stores.
      * 
-     * @return
+     * @return String
      */
     public String getWebappId()
     {
@@ -254,7 +254,7 @@ public class RemoteStore extends AbstractStore
      * 
      * This allows us to operate against both straight up AVM stores as well as WCM Web Project AVM stores.
      * 
-     * @return
+     * @return String
      */
     public String getStorePath()
     {
@@ -767,7 +767,7 @@ public class RemoteStore extends AbstractStore
      * 
      * @return Connector
      * 
-     * @throws RemoteConfigException
+     * @throws ConnectorProviderException
      */
     protected Connector getConnector() throws ConnectorProviderException
     {
@@ -1027,7 +1027,7 @@ public class RemoteStore extends AbstractStore
      *  
      * Note that the webappPathPrefix is only applied for WCM stores.
      * 
-     * @param fullPaths
+     * @param fullPaths String[]
      */
     private void convertToRelativePaths(String[] fullPaths)
     {

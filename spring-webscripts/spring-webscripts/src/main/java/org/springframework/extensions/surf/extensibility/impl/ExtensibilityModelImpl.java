@@ -197,7 +197,7 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
      * This should occur each time a directive is processed, when the stack is popped a new <code>ContentModelElement</code>
      * of the previous <code>ModelElement</code> will be pushed as the current element to write to.</p>
      * 
-     * @param directiveData
+     * @param directiveData ExtensibilityDirectiveData
      * @param model The model that is passed in can either be the full content model or a sub-range. This will depend upon the
      * current action.
      */
@@ -230,7 +230,7 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
      * @param model The model that is passed in can either be the full content model or a sub-range. This will depend upon the
      * current action.
      * 
-     * @return
+     * @return ExtensibilityDirectiveData
      */
     private ExtensibilityDirectiveData popDirective(List<ExtensibilityModelElement> model)
     {
@@ -385,7 +385,7 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
      * <@region> directive can be merged into the model as part of a "before", "after" or "replace" action of an enclosing
      * <@markup> directive. This relies on some additional content elements being created in the model for the new content
      * to be added to.</p>
-     * @param The {@link ExtensibilityDirectiveData} instance to merge into the model.
+     * @param directiveData The {@link ExtensibilityDirectiveData} instance to merge into the model.
      */
     public void merge(ExtensibilityDirectiveData directiveData) throws TemplateException, IOException
     {
@@ -462,7 +462,7 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
      * <p><b>WARNING:</b> The content will also not be added if the model has not been switched into extension 
      * processing mode as it is not valid for a model declaring template to manipulate its own contents.</p>
      * 
-     *  @param directiveData
+     *  @param directiveData ExtensibilityDirectiveData
      *  @throws IOException
      *  @throws TemplateException
      */
@@ -502,7 +502,7 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
      * <p><b>WARNING:</b> The content will also not be added if the model has not been switched into extension 
      * processing mode as it is not valid for a model declaring template to manipulate its own contents.</p>
      * 
-     *  @param directiveData
+     *  @param directiveData ExtensibilityDirectiveData
      *  @throws IOException
      *  @throws TemplateException
      */
@@ -578,7 +578,6 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
      * <code>TemplateDirectiveBody</code>.
      * 
      * @param directiveData The directive requesting to replace the existing elements with the same id
-     * @param body The directive body that should be processed to generate the replacement content
      */
     public void replace(ExtensibilityDirectiveData directiveData) throws TemplateException, IOException
     {
@@ -625,7 +624,7 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
     }
 
     /**
-     * <p>Iterates over the supplied {@link RangeData} object and calls the <code>enterEditMode</code> method
+     * <p>Iterates over the supplied {@code RangeData} object and calls the <code>enterEditMode</code> method
      * on any {@link DeferredContentSourceModelElement} instances that are found within it. This allows deferred content
      * to be manipulated when extensions are applied to it. For example - deferred content may have already been
      * set which needs to be replaced.</p>
@@ -650,10 +649,10 @@ public class ExtensibilityModelImpl implements ExtensibilityModel
     }
     
     /**
-     * <p>Iterates over the supplied {@link RangeData} object and calls the <code>exitEditMode</code> method on 
+     * <p>Iterates over the supplied {@code RangeData} object and calls the <code>exitEditMode</code> method on
      * any {@link DeferredContentSourceModelElement} instances that are found within it. This indicates to the
      * associated {@link DeferredContentTargetModelElement} instance that editing is now finished.</p>
-     * @param targetRange The range of elements that need to be checked for {@link DeferredContentSourceModelElement} instances 
+     * @param deferredSourceElements List<DeferredContentSourceModelElement>
      */
     public void exitDeferredContentEditMode(List<DeferredContentSourceModelElement> deferredSourceElements)
     {

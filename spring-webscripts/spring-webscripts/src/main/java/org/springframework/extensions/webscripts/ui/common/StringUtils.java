@@ -644,9 +644,9 @@ public class StringUtils
     /**
      * Replace one string instance with another within the specified string
      * 
-     * @param str
-     * @param repl
-     * @param with
+     * @param str String
+     * @param repl String
+     * @param with String
      * 
      * @return replaced string
      */

@@ -156,7 +156,7 @@ public class TypeDescription extends AbstractBaseDescription
     /**
      * Return a new instance of TypeDescription
      * 
-     * @return
+     * @return TypeDescription
      */
     public static TypeDescription newInstance()
     {
@@ -189,11 +189,11 @@ public class TypeDescription extends AbstractBaseDescription
     /**
      * Constructor with id, shortName, description, format and definition
      * 
-     * @param id
-     * @param shortName
-     * @param description
-     * @param format
-     * @param definition
+     * @param id String
+     * @param shortName String
+     * @param description String
+     * @param format String
+     * @param definition String
      */
     public TypeDescription(String id, String shortName, String description, String format, String definition)
     {

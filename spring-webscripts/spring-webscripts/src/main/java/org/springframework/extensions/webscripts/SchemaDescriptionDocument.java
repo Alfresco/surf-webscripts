@@ -70,7 +70,7 @@ public class SchemaDescriptionDocument extends AbstractBaseDescriptionDocument
     }
 
     /**
-     * @param schemaDescriptions the schemaDescriptions to set
+     * @param typeDescriptions TypeDescription[]
      */
     public void setTypeDescriptions(TypeDescription[] typeDescriptions) 
     {
@@ -79,7 +79,7 @@ public class SchemaDescriptionDocument extends AbstractBaseDescriptionDocument
     }
 
     /**
-     * @param typeDescription
+     * @param typeDescription TypeDescription
      */
     public void addTypeDescription(TypeDescription typeDescription)
     {
@@ -147,7 +147,7 @@ public class SchemaDescriptionDocument extends AbstractBaseDescriptionDocument
     /**
      * Return a new instance of SchemaDescriptDocument
      * 
-     * @return
+     * @return SchemaDescriptionDocument
      */
     public static SchemaDescriptionDocument newInstance()
     {
@@ -158,9 +158,9 @@ public class SchemaDescriptionDocument extends AbstractBaseDescriptionDocument
     /**
      * Constructor with id, shortName and desription
      * 
-     * @param id
-     * @param shortName
-     * @param description
+     * @param id String
+     * @param shortName String
+     * @param description String
      */
     public SchemaDescriptionDocument(String id, String shortName, String description)
     {

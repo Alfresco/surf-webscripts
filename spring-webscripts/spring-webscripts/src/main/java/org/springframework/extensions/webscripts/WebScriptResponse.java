@@ -45,7 +45,7 @@ public interface WebScriptResponse
     /**
      * Sets the Response Status
      * 
-     * @param status
+     * @param status int
      */
     public void setStatus(int status);
     
@@ -70,14 +70,14 @@ public interface WebScriptResponse
     /**
      * Sets the Content Type
      * 
-     * @param contentType
+     * @param contentType String
      */
     public void setContentType(String contentType);
     
     /**
      * Sets the Content Encoding
      * 
-     * @param contentEncoding
+     * @param contentEncoding String
      */
     public void setContentEncoding(String contentEncoding);
     

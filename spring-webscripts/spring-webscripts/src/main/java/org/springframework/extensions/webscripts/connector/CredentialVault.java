@@ -46,7 +46,7 @@ public interface CredentialVault
     
     /**
      * Removes credentials for a given endpoint id from the vault
-     * @param endpointId
+     * @param endpointId String
      */
     public void remove(String endpointId);
     
@@ -58,7 +58,7 @@ public interface CredentialVault
     /**
      * Creates new credentials which are stored in this vault
      * 
-     * @param endpointId
+     * @param endpointId String
      * @return the credentials object
      */
     public Credentials newCredentials(String endpointId);
@@ -66,7 +66,7 @@ public interface CredentialVault
     /**
      * Returns the ids for stored credentials
      * 
-     * @return
+     * @return String[]
      */
     public String[] getStoredIds();
 }

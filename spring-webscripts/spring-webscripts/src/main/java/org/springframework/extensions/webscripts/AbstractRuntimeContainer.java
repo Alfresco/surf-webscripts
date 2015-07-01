@@ -62,7 +62,7 @@ public abstract class AbstractRuntimeContainer
     private Map<String, Object> templateObjects;
 
     /**
-     * @param name
+     * @param name String
      */
     public void setName(String name)
     {
@@ -70,7 +70,7 @@ public abstract class AbstractRuntimeContainer
     }
 
     /**
-     * @param formatRegistry
+     * @param formatRegistry FormatRegistry
      */
     public void setFormatRegistry(FormatRegistry formatRegistry)
     {
@@ -78,7 +78,7 @@ public abstract class AbstractRuntimeContainer
     }
 
     /**
-     * @param registry
+     * @param registry Registry
      */
     public void setRegistry(Registry registry)
     {
@@ -86,7 +86,7 @@ public abstract class AbstractRuntimeContainer
     }
     
     /**
-     * @param scriptProcessorRegistry
+     * @param scriptProcessorRegistry ScriptProcessorRegistry
      */
     public void setScriptProcessorRegistry(ScriptProcessorRegistry scriptProcessorRegistry)
     {
@@ -94,7 +94,7 @@ public abstract class AbstractRuntimeContainer
     }
     
     /**
-     * @param templateProcessorRegistry
+     * @param templateProcessorRegistry TemplateProcessorRegistry
      */
     public void setTemplateProcessorRegistry(TemplateProcessorRegistry templateProcessorRegistry)
     {
@@ -102,7 +102,7 @@ public abstract class AbstractRuntimeContainer
     }
     
     /**
-     * @param scriptParameterFactoryRegistry
+     * @param scriptParameterFactoryRegistry ScriptParameterFactoryRegistry
      */
     public void setScriptParameterFactoryRegistry(ScriptParameterFactoryRegistry scriptParameterFactoryRegistry)
     {
@@ -110,7 +110,7 @@ public abstract class AbstractRuntimeContainer
     }
     
     /**
-     * @param searchPath
+     * @param searchPath SearchPath
      */
     public void setSearchPath(SearchPath searchPath)
     {
@@ -118,7 +118,7 @@ public abstract class AbstractRuntimeContainer
     }
     
     /**
-     * @param configService
+     * @param configService ConfigService
      */
     public void setConfigService(ConfigService configService)
     {
@@ -126,7 +126,7 @@ public abstract class AbstractRuntimeContainer
     }
     
     /**
-     * @param scriptObjects
+     * @param scriptObjects Map<String, Object>
      */
     public void setScriptObjects(Map<String, Object> scriptObjects)
     {
@@ -134,7 +134,7 @@ public abstract class AbstractRuntimeContainer
     }
     
     /**
-     * @param templateObjects
+     * @param templateObjects Map<String, Object>
      */
     public void setTemplateObjects(Map<String, Object> templateObjects)
     {

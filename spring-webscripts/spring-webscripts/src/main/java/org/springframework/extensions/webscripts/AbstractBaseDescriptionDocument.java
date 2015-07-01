@@ -58,7 +58,7 @@ public abstract class AbstractBaseDescriptionDocument extends AbstractBaseDescri
     /**
      * Sets the desc path
      * 
-     * @param descPath
+     * @param descPath String
      */
     public void setDescPath(String descPath)
     {
@@ -115,9 +115,9 @@ public abstract class AbstractBaseDescriptionDocument extends AbstractBaseDescri
     /**
      * Constructor with id, shortName and description
      * 
-     * @param id
-     * @param shortName
-     * @param description
+     * @param id String
+     * @param shortName String
+     * @param description String
      */
     public AbstractBaseDescriptionDocument(String id, String shortName,
             String description)

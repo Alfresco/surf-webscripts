@@ -30,7 +30,7 @@ public interface WrappingWebScriptRequest extends WebScriptRequest
     /**
      * Get Web Script request wrapped by this request
      * 
-     * @return
+     * @return WebScriptRequest
      */
     public WebScriptRequest getNext();
 }

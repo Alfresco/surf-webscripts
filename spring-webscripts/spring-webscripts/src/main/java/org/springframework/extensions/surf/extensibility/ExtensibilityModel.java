@@ -33,7 +33,7 @@ public interface ExtensibilityModel
 {
     /**
      * <p>Indicates whether or not the has been started.</p>
-     * @return
+     * @return boolean
      */
     public boolean isModelStarted();
 
@@ -48,7 +48,7 @@ public interface ExtensibilityModel
      * the <code>switchToExtensionProcessing</code> method has been called. When extension processing the "merge" action can no longer
      * be used but the "remove", "replace", "modify", "before" and "after" actions can be. 
      * 
-     * @return
+     * @return boolean
      */
     public boolean isExtensionProcessing();
     
@@ -60,7 +60,7 @@ public interface ExtensibilityModel
     
     /**
      * <p>Gets the {@link ModelWriter} being used by this instance.</p>
-     * @return
+     * @return ModelWriter
      */
     public ModelWriter getWriter();
     
@@ -90,7 +90,7 @@ public interface ExtensibilityModel
     
     /**
      * <p>Removes content from the model.</p>
-     * @param directive
+     * @param directive ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -98,7 +98,7 @@ public interface ExtensibilityModel
     
     /**
      * <p>Replaces content in the model.</p>
-     * @param directive
+     * @param directive ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -107,7 +107,7 @@ public interface ExtensibilityModel
     /**
      * <p>Places new content in the base model.</p>
      * 
-     * @param directive
+     * @param directive ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -115,7 +115,7 @@ public interface ExtensibilityModel
     
     /**
      * <p>Places content in the model before some base content.</p>
-     * @param directive
+     * @param directive ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -124,7 +124,7 @@ public interface ExtensibilityModel
     /**
      * <p>Places content in the modell after some base content.</p>
      * 
-     * @param directive
+     * @param directive ExtensibilityDirectiveData
      * @throws TemplateException
      * @throws IOException
      */
@@ -132,8 +132,8 @@ public interface ExtensibilityModel
     
     /**
      * <p>Finds a specific {@link ContentModelElement} (with the supplied identifier) in the model.</p>
-     * @param id
-     * @return
+     * @param id String
+     * @return ContentModelElement
      */
     public ContentModelElement findContentModelElement(String id);
     
@@ -154,7 +154,7 @@ public interface ExtensibilityModel
     
     /**
      * <p>Retrieves the list of elements being generated as part of extension processing.</p>
-     * @return
+     * @return List<ExtensibilityModelElement>
      */
     public List<ExtensibilityModelElement> getAdditionalContentElements();
     

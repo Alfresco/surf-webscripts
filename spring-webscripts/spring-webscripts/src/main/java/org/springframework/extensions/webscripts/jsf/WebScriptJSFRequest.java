@@ -34,9 +34,9 @@ public class WebScriptJSFRequest extends WebScriptRequestURLImpl
    /**
     * Construct
     * 
-    * @param container
-    * @param scriptUrlParts
-    * @param match
+    * @param container Runtime
+    * @param scriptUrlParts String[]
+    * @param match Match
     */
    public WebScriptJSFRequest(Runtime container, String[] scriptUrlParts, Match match)
    {
