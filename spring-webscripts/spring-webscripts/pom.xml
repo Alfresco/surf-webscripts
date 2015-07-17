@@ -3,9 +3,9 @@
    <modelVersion>4.0.0</modelVersion>
    
    <parent>
-      <groupId>org.springframework.extensions.surf</groupId>
+      <groupId>org.alfresco.surf</groupId>
       <artifactId>spring-surf-webscripts-parent</artifactId>
-      <version>5.1.2-SNAPSHOT</version>
+      <version>5.2</version>
       <relativePath>../../pom.xml</relativePath>
    </parent>
    
@@ -19,7 +19,7 @@
    
       <!-- Spring Surf Core - Configuration Service -->
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-core-configservice</artifactId>
          <version>${project.version}</version>
       </dependency>
