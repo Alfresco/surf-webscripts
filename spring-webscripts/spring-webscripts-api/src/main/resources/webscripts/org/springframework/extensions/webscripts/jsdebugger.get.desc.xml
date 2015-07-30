@@ -2,6 +2,7 @@
   <shortname>Javascript Debugger</shortname>
   <description>Javascript Debugger</description>
   <url>/api/javascript/debugger</url>
+  <lifecycle>internal</lifecycle>
   <authentication>admin</authentication>
   <transaction allow="readonly">required</transaction>
 </webscript>

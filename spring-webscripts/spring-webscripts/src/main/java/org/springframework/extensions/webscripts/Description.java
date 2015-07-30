@@ -271,7 +271,8 @@ public interface Description extends BaseDescriptionDocument
         draft_public_api,
         public_api,
         deprecated,
-        internal
+        internal,
+        limited_support
     }
     
     /**

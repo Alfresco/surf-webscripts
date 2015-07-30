@@ -594,17 +594,15 @@ public class DeclarativeRegistry
     {
         Description desc = script.getDescription();
         Lifecycle lifecycle = desc.getLifecycle();
-       	if (lifecycle != Lifecycle.none)
-      	{
-            PathImpl path = lifecycleByPath.get("/");
-        	PathImpl subpath = lifecycleByPath.get(PathImpl.concatPath(path.getPath(), lifecycle.toString()));
-            if (subpath == null)
-            {
-                 subpath = path.createChildPath(lifecycle.toString());
-                 lifecycleByPath.put(subpath.getPath(), subpath);
-            }      	
-            subpath.addScript(script);
-        }
+       	
+        PathImpl path = lifecycleByPath.get("/");
+    	PathImpl subpath = lifecycleByPath.get(PathImpl.concatPath(path.getPath(), lifecycle.toString()));
+        if (subpath == null)
+        {
+             subpath = path.createChildPath(lifecycle.toString());
+             lifecycleByPath.put(subpath.getPath(), subpath);
+        }      	
+        subpath.addScript(script);
     }
 
     /**

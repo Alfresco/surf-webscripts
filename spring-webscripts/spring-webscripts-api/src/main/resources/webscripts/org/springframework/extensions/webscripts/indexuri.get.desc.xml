@@ -2,6 +2,7 @@
   <shortname>Web Script URI Index</shortname>
   <description>Provide an index of Web Scripts for the specified Web Script URI</description>
   <url>/index/uri/{uri}</url>
+  <lifecycle>internal</lifecycle>
   <format>argument</format>
   <authentication>admin</authentication>
   <transaction allow="readonly">required</transaction>
