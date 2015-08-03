@@ -27,6 +27,9 @@ import java.io.Writer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.extensions.config.Config;
+import org.springframework.extensions.config.ConfigElement;
+import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.config.element.GenericConfigElement;
 import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.extensions.webscripts.TemplateConfigModel;
@@ -68,6 +71,22 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
     
     /** Size of the FreeMarker in-memory template cache */
     private int cacheSize = 256;
+    
+    /** WebScript ConfigService */
+    private ConfigService configService;
+    
+    private Boolean isDebugMode = null;
+    
+    
+    /**
+     * Sets the config service.
+     * 
+     * @param configService     The ConfigService
+     */
+    public void setConfigService(ConfigService configService)
+    {
+        this.configService = configService;
+    }
 
     /**
      * @param defaultEncoding String
@@ -281,7 +300,7 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
         ObjectWrapper objectWrapper = new NonBlockingObjectWrapper();
         config.setObjectWrapper(objectWrapper);
         config.setCacheStorage(new StrongCacheStorage());
-        config.setTemplateUpdateDelay(updateDelay);
+        config.setTemplateUpdateDelay(isDebugMode() == false ? updateDelay : 0);
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         config.setLocalizedLookup(false);
         config.setOutputEncoding("UTF-8");
@@ -307,6 +326,32 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
         {
             stringConfig.setDefaultEncoding(defaultEncoding);
         }
+    }
+    
+    protected boolean isDebugMode()
+    {
+        if (this.isDebugMode == null)
+        {
+            Boolean debugValue = false;
+            if (configService != null)
+            {
+                Config global = configService.getGlobalConfig();
+                if (global != null)
+                {
+                    ConfigElement flags = global.getConfigElement("flags");
+                    if (flags != null)
+                    {
+                        ConfigElement clientDebug = flags.getChild("client-debug");
+                        if (clientDebug != null)
+                        {
+                            debugValue = Boolean.valueOf(clientDebug.getValue());
+                        }
+                    }
+                }
+            }
+            this.isDebugMode = debugValue;
+        }
+        return this.isDebugMode;
     }
     
     

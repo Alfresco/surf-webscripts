@@ -34,10 +34,12 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrapFactory;
 import org.mozilla.javascript.WrappedException;
+import org.springframework.extensions.config.Config;
+import org.springframework.extensions.config.ConfigElement;
+import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.surf.core.scripts.ScriptException;
 import org.springframework.extensions.surf.core.scripts.ScriptResourceHelper;
 import org.springframework.extensions.surf.core.scripts.ScriptResourceLoader;
-import org.springframework.extensions.surf.exception.WebScriptsPlatformException;
 import org.springframework.extensions.webscripts.NativeMap;
 import org.springframework.extensions.webscripts.ScriptContent;
 import org.springframework.extensions.webscripts.ScriptValueConverter;
@@ -73,6 +75,21 @@ public class JSScriptProcessor extends AbstractScriptProcessor implements Script
     /** Cache of runtime compiled script instances */
     private Map<String, Script> scriptCache = new ConcurrentHashMap<String, Script>(256);
     
+    /** WebScript ConfigService */
+    private ConfigService configService;
+    
+    private Boolean isDebugMode = null;
+    
+    
+    /**
+     * Sets the config service.
+     * 
+     * @param configService     The ConfigService
+     */
+    public void setConfigService(ConfigService configService)
+    {
+        this.configService = configService;
+    }
     
     /**
      * @param compile   the compile flag to set
@@ -150,7 +167,7 @@ public class JSScriptProcessor extends AbstractScriptProcessor implements Script
             // test the cache for a pre-compiled script matching our path
             String path = location.getPath();
             Script script = null;
-            if (this.compile && location.isCachable())
+            if (this.compile && location.isCachable() && isDebugMode() == false)
             {
                 script = this.scriptCache.get(path);
             }
@@ -178,7 +195,7 @@ public class JSScriptProcessor extends AbstractScriptProcessor implements Script
                     // rely on the ConcurrentHashMap impl to deal both with ensuring the safety of the
                     // underlying structure with asynchronous get/put operations and for fast
                     // multi-threaded access to the common cache.
-                    if (this.compile && location.isCachable())
+                    if (this.compile && location.isCachable() && isDebugMode() == false)
                     {
                         this.scriptCache.put(path, script);
                     }
@@ -419,6 +436,32 @@ public class JSScriptProcessor extends AbstractScriptProcessor implements Script
             scope.delete("java");
         }
         return scope;
+    }
+    
+    protected boolean isDebugMode()
+    {
+        if (this.isDebugMode == null)
+        {
+            Boolean debugValue = false;
+            if (configService != null)
+            {
+                Config global = configService.getGlobalConfig();
+                if (global != null)
+                {
+                    ConfigElement flags = global.getConfigElement("flags");
+                    if (flags != null)
+                    {
+                        ConfigElement clientDebug = flags.getChild("client-debug");
+                        if (clientDebug != null)
+                        {
+                            debugValue = Boolean.valueOf(clientDebug.getValue());
+                        }
+                    }
+                }
+            }
+            this.isDebugMode = debugValue;
+        }
+        return this.isDebugMode;
     }
 
 
