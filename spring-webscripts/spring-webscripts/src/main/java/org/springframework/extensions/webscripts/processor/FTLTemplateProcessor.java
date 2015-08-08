@@ -328,6 +328,8 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
         {
             stringConfig.setDefaultEncoding(defaultEncoding);
         }
+        
+        stringConfig.setNewBuiltinClassResolver(TemplateClassResolver.SAFER_RESOLVER);
     }
     
     protected boolean isDebugMode()
