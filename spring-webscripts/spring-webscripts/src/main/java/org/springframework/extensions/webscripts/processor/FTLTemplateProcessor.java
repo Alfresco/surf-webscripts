@@ -39,6 +39,7 @@ import org.springframework.extensions.webscripts.json.JSONUtils;
 import freemarker.cache.MruCacheStorage;
 import freemarker.cache.StrongCacheStorage;
 import freemarker.core.Environment;
+import freemarker.core.TemplateClassResolver;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.ObjectWrapper;
@@ -313,6 +314,7 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
         {
             config.setTemplateLoader(getTemplateLoader());
         }
+        config.setNewBuiltinClassResolver(TemplateClassResolver.SAFER_RESOLVER);
                 
         templateConfig = config;
         
