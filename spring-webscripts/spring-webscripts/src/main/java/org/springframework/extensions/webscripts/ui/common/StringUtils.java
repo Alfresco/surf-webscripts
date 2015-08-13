@@ -218,7 +218,8 @@ public class StringUtils
             c = string.charAt(i);
             switch (c)
             {
-                case '"': enc = "&quot;"; break;    //"
+                case '\'': enc = "&#39;"; break;    //'
+                case '"': enc = "&#34;"; break;     //"
                 case '&': enc = "&amp;"; break;     //&
                 case '<': enc = "&lt;"; break;      //<
                 case '>': enc = "&gt;"; break;      //>
