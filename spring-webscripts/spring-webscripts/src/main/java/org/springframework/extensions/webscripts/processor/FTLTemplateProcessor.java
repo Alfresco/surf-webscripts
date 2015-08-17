@@ -47,6 +47,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
+import freemarker.template.Version;
 
 /**
  * FTL Template Processor for Alfresco Web Framework
@@ -309,7 +310,8 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
         {
             config.setDefaultEncoding(defaultEncoding);
         }
-        
+
+        config.setIncompatibleImprovements(new Version(2, 3, 20)); 
         if (getTemplateLoader() != null)
         {
             config.setTemplateLoader(getTemplateLoader());
@@ -328,7 +330,7 @@ public class FTLTemplateProcessor extends AbstractTemplateProcessor
         {
             stringConfig.setDefaultEncoding(defaultEncoding);
         }
-        
+        stringConfig.setIncompatibleImprovements(new Version(2, 3, 20));
         stringConfig.setNewBuiltinClassResolver(TemplateClassResolver.SAFER_RESOLVER);
     }
     
