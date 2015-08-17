@@ -406,7 +406,7 @@ public class StringUtils
                 
                 result = buf.toString();
                 
-                if (strippedLength >= result.length()) break;
+                if (strippedLength == result.length()) break;
             }
             // avoid attempts to add attack vectors that wrap in partial attacks hoping that the stripping
             // process will effectively reconstruct attack elements as other elements are removed.
@@ -513,91 +513,107 @@ public class StringUtils
                     Vector<Attribute> attrs = tag.getAttributesEx();
                     
                     // tag attributes contain the tag name at a minimum
-                    buf.append('<').append(tag.getRawTagName());
-                    for (Attribute attr : attrs)
+                    if (attrs.size() > 1)
                     {
-                        String name = attr.getName();
-                        if (name != null)
+                        buf.append('<').append(tag.getRawTagName());
+                        for (Attribute attr : attrs)
                         {
-                            String nameUpper = name.toUpperCase();
-                            if (!tagname.equals(nameUpper))   // ignore tag name itself
+                            String name = attr.getName();
+                            if (name != null)
                             {
-                                // strip any non-alpha character from attribute name - can be used to form XSS attacks
-                                // i.e. allow onclick= by using /onclick= or "onclick=
-                                String safeName = nameUpper.replaceAll("[^A-Z_]", "");
-
-                                // found a tag attribute for output
-                                // test for known attributes to remove
-                                if (!safeName.startsWith(ATTR_ON_PREFIX) && !attrBlackList.contains(safeName))
+                                String nameUpper = name.toUpperCase();
+                                if (!tagname.equals(nameUpper))   // ignore tag name itself
                                 {
-                                    String value = attr.getRawValue();
-                                    
-                                    //Check for forbidden values on particular attribute
-                                    if (attrValueBlackList.containsKey(safeName))
+                                    // strip any non-alpha character from attribute name - can be used to form XSS attacks
+                                    // i.e. allow onclick= by using /onclick= or "onclick=
+                                    String safeName = nameUpper.replaceAll("[^A-Z_]", "");
+
+                                    // found a tag attribute for output
+                                    // test for known attributes to remove
+                                    if (!safeName.startsWith(ATTR_ON_PREFIX) && !attrBlackList.contains(safeName))
                                     {
-                                        if (attr.getValue() != null)
+                                        String value = attr.getRawValue();
+                                        
+                                        //Check for forbidden values on particular attribute
+                                        if (attrValueBlackList.containsKey(safeName))
                                         {
-                                            String test = attr.getValue().trim().toUpperCase();
-                                            Set<String> blackValues = attrValueBlackList.get(safeName);
-                                            if (blackValues.contains(test))
+                                            if (attr.getValue() != null)
                                             {
-                                                value = "\"\"";
-                                            }
-                                        }
-                                    }
-                                    
-                                    // sanitise src and href attributes
-                                    if (attrGreyList.contains(safeName))
-                                    {
-                                        // test the attribute value for XSS - the procedure is:
-                                        // . first trim the string to remove whitespace at front (hides attack)
-                                        // . test for encoded characters at start of attribute (hides javascript)
-                                        // . test for direct javascript: attack
-                                        if (attr.getValue() != null)
-                                        {
-                                            String test = attr.getValue().trim();
-                                            if (test.length() > 2)
-                                            {
-                                                // handle that html encoder doesn't know about grave accent
-                                                if (test.startsWith("`"))
-                                                {
-                                                    test = test.substring(1);
-                                                }
-                                                // all encoded attacks start with &# sequence - assume to be an attack
-                                                // there are no valid protocols starting with "J" - assume attack
-                                                // the "background" attribute is also vulnerable - no web colors start with "J"
-                                                // on IE6 "vbscript" can be used - no colors or protocols start with "VB"
-                                                if (test.startsWith("&#") ||
-                                                    test.substring(0, 1).toUpperCase().charAt(0) == 'J' ||
-                                                    test.substring(0, 2).toUpperCase().startsWith("VB"))
+                                                String test = attr.getValue().trim().toUpperCase();
+                                                Set<String> blackValues = attrValueBlackList.get(safeName);
+                                                if (blackValues.contains(test))
                                                 {
                                                     value = "\"\"";
                                                 }
                                             }
                                         }
-                                    }
-                                    buf.append(' ').append(name);
-                                    if (value != null)
-                                    {
-                                        buf.append('=').append(value);
+                                        
+                                        // sanitise src and href attributes
+                                        if (attrGreyList.contains(safeName))
+                                        {
+                                            // test the attribute value for XSS - the procedure is:
+                                            // . first trim the string to remove whitespace at front (hides attack)
+                                            // . test for encoded characters at start of attribute (hides javascript)
+                                            // . test for direct javascript: attack
+                                            if (attr.getValue() != null)
+                                            {
+                                                String test = attr.getValue().trim();
+                                                if (test.length() > 2)
+                                                {
+                                                    // handle that html encoder doesn't know about grave accent
+                                                    if (test.startsWith("`"))
+                                                    {
+                                                        test = test.substring(1);
+                                                    }
+                                                    // all encoded attacks start with &# sequence - assume to be an attack
+                                                    // there are no valid protocols starting with "J" - assume attack
+                                                    // the "background" attribute is also vulnerable - no web colors start with "J"
+                                                    // on IE6 "vbscript" can be used - no colors or protocols start with "VB"
+                                                    if (test.startsWith("&#") ||
+                                                        test.substring(0, 1).toUpperCase().charAt(0) == 'J' ||
+                                                        test.substring(0, 2).toUpperCase().startsWith("VB"))
+                                                    {
+                                                        value = "\"\"";
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        buf.append(' ').append(name);
+                                        if (value != null)
+                                        {
+                                            buf.append('=').append(value);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // close the tag after attribute output and before child output
-                    buf.append('>');
-                    
-                    // process children if they exist
-                    if (tag.getChildren() != null)
-                    {
-                        processNodes(buf, tag.getChildren().elements(), encode, false);
+                        // close the tag after attribute output and before child output
+                        buf.append('>');
+                        
+                        // process children if they exist
+                        if (tag.getChildren() != null)
+                        {
+                            processNodes(buf, tag.getChildren().elements(), encode, false);
+                        }
+                        // add the end-tag only if the tag is not a self-closing one <tag attr="val"/>
+                        if (tag.getEndTag() != null && tag.getEndTag() != tag)
+                        {
+                            buf.append(tag.getEndTag().toHtml());
+                        }
                     }
-                    // add the end-tag only if the tag is not a self-closing one <tag attr="val"/>
-                    if (tag.getEndTag() != null && tag.getEndTag() != tag)
+                    else
                     {
-                        buf.append(tag.getEndTag().toHtml());
+                        buf.append('<').append(tag.getRawTagName()).append('>');
+                        // process children if they exist
+                        if (tag.getChildren() != null)
+                        {
+                            processNodes(buf, tag.getChildren().elements(), encode, false);
+                        }
+                        if (tag.getEndTag() != null)
+                        {
+                            buf.append(tag.getEndTag().toHtml());
+                        }
                     }
                 }
             }
