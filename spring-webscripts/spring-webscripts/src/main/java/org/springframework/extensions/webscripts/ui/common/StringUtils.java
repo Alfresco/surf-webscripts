@@ -633,7 +633,8 @@ public class StringUtils
                 // MNT-10958 - work around a bug in the HTML Parser which does not correctly
                 // detect <% as start of TAG - which can used to insert XSS code!
                 // For example: <%<script>alert('XSS');//<%</script>
-                buf.append(encode || txt.contains("<%") ? encode(txt): txt);
+                // MNT-14736 : detect <? which also can used to insert XSS code!
+                buf.append(encode || txt.contains("<%") || txt.contains("<?") ? encode(txt): txt);
             }
         }
     }
