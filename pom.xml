@@ -128,22 +128,30 @@
   </dependencyManagement>
 
    <properties>
-      <!-- Surf Properties - To be updated per release -->
-      <surf.version.major>5</surf.version.major>
-      <surf.version.minor>1</surf.version.minor>
-      <surf.version.revision>0</surf.version.revision>
-      <surf.version.label>Release</surf.version.label>
-      <surf.edition>-</surf.edition>
-      <surf.schema>1000</surf.schema>
-
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
       <spring.version>3.2.14.RELEASE</spring.version>
    </properties>
    
 
-  <build>
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.9.1</version>
+            <executions>
+               <execution>
+                  <phase>initialize</phase>
+                  <id>parse-version</id>
+                  <goals>
+                     <goal>parse-version</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+    
     <!-- Defining version and some configuration of Maven plugins -->
     <pluginManagement>
         <plugins>
