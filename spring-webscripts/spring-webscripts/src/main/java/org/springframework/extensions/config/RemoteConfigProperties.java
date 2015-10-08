@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2009 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of the Spring Surf Extension project.
  *
@@ -21,6 +21,7 @@ package org.springframework.extensions.config;
 import org.springframework.extensions.config.RemoteConfigElement.AuthenticatorDescriptor;
 import org.springframework.extensions.config.RemoteConfigElement.ConnectorDescriptor;
 import org.springframework.extensions.config.RemoteConfigElement.EndpointDescriptor;
+import org.springframework.extensions.config.RemoteConfigElement.KeyStoreDescriptor;
 
 /**
  * @author muzquiano
@@ -42,4 +43,6 @@ public interface RemoteConfigProperties
     // defaults
     public String getDefaultEndpointId();
     public String getDefaultCredentialVaultProviderId();
+
+    public KeyStoreDescriptor getKeyStoreDescriptor();
 }

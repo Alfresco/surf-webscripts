@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2009 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of the Spring Surf Extension project.
  *
@@ -18,10 +18,30 @@
 
 package org.springframework.extensions.config;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.ssl.SSLContexts;
 import org.dom4j.Element;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
 
@@ -34,12 +54,15 @@ import org.springframework.extensions.config.element.ConfigElementAdapter;
  */
 public class RemoteConfigElement extends ConfigElementAdapter implements RemoteConfigProperties
 {
+    private static final Log logger = LogFactory.getLog(RemoteConfigElement.class);
+
     private static final String REMOTE_KEYSTORE = "keystore";  
     private static final String REMOTE_ENDPOINT = "endpoint";
     private static final String REMOTE_AUTHENTICATOR = "authenticator";
     private static final String REMOTE_CONNECTOR = "connector";
     private static final String CONFIG_ELEMENT_ID = "remote";
 
+    protected KeyStoreDescriptor keyStoreDescriptor;
     protected HashMap<String, ConnectorDescriptor> connectors = null;
     protected HashMap<String, AuthenticatorDescriptor> authenticators = null;
     protected HashMap<String, EndpointDescriptor> endpoints = null;
@@ -91,6 +114,13 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         if(configElement.defaultCredentialVaultProviderId != null)
         {
             combinedElement.defaultCredentialVaultProviderId = configElement.defaultCredentialVaultProviderId;
+        }
+
+        // SSL KeyStore configuration
+        combinedElement.keyStoreDescriptor = this.keyStoreDescriptor;
+        if(configElement.keyStoreDescriptor != null)
+        {
+           combinedElement.keyStoreDescriptor = configElement.keyStoreDescriptor;
         }
 
         // return the combined element
@@ -149,6 +179,11 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         return defaultCredentialVaultProviderId;
     }
 
+    @Override
+    public KeyStoreDescriptor getKeyStoreDescriptor()
+    {
+        return this.keyStoreDescriptor;
+    }
 
     /**
      * EndPoint Descriptor class
@@ -207,6 +242,83 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         }
     }
 
+    public static class KeyStoreDescriptor extends Descriptor
+    {
+        private static final String PATH = "path";
+        private static final String TYPE = "type";
+        private static final String PASSWORD = "password";
+        private static final String VERIFY_HOSTNAME = "verify-hostname";
+
+        private Registry<ConnectionSocketFactory> socketFactoryRegistry;
+
+        /**
+         * Initializes SSL client certificate configuration, if appropriate
+         * 
+         * @param elem the element
+         */
+        KeyStoreDescriptor(Element el)
+        {
+            super(el);
+
+            String keyStorePath = getStringProperty(PATH);
+
+            if (keyStorePath != null)
+            {
+                try (InputStream keyStoreIn = new FileInputStream(new File(keyStorePath)))
+                {
+                    KeyStore keyStore = KeyStore.getInstance(getStringProperty(TYPE));
+                    String password = getStringProperty(PASSWORD);
+                    keyStore.load(keyStoreIn, password.toCharArray());
+
+                    boolean verifyHostname = Boolean.valueOf(getStringProperty(VERIFY_HOSTNAME));
+                    if (verifyHostname)
+                    {
+                        logger.info("Creating custom SSL socket factory with hostname verification enabled.");
+                    }
+                    else
+                    {
+                        logger.warn("Creating custom SSL socket factory with hostname verification disabled.");
+                    }
+
+
+                    HostnameVerifier hostnameVerifier = verifyHostname
+                                ? SSLConnectionSocketFactory.getDefaultHostnameVerifier() : NoopHostnameVerifier.INSTANCE;
+
+                    SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(keyStore, null).build();
+                    SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+
+                    this.socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
+                                .register("https", socketFactory).build();
+
+                }
+                catch (IOException io)
+                {
+                    logger.error(io);
+                }
+                catch (KeyStoreException ks)
+                {
+                    logger.error(ks);
+                }
+                catch (NoSuchAlgorithmException na)
+                {
+                    logger.error(na);
+                }
+                catch (KeyManagementException km)
+                {
+                    logger.error(km);
+                }
+                catch (CertificateException ce)
+                {
+                    logger.error(ce);
+                }
+            }
+        }
+
+        public Registry<ConnectionSocketFactory> getSocketFactoryRegistry()
+        {
+            return this.socketFactoryRegistry;
+        }
+    }
     /**
      * The Class ConnectorDescriptor.
      */
@@ -436,6 +548,12 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         if(_defaultCredentialVaultProviderId != null && _defaultCredentialVaultProviderId.length() > 0)
         {
             configElement.defaultCredentialVaultProviderId = _defaultCredentialVaultProviderId;
+        }
+
+        Element remoteKeyStore = elem.element(REMOTE_KEYSTORE);
+        if (remoteKeyStore != null)
+        {
+            configElement.keyStoreDescriptor = new KeyStoreDescriptor(remoteKeyStore);
         }
 
         return configElement;

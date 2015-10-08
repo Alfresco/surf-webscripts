@@ -338,7 +338,8 @@
         modify individual properties or to extend the implementing class. -->
    <bean id="connector.remoteclient" parent="connector.remoteclient.abstract"
          class="org.springframework.extensions.webscripts.connector.RemoteClient" scope="prototype" />
-   <bean id="connector.remoteclient.abstract" abstract="true">
+   <bean id="connector.remoteclient.abstract" abstract="true" init-method="init">
+      <property name="configService" ref="web.config" />
       <!-- name of authentication ticket that can be optionally applied to proxied URLs -->
       <!-- the ticket value is set programmatically by the connector making use of the RemoteClient instance -->
       <property name="ticketName"><value>alf_ticket</value></property>

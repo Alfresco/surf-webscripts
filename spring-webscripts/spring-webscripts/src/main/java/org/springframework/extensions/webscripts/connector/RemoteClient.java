@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2009 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of the Spring Surf Extension project.
  *
@@ -76,6 +76,9 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.springframework.extensions.config.ConfigService;
+import org.springframework.extensions.config.RemoteConfigElement;
+import org.springframework.extensions.config.RemoteConfigElement.KeyStoreDescriptor;
 import org.springframework.extensions.surf.exception.WebScriptsPlatformException;
 import org.springframework.extensions.surf.util.Base64;
 import org.springframework.extensions.webscripts.ScriptRemote;
@@ -134,11 +137,14 @@ public class RemoteClient extends AbstractClient implements Cloneable
     private static final Pattern XML_ENCODING = Pattern.compile("<\\?xml.*.encoding=\"([^\"]*)\"");
     private static final int XML_ENC_READ_LIMIT = 100;
     
-    // HTTP client connection manager and proxy hosts
-    private static PoolingHttpClientConnectionManager s_connectionManager;
+    // HTTP proxy hosts
     private static HttpHost s_httpProxyHost;
     private static HttpHost s_httpsProxyHost;
     
+    // HTTP client connection manager and config service
+    private PoolingHttpClientConnectionManager connectionManager;
+    private ConfigService configService;
+
     // Stateful values (set programatically for each remote client instance)
     private Map<String, String> cookies;
     private String ticket;
@@ -181,22 +187,40 @@ public class RemoteClient extends AbstractClient implements Cloneable
     
     
     /**
-     * Initialise the static HTTP objects - Connection Manager and Proxy Hosts
+     * Initialise the static HTTP objects - Proxy Hosts
      */
     static
     {
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-        cm.setMaxTotal(DEFAULT_POOLSIZE);
-        cm.setDefaultMaxPerRoute(DEFAULT_POOLSIZE);
-        s_connectionManager = cm;
-        
         // Create an HTTP Proxy Host if appropriate system property set
         s_httpProxyHost = createProxyHost("http.proxyHost", "http.proxyPort", 80);
         
         // Create an HTTPS Proxy Host if appropriate system property set
         s_httpsProxyHost = createProxyHost("https.proxyHost", "https.proxyPort", 443);
     }
-    
+
+    public void init()
+    {
+        RemoteConfigElement remoteConfig = (RemoteConfigElement) configService.getConfig("Remote").getConfigElement("remote");
+
+        KeyStoreDescriptor keyStoreDescriptor = null;
+        if (remoteConfig != null)
+        {
+            keyStoreDescriptor = remoteConfig.getKeyStoreDescriptor();
+        }
+
+        if (keyStoreDescriptor != null && keyStoreDescriptor.getSocketFactoryRegistry() != null)
+        {
+            connectionManager = new PoolingHttpClientConnectionManager(keyStoreDescriptor.getSocketFactoryRegistry());
+        }
+        else
+        {
+            connectionManager = new PoolingHttpClientConnectionManager();
+        }
+
+        connectionManager.setMaxTotal(poolSize);
+        connectionManager.setDefaultMaxPerRoute(poolSize);
+    }
+
     /**
      * Clone a RemoteClient and all the properties.
      * <p>
@@ -233,7 +257,12 @@ public class RemoteClient extends AbstractClient implements Cloneable
     
     /////////////////////////////////////////////////////////////////
     // Setters and Spring properties
-    
+
+    public void setConfigService(ConfigService configService)
+    {
+        this.configService = configService;
+    }
+
     /**
      * Sets the authentication ticket name to use.  Will be used for all future call() requests.
      * 
@@ -317,8 +346,6 @@ public class RemoteClient extends AbstractClient implements Cloneable
     public void setPoolSize(int poolSize)
     {
         this.poolSize = poolSize;
-        s_connectionManager.setMaxTotal(poolSize);
-        s_connectionManager.setDefaultMaxPerRoute(poolSize);
     }
 
     /**
@@ -1455,7 +1482,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
         }
         
         return HttpClientBuilder.create()
-            .setConnectionManager(s_connectionManager)
+            .setConnectionManager(connectionManager)
             .setRoutePlanner(routePlanner)
             .setRedirectStrategy(new RedirectStrategy() {
                 // Switch off automatic redirect handling as we want to process them ourselves and maintain cookies
