@@ -8,14 +8,14 @@
    </parent>
    <groupId>org.springframework.extensions.surf</groupId>
    <artifactId>spring-surf-webscripts-parent</artifactId>
-   <version>5.5-SNAPSHOT</version>
+   <version>5.5</version>
    <name>Spring Surf WebScripts</name>
    <description>Spring Surf WebScript modules</description>
    <packaging>pom</packaging>
 
    <scm>
-      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/trunk</connection>
-      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/trunk</developerConnection>
+      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/tags/5.5</connection>
+      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/tags/5.5</developerConnection>
    </scm>
 
    <distributionManagement>
