@@ -160,7 +160,10 @@ public class RemoteClient extends AbstractClient implements Cloneable
     private boolean exceptionOnError = false;
     
     // Programmable request properties - overriding default proxied headers
-    private Map<String, String> requestProperties;
+    private HashMap<String, String> requestProperties = new HashMap<>(0);
+    
+    // Request headers set by bean configuration - the requestProperties above will override and augment these defaults
+    private HashMap<String, String> requestHeaders = new HashMap<>(0);
     
     // Spring bean properties (set via config for each instance)
     // NOTE: must update clone() method below when new config properties are added
@@ -249,6 +252,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
         clone.readTimeout = this.readTimeout;
         clone.removeRequestHeaders = (Set<String>)((HashSet<String>)this.removeRequestHeaders).clone();
         clone.removeResponseHeaders = (Set<String>)((HashSet<String>)this.removeResponseHeaders).clone();
+        clone.requestHeaders = (HashMap<String, String>)this.requestHeaders.clone();
         clone.ticketName = this.ticketName;
         clone.poolSize = this.poolSize;
         return clone;
@@ -261,6 +265,11 @@ public class RemoteClient extends AbstractClient implements Cloneable
     public void setConfigService(ConfigService configService)
     {
         this.configService = configService;
+    }
+    
+    public ConfigService getConfigService()
+    {
+        return this.configService;
     }
 
     /**
@@ -471,7 +480,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
      * These request properties are applied to the connection when
      * the connection is called. Will be used for all future call() requests.
      * 
-     * @param requestProperties Map<String, String>
+     * @param requestProperties     map of request properties to set
      */
     public void setRequestProperties(Map<String, String> requestProperties)
     {
@@ -481,6 +490,25 @@ public class RemoteClient extends AbstractClient implements Cloneable
             for (String key : requestProperties.keySet())
             {
                 this.requestProperties.put(key.toLowerCase(), requestProperties.get(key));
+            }
+        }
+    }
+    
+    /**
+     * Configuration of custom request headers to be applied to each request.
+     * The request properties set programmatically above at runtime will augment and
+     * override these configuration defaults.
+     * 
+     * @param requestHeaders        map of request headers to set
+     */
+    public void setRequestHeaders(Map<String, String> requestHeaders)
+    {
+        if (requestHeaders != null)
+        {
+            this.requestHeaders = new HashMap<String, String>(requestHeaders.size());
+            for (String key : requestHeaders.keySet())
+            {
+                this.requestHeaders.put(key.toLowerCase(), requestHeaders.get(key));
             }
         }
     }
@@ -985,7 +1013,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
                         {
                             key = key.toLowerCase();
                             if (!this.removeRequestHeaders.contains(key) &&
-                                (this.requestProperties == null || !this.requestProperties.containsKey(key)))
+                                !this.requestProperties.containsKey(key) && !this.requestHeaders.containsKey(key))
                             {
                                 method.setHeader(key, req.getHeader(key));
                                 if (trace) logger.trace("Proxy request header: " + key + "=" + req.getHeader(key));
@@ -995,12 +1023,15 @@ public class RemoteClient extends AbstractClient implements Cloneable
                 }
                 
                 // apply request properties, allows for the assignment and override of specific header properties
-                if (this.requestProperties != null && this.requestProperties.size() != 0)
+                // firstly pre-configured headers are applied and overridden/augmented by runtime request properties 
+                final Map<String, String> headers = (Map<String, String>)this.requestHeaders.clone();
+                headers.putAll(this.requestProperties);
+                if (headers.size() != 0)
                 {
-                    for (Map.Entry<String, String> entry : requestProperties.entrySet())
+                    for (Map.Entry<String, String> entry : headers.entrySet())
                     {
                         String headerName = entry.getKey();
-                        String headerValue = this.requestProperties.get(headerName);
+                        String headerValue = headers.get(headerName);
                         if (headerValue != null)
                         {
                            method.setHeader(headerName, headerValue);

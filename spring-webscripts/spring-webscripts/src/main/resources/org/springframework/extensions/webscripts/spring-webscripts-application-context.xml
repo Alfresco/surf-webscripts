@@ -370,6 +370,14 @@
             <value>Host</value>
          </set>
       </property>
+      <!-- the set of headers to apply when proxying a request from a client to a remote endpoint -->
+      <property name="requestHeaders">
+         <map>
+            <!-- Example custom header
+            <entry key="x-something"><value>thevalue</value></entry>
+             -->
+         </map>
+      </property>
       <!-- the set of headers to remove when proxying a response from a remote endpoint to a client -->
       <property name="removeResponseHeaders">
          <set>

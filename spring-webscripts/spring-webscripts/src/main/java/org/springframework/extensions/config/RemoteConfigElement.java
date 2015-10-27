@@ -81,7 +81,7 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         authenticators = new HashMap<String, AuthenticatorDescriptor>(10);
         endpoints = new HashMap<String, EndpointDescriptor>(10);
     }
-
+    
     /* (non-Javadoc)
      * @see org.springframework.extensions.surf.config.element.ConfigElementAdapter#combine(org.springframework.extensions.surf.config.ConfigElement)
      */
