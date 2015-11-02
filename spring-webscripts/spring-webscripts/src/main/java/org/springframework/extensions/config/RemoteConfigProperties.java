@@ -21,7 +21,7 @@ package org.springframework.extensions.config;
 import org.springframework.extensions.config.RemoteConfigElement.AuthenticatorDescriptor;
 import org.springframework.extensions.config.RemoteConfigElement.ConnectorDescriptor;
 import org.springframework.extensions.config.RemoteConfigElement.EndpointDescriptor;
-import org.springframework.extensions.config.RemoteConfigElement.KeyStoreDescriptor;
+import org.springframework.extensions.config.RemoteConfigElement.SSLConfigDescriptor;
 
 /**
  * @author muzquiano
@@ -44,5 +44,5 @@ public interface RemoteConfigProperties
     public String getDefaultEndpointId();
     public String getDefaultCredentialVaultProviderId();
 
-    public KeyStoreDescriptor getKeyStoreDescriptor();
+    public SSLConfigDescriptor getSSLConfigDescriptor();
 }

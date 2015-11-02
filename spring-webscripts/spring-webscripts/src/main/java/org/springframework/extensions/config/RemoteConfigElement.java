@@ -20,27 +20,25 @@ package org.springframework.extensions.config;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.dom4j.Element;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
@@ -56,13 +54,13 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
 {
     private static final Log logger = LogFactory.getLog(RemoteConfigElement.class);
 
-    private static final String REMOTE_KEYSTORE = "keystore";  
+    private static final String REMOTE_SSL_CONFIG = "ssl-config";
     private static final String REMOTE_ENDPOINT = "endpoint";
     private static final String REMOTE_AUTHENTICATOR = "authenticator";
     private static final String REMOTE_CONNECTOR = "connector";
     private static final String CONFIG_ELEMENT_ID = "remote";
 
-    protected KeyStoreDescriptor keyStoreDescriptor;
+    protected SSLConfigDescriptor sslConfigDescriptor;
     protected HashMap<String, ConnectorDescriptor> connectors = null;
     protected HashMap<String, AuthenticatorDescriptor> authenticators = null;
     protected HashMap<String, EndpointDescriptor> endpoints = null;
@@ -117,10 +115,10 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         }
 
         // SSL KeyStore configuration
-        combinedElement.keyStoreDescriptor = this.keyStoreDescriptor;
-        if(configElement.keyStoreDescriptor != null)
+        combinedElement.sslConfigDescriptor = this.sslConfigDescriptor;
+        if(configElement.sslConfigDescriptor != null)
         {
-           combinedElement.keyStoreDescriptor = configElement.keyStoreDescriptor;
+           combinedElement.sslConfigDescriptor = configElement.sslConfigDescriptor;
         }
 
         // return the combined element
@@ -180,9 +178,9 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
     }
 
     @Override
-    public KeyStoreDescriptor getKeyStoreDescriptor()
+    public SSLConfigDescriptor getSSLConfigDescriptor()
     {
-        return this.keyStoreDescriptor;
+        return this.sslConfigDescriptor;
     }
 
     /**
@@ -242,76 +240,115 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
         }
     }
 
-    public static class KeyStoreDescriptor extends Descriptor
+    public static class SSLConfigDescriptor extends Descriptor
     {
-        private static final String PATH = "path";
-        private static final String TYPE = "type";
-        private static final String PASSWORD = "password";
+        // Keystore elements
+        private static final String KEYSTORE_PATH = "keystore-path";
+        private static final String KEYSTORE_TYPE = "keystore-type";
+        private static final String KEYSTORE_PASSWORD = "keystore-password";
+        // Truststore elements
+        private static final String TRUSTSTORE_PATH = "truststore-path";
+        private static final String TRUSTSTORE_TYPE = "truststore-type";
+        private static final String TRUSTSTORE_PASSWORD = "truststore-password";
+        // verify host name element
         private static final String VERIFY_HOSTNAME = "verify-hostname";
 
         private Registry<ConnectionSocketFactory> socketFactoryRegistry;
 
         /**
-         * Initializes SSL client certificate configuration, if appropriate
+         * Initializes SSL client keystore and truststore configuration, if appropriate.
          * 
          * @param elem the element
          */
-        KeyStoreDescriptor(Element el)
+        SSLConfigDescriptor(Element el)
         {
             super(el);
 
-            String keyStorePath = getStringProperty(PATH);
+            KeyStore keyStore = loadKeyStore(KEYSTORE_PATH, KEYSTORE_TYPE, KEYSTORE_PASSWORD);
+            KeyStore trustStore = loadKeyStore(TRUSTSTORE_PATH, TRUSTSTORE_TYPE, TRUSTSTORE_PASSWORD);
 
-            if (keyStorePath != null)
+            if (keyStore == null && trustStore == null)
             {
-                try (InputStream keyStoreIn = new FileInputStream(new File(keyStorePath)))
-                {
-                    KeyStore keyStore = KeyStore.getInstance(getStringProperty(TYPE));
-                    String password = getStringProperty(PASSWORD);
-                    keyStore.load(keyStoreIn, password.toCharArray());
-
-                    boolean verifyHostname = Boolean.valueOf(getStringProperty(VERIFY_HOSTNAME));
-                    if (verifyHostname)
-                    {
-                        logger.info("Creating custom SSL socket factory with hostname verification enabled.");
-                    }
-                    else
-                    {
-                        logger.warn("Creating custom SSL socket factory with hostname verification disabled.");
-                    }
-
-
-                    HostnameVerifier hostnameVerifier = verifyHostname
-                                ? SSLConnectionSocketFactory.getDefaultHostnameVerifier() : NoopHostnameVerifier.INSTANCE;
-
-                    SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(keyStore, null).build();
-                    SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
-
-                    this.socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
-                                .register("https", socketFactory).build();
-
-                }
-                catch (IOException io)
-                {
-                    logger.error(io);
-                }
-                catch (KeyStoreException ks)
-                {
-                    logger.error(ks);
-                }
-                catch (NoSuchAlgorithmException na)
-                {
-                    logger.error(na);
-                }
-                catch (KeyManagementException km)
-                {
-                    logger.error(km);
-                }
-                catch (CertificateException ce)
-                {
-                    logger.error(ce);
-                }
+                logger.warn("Custom SSL socket factory was not configured, as there was no Keystore or Truststore.");
+                return;
             }
+
+            try
+            {
+                String verifyHostStr = getStringProperty(VERIFY_HOSTNAME);
+                // default is 'true', if the verify-hostname element hasn't been defined.
+                boolean verifyHostname = StringUtils.isEmpty(verifyHostStr) ? true : Boolean.valueOf(verifyHostStr);
+                if (verifyHostname)
+                {
+                    logger.info("Creating custom SSL socket factory with hostname verification enabled.");
+                }
+                else
+                {
+                    logger.warn("Creating custom SSL socket factory with hostname verification disabled.");
+                }
+
+                HostnameVerifier hostnameVerifier = verifyHostname
+                            ? SSLConnectionSocketFactory.getDefaultHostnameVerifier() : NoopHostnameVerifier.INSTANCE;
+
+                SSLContextBuilder sslContextBuilder = SSLContexts.custom();
+                if (keyStore != null)
+                {
+                    sslContextBuilder.loadKeyMaterial(keyStore, getPassword(KEYSTORE_PASSWORD));
+                }
+                if (trustStore != null)
+                {
+                    sslContextBuilder.loadTrustMaterial(trustStore, null);
+                }
+
+                SSLContext sslContext = sslContextBuilder.useProtocol("TLS").build();
+                SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+
+                this.socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
+                            .register("https", socketFactory)
+                            .register("http", PlainConnectionSocketFactory.INSTANCE)
+                            .build();
+
+            }
+            catch (Exception ex)
+            {
+                logger.error(ex);
+            }
+        }
+
+        private KeyStore loadKeyStore(String pathElmName, String typeElmName, String passwordElmName)
+        {
+            String path = getStringProperty(pathElmName);
+            if (StringUtils.isEmpty(path))
+            {
+                String storeKind = (TRUSTSTORE_PATH.equals(pathElmName)) ? "Truststore" : "Keystore";
+                logger.warn("No SSL " + storeKind + " was configured.");
+                return null;
+            }
+
+            char[] password = getPassword(passwordElmName);
+            if (password == null)
+            {
+                logger.warn("No SSL key store password was provided. Attempt to load a key store without a password.");
+            }
+
+            try (InputStream keyStoreIn = new FileInputStream(new File(path)))
+            {
+                KeyStore keyStore = KeyStore.getInstance(getStringProperty(typeElmName));
+                keyStore.load(keyStoreIn, password);
+
+                return keyStore;
+            }
+            catch (Exception error)
+            {
+                logger.error(error);
+                return null;
+            }
+        }
+
+        private char[] getPassword(String passwordElmName)
+        {
+            String passwordStr = getStringProperty(passwordElmName);
+            return (StringUtils.isEmpty(passwordStr)) ? null : passwordStr.toCharArray();
         }
 
         public Registry<ConnectionSocketFactory> getSocketFactoryRegistry()
@@ -550,10 +587,10 @@ public class RemoteConfigElement extends ConfigElementAdapter implements RemoteC
             configElement.defaultCredentialVaultProviderId = _defaultCredentialVaultProviderId;
         }
 
-        Element remoteKeyStore = elem.element(REMOTE_KEYSTORE);
-        if (remoteKeyStore != null)
+        Element remoteSSLConfig = elem.element(REMOTE_SSL_CONFIG);
+        if (remoteSSLConfig != null)
         {
-            configElement.keyStoreDescriptor = new KeyStoreDescriptor(remoteKeyStore);
+            configElement.sslConfigDescriptor = new SSLConfigDescriptor(remoteSSLConfig);
         }
 
         return configElement;

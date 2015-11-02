@@ -78,7 +78,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.config.RemoteConfigElement;
-import org.springframework.extensions.config.RemoteConfigElement.KeyStoreDescriptor;
+import org.springframework.extensions.config.RemoteConfigElement.SSLConfigDescriptor;
 import org.springframework.extensions.surf.exception.WebScriptsPlatformException;
 import org.springframework.extensions.surf.util.Base64;
 import org.springframework.extensions.webscripts.ScriptRemote;
@@ -205,15 +205,15 @@ public class RemoteClient extends AbstractClient implements Cloneable
     {
         RemoteConfigElement remoteConfig = (RemoteConfigElement) configService.getConfig("Remote").getConfigElement("remote");
 
-        KeyStoreDescriptor keyStoreDescriptor = null;
+        SSLConfigDescriptor sslConfigDescriptor = null;
         if (remoteConfig != null)
         {
-            keyStoreDescriptor = remoteConfig.getKeyStoreDescriptor();
+            sslConfigDescriptor = remoteConfig.getSSLConfigDescriptor();
         }
 
-        if (keyStoreDescriptor != null && keyStoreDescriptor.getSocketFactoryRegistry() != null)
+        if (sslConfigDescriptor != null && sslConfigDescriptor.getSocketFactoryRegistry() != null)
         {
-            connectionManager = new PoolingHttpClientConnectionManager(keyStoreDescriptor.getSocketFactoryRegistry());
+            connectionManager = new PoolingHttpClientConnectionManager(sslConfigDescriptor.getSocketFactoryRegistry());
         }
         else
         {
