@@ -42,6 +42,7 @@ import org.apache.commons.logging.LogFactory;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
+import org.springframework.extensions.config.HasAikauVersion;
 import org.springframework.extensions.surf.extensibility.ExtensibilityModel;
 import org.springframework.extensions.surf.extensibility.HandlesExtensibility;
 import org.springframework.extensions.surf.extensibility.impl.ModelWriter;
@@ -405,8 +406,19 @@ public abstract class AbstractWebScript implements WebScript
                         Object includeBundles = result.getString("surf.include.resources");
                         if (includeBundles != null) 
                         {
+                            String aikauVersion = null;
+                            if (container instanceof HasAikauVersion)
+                            {
+                                aikauVersion = ((HasAikauVersion) container).getAikauVersion();
+                            }
+                            
                             for (String includeBundle: includeBundles.toString().split("\\s*,\\s*")) 
                             {
+                                if (aikauVersion != null)
+                                {
+                                    includeBundle = includeBundle.replaceAll("\\{aikauVersion\\}", aikauVersion);
+                                }
+                                
                                 Set<String> importPaths = buildLocalePathList(includeBundle, locale);
                                 Object[] arrayOfImportPaths = importPaths.toArray();
                                 for (int i=arrayOfImportPaths.length-1; i>=0; i--)
