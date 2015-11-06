@@ -1149,8 +1149,10 @@ public class RemoteClient extends AbstractClient implements Cloneable
                     }
                 }
                 
-                // execute the method to get the response
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Execute the method to get the response
                 response = httpClient.execute(method);
+                
                 redirectURL = processResponse(redirectURL, response);
             }
             while (redirectURL != null && ++retries < maxRetries);
@@ -1160,6 +1162,11 @@ public class RemoteClient extends AbstractClient implements Cloneable
             if (responseCode >= HttpServletResponse.SC_INTERNAL_SERVER_ERROR && this.exceptionOnError)
             {
                 buildProxiedServerError(response);
+            }
+            else if (responseCode == HttpServletResponse.SC_SERVICE_UNAVAILABLE)
+            {
+                // Occurs when server is down and likely an ELB response 
+                throw new ConnectException(response.toString());
             }
             boolean allowResponseCommit = (responseCode != HttpServletResponse.SC_UNAUTHORIZED || commitResponseOnAuthenticationError);
             status.setCode(responseCode);
