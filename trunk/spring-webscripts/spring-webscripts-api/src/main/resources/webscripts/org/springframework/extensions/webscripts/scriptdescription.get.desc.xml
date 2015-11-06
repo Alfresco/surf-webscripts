@@ -1,0 +1,9 @@
+<webscript>
+  <shortname>Web Script Description</shortname>
+  <description>Retrieve description document for identified Web Script</description>
+  <url>/description/{serviceId}</url>
+  <lifecycle>internal</lifecycle>
+  <format>argument</format>
+  <authentication>admin</authentication>
+  <transaction allow="readonly">required</transaction>
+</webscript>

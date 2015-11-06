@@ -1,0 +1,170 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.alfresco</groupId>
+      <artifactId>alfresco-super-pom</artifactId>
+      <version>6</version>
+   </parent>
+   <groupId>org.springframework.extensions.surf</groupId>
+   <artifactId>spring-surf-webscripts-parent</artifactId>
+   <version>5.8</version>
+   <name>Spring Surf WebScripts</name>
+   <description>Spring Surf WebScript modules</description>
+   <packaging>pom</packaging>
+
+   <scm>
+      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/tags/5.8</connection>
+      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/tags/5.8</developerConnection>
+   </scm>
+
+   <distributionManagement>
+      <repository>
+          <id>alfresco-internal</id>
+          <url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
+      </repository>
+      <snapshotRepository>
+          <id>alfresco-internal-snapshots</id>
+          <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
+      </snapshotRepository>      
+   </distributionManagement>
+
+   <modules>
+      <!-- Spring Surf Platform Services -->
+      <module>spring-surf-core/spring-surf-core</module>
+      <module>spring-surf-core/spring-surf-core-configservice</module>
+
+      <!-- Spring Web Scripts -->
+      <module>spring-webscripts/spring-webscripts</module>
+      <module>spring-webscripts/spring-webscripts-api</module>
+   </modules>
+
+   <dependencies>
+      <!-- Common test dependencies for Spring Surf -->
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>4.11</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-test</artifactId>
+         <version>${spring.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- Servlet API 2.5 -->
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>servlet-api</artifactId>
+         <version>2.5</version>
+      </dependency>
+   </dependencies>
+
+  <dependencyManagement>
+     <dependencies>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>1.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>1.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.21</version>
+        </dependency>
+     </dependencies>
+  </dependencyManagement>
+
+   <properties>
+      <spring.version>3.2.14.RELEASE</spring.version>
+   </properties>
+   
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <phase>initialize</phase>
+                  <id>parse-version</id>
+                  <goals>
+                     <goal>parse-version</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+    
+    <pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Specification-Version>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</Specification-Version>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Build-Date>${maven.build.timestamp}</Build-Date>
+                            <Build-Name>${bamboo_planName}</Build-Name>
+                            <Build-Key>${bamboo_fullBuildKey}</Build-Key>
+                            <Build-Number>${bamboo_buildNumber}</Build-Number>
+                            <Build-Revision>${bamboo_repository_revision_number}</Build-Revision>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                </configuration>        
+            </plugin>
+        </plugins>
+    </pluginManagement>
+  </build>
+</project>
