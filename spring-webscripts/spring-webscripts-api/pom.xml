@@ -3,22 +3,22 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>org.springframework.extensions.surf</groupId>
+		<groupId>org.alfresco.surf</groupId>
 		<artifactId>spring-surf-webscripts-parent</artifactId>
 		<version>6.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	
 	<artifactId>spring-webscripts-api</artifactId>
-	<name>Spring Web Scripts - API</name>
-	<description>Spring Web Scripts - API</description>
+	<name>Surf Web Scripts - API</name>
+	<description>Surf Web Scripts - API</description>
 	<url>spring-webscripts/${project.artifactId}</url>
 	<packaging>jar</packaging>
 	<dependencies>
 	
-		<!-- Spring Web Scripts Runtime -->
+		<!-- Web Scripts Runtime -->
 		<dependency>
-			<groupId>org.springframework.extensions.surf</groupId>
+			<groupId>org.alfresco.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
 			<version>${project.version}</version>
 		</dependency>

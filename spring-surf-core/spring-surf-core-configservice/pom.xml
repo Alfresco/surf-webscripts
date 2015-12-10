@@ -2,23 +2,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.springframework.extensions.surf</groupId>
+		<groupId>org.alfresco.surf</groupId>
 		<artifactId>spring-surf-webscripts-parent</artifactId>
 		<version>6.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>spring-surf-core-configservice</artifactId>
-	<name>Spring Surf Core - Configuration Service</name>
-	<description>Spring Surf Core - Configuration Service</description>
+	<name>Surf Core - Configuration Service</name>
+	<description>Surf Core - Configuration Service</description>
 	<url>spring-surf-core/${project.artifactId}</url>
 	<packaging>jar</packaging>
 
 	<dependencies>
 
-		<!-- Spring Web Scripts Core -->
+		<!-- Web Scripts Core -->
 		<dependency>
-			<groupId>org.springframework.extensions.surf</groupId>
+			<groupId>org.alfresco.surf</groupId>
 			<artifactId>spring-surf-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>

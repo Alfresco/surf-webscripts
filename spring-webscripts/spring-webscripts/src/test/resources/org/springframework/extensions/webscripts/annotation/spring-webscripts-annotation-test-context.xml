@@ -11,7 +11,7 @@
 	<bean id="webscripts.container.test" parent="webscripts.container"
 		class="org.springframework.extensions.webscripts.PresentationContainer">
 		<property name="name">
-			<value>Spring Web Scripts Test Container</value>
+			<value>Web Scripts Test Container</value>
 		</property>
 		<property name="registry" ref="webscripts.registry" />
 		<property name="templateProcessorRegistry" ref="webscripts.web.templateregistry" />

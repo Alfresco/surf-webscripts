@@ -3,15 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>org.springframework.extensions.surf</groupId>
+		<groupId>org.alfresco.surf</groupId>
 		<artifactId>spring-surf-webscripts-parent</artifactId>
 		<version>6.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	
 	<artifactId>spring-surf-core</artifactId>
-	<name>Spring Surf Core</name>
-	<description>Spring Surf Core</description>
+	<name>Surf Core</name>
+	<description>Surf Core</description>
 	<url>spring-surf-core/${project.artifactId}</url>
 	<packaging>jar</packaging>
 	<build>

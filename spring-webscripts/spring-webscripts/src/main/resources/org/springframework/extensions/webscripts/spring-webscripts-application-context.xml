@@ -181,7 +181,7 @@
    <!-- This is an example of the WebScripts extensibility container - this could replace the other "webscripts.container" 
         definition to provide extensibility capabilities for WebScripts...
    <bean id="webscripts.container" parent="webscripts.abstractcontainer" class="org.springframework.extensions.webscripts.ExtensibilityContainer">
-      <property name="name"><value>Spring Web Scripts Extensibility Container</value></property>
+      <property name="name"><value>Web Scripts Extensibility Container</value></property>
       <property name="extensibilityModuleHandler" ref="extensibility.handler"/>
       <property name="registry" ref="webscripts.registry" />
       <property name="templateProcessorRegistry" ref="webscripts.web.templateregistry" />
@@ -252,7 +252,7 @@
    <bean id="webscripts.web.scriptparameterfactoryregistry" class="org.springframework.extensions.webscripts.ScriptParameterFactoryRegistry" />
 
    <bean id="webscripts.container" parent="webscripts.abstractcontainer" class="org.springframework.extensions.webscripts.PresentationContainer">
-      <property name="name"><value>Spring Web Scripts Container</value></property>
+      <property name="name"><value>Web Scripts Container</value></property>
       <property name="registry" ref="webscripts.registry" />
       <property name="templateProcessorRegistry" ref="webscripts.web.templateregistry" />
       <property name="scriptProcessorRegistry" ref="webscripts.web.scriptregistry" />
