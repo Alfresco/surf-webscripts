@@ -39,15 +39,12 @@
              <tr><td><a href="${url.serviceContext}/index/failures">Browse failed Web Scripts</a></td></tr>
              </#if>
              <tr><td><a href="${url.serviceContext}/api/javascript/debugger">Alfresco Javascript Debugger</a></td></tr>
-             <!--<tr><td><a href="${url.serviceContext}/modules/deploy">Module Deployment</a></td></tr>-->
           </table>
           <br/>
           <table>
              <tr><td><input type="submit" name="submit" value="Refresh Web Scripts"/></td></tr>
           </table>
       </form>
-      <br/>
-      
       </div>
    </body>
 </html>

@@ -11,7 +11,7 @@
 <table>
    <tr>
       <td>
-      	<img src="${resourceurl('/images/logo/AlfrescoLogo32.png', true)}" alt="Alfresco" />
+      	<img src="${resourceurl('/images/logo/AlfrescoLogo.png', true)}" alt="Alfresco" width="60" />
       </td>
       <td><span class="title">[#nested]</span></td>
    </tr>

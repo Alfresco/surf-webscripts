@@ -1,22 +1,14 @@
 body 
 {
-   margin: 4px;
-   font-family: Trebuchet MS, Arial, sans-serif;
-   font-size: 12px;
-   color: #515D6B;
-}
-
-div
-{
-   font-family: Trebuchet MS, Arial, sans-serif;
-   font-size: 12px;
+   margin: 12px;
+   font-family: Arial, sans-serif;
+   font-size: 14px;
    color: #515D6B;
 }
 
 div.title
 {
-   font-weight: bold;
-   font-size: 13px;
+   font-size: 24px;
 }
 
 div.titlebar
@@ -32,15 +24,15 @@ div.indent
    padding-left: 3px;
 }
 
-span
+span.mainSubTitle
 {
-   font-size: 11px;
+   font-weight: bold;
+   padding: 3px;
 }
 
 span.title
 {
-   font-weight: bold;
-   font-size: 13px;
+   font-size: 32px;
    color: #666677;
 }
 
@@ -51,7 +43,6 @@ span.indent
 
 a:link, a:visited
 {
-   font-family: Trebuchet MS, Arial, sans-serif;
    text-decoration: none;
    color: #168ECE;
 }
@@ -68,12 +59,20 @@ form
    margin: 0px;
 }
 
-input
+input[type="submit"],
+input[type="button"]
 {
-   font-family: Trebuchet MS, Arial, sans-serif;
-   font-size: 12px;
-   padding: 1px 2px 1px 2px;
-   color: #515D6B;
-   background-color: #F8FCFD;
-   border: 1px solid #CCD4DB;
+   padding: 5px 8px;
+   color: #fff;
+   background-color: #0C79BF;
+   border: 1px solid #0C79BF;
+   margin: 4px 0px;
+   border-radius: 3px;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover
+{
+   background-color: #106E9F;
+   cursor: pointer;
 }
