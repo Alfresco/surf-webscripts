@@ -1146,6 +1146,14 @@ public class RemoteClient extends AbstractClient implements Cloneable
                             // HttpClient will encode the body as appropriate - cannot assume same as the original client sent
                             method.removeHeaders(HEADER_CONTENT_LENGTH);
                         }
+                        else
+                        {
+                            // Apache doc for AbstractHttpEntity states:
+                            // HttpClient must use chunk coding if the entity content length is unknown (== -1).
+                            HttpEntity entity = new InputStreamEntity(in, -1L);
+                            ((HttpEntityEnclosingRequest)method).setEntity(entity);
+                            ((HttpEntityEnclosingRequest)method).setHeader(HTTP.EXPECT_DIRECTIVE, HTTP.EXPECT_CONTINUE);
+                        }
                     }
                 }
                 
