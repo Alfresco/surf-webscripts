@@ -479,7 +479,7 @@ public class ConnectorService implements ApplicationContextAware
         // Remap connector to use existing credential id connector session endpoint
         // to allow an endpoint to share another endpoint credentials and connector session
         // @see SimpleCredentialVault.retrieve()
-        EndpointDescriptor desc = this.remoteConfig.getEndpointDescriptor(endpointId);
+        EndpointDescriptor desc = getRemoteConfig().getEndpointDescriptor(endpointId);
         if (desc.getParentId() != null)
         {
             endpointId = desc.getParentId();
@@ -512,7 +512,7 @@ public class ConnectorService implements ApplicationContextAware
         // Remap connector to use existing credential id connector session endpoint
         // to allow an endpoint to share another endpoint credentials and connector session
         // @see SimpleCredentialVault.retrieve()
-        EndpointDescriptor desc = this.remoteConfig.getEndpointDescriptor(endpointId);
+        EndpointDescriptor desc = getRemoteConfig().getEndpointDescriptor(endpointId);
         if (desc.getParentId() != null)
         {
             endpointId = desc.getParentId();
