@@ -42,6 +42,7 @@ public abstract class AbstractAuthenticator implements Authenticator, Applicatio
     private static Log logger = LogFactory.getLog(Authenticator.class);
     
     private ApplicationContext applicationContext;
+    private ConnectorService connectorService;
     
     /** RemoteClient base bean used to clone beans for use in Authenticators */
     private static ThreadLocal<RemoteClient> remoteClientBase = new ThreadLocal<RemoteClient>();
@@ -55,6 +56,24 @@ public abstract class AbstractAuthenticator implements Authenticator, Applicatio
     public void setApplicationContext(ApplicationContext applicationContext)
     {
         this.applicationContext = applicationContext;
+    }
+    
+    /**
+     * Helper to return the "connector.service" bean for concrete implementations to make use of
+     * 
+     * @return ConnectorService
+     */
+    protected ConnectorService getConnectorService()
+    {
+        if (this.connectorService == null)
+        {
+            if (this.applicationContext == null)
+            {
+                throw new IllegalStateException("Application Context must be set programatically for Authenticator.");
+            }
+            this.connectorService = (ConnectorService) this.applicationContext.getBean("connector.service");
+        }
+        return this.connectorService;
     }
     
     /**

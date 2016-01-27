@@ -24,6 +24,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.extensions.config.RemoteConfigElement;
+import org.springframework.extensions.config.RemoteConfigElement.EndpointDescriptor;
 import org.springframework.extensions.surf.exception.AuthenticationException;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.json.JSONWriter;
@@ -44,7 +46,7 @@ public class AlfrescoAuthenticator extends AbstractAuthenticator
 {
     private static Log logger = LogFactory.getLog(AlfrescoAuthenticator.class);
     
-    private static final String JSON_lOGIN = "'{'\"username\": \"{0}\", \"password\": \"{1}\"'}'";
+    private static final String JSON_LOGIN = "'{'\"username\": \"{0}\", \"password\": \"{1}\"'}'";
     private static final String API_LOGIN = "/api/login";
     private static final String MIMETYPE_APPLICATION_JSON = "application/json";
     
@@ -64,14 +66,26 @@ public class AlfrescoAuthenticator extends AbstractAuthenticator
             (pass = (String)credentials.getProperty(Credentials.CREDENTIAL_PASSWORD)) != null)
         {
             // build a new remote client
-            RemoteClient remoteClient = buildRemoteClient(endpoint);
+            
+            // Take endpointId from credentials as the endpoint may be remapped to allow an endpoint to credentials from
+            // a parent endpoint - for the purposes of authentication, we want to use the parent endpoint URL.
+            // @see ConnectorService.getConnectorSession()
+            // @see SimpleCredentialVault.retrieve()
+            final String endpointId = credentials.getEndpointId();
+            final RemoteConfigElement config = getConnectorService().getRemoteConfig();
+            final EndpointDescriptor desc = config.getEndpointDescriptor(endpointId);
+            if (desc == null)
+            {
+                throw new IllegalArgumentException("Unknown endpoint ID: " + endpointId);
+            }
+            final RemoteClient remoteClient = buildRemoteClient(config.getEndpointDescriptor(endpointId).getEndpointUrl());
             
             if (logger.isDebugEnabled())
                 logger.debug("Authenticating user: " + user);
             
             // POST to the Alfresco login WebScript
             remoteClient.setRequestContentType(MIMETYPE_APPLICATION_JSON);
-            String body = MessageFormat.format(JSON_lOGIN, JSONWriter.encodeJSONString(user), JSONWriter.encodeJSONString(pass));
+            String body = MessageFormat.format(JSON_LOGIN, JSONWriter.encodeJSONString(user), JSONWriter.encodeJSONString(pass));
             Response response = remoteClient.call(getLoginURL(), body);
             
             // read back the ticket
