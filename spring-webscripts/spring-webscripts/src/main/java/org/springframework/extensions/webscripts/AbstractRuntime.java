@@ -45,6 +45,7 @@ public abstract class AbstractRuntime implements Runtime
 {
     // Logger
     protected static final Log logger = LogFactory.getLog(AbstractRuntime.class);
+    protected static final Log exceptionLogger = LogFactory.getLog(AbstractRuntime.class.getName() + ".exception");
 
     /** Component Dependencies */
     protected RuntimeContainer container;
@@ -302,7 +303,10 @@ public abstract class AbstractRuntime implements Runtime
                 Status status = new Status();
                 status.setCode(statusCode);
                 status.setMessage(e.getMessage() != null ? e.getMessage() : e.toString());
-                status.setException(e);
+                if (exceptionLogger.isDebugEnabled())
+                {
+                    status.setException(e);
+                }
                 statusModel.put("status", status);
     
                 // render output
