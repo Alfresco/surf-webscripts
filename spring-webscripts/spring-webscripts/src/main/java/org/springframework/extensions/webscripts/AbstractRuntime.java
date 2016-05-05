@@ -232,113 +232,19 @@ public abstract class AbstractRuntime implements Runtime
             	// log error on server so its not swallowed and lost
                 else if (logger.isErrorEnabled())
                 {
-                    logger.error("Exception from executeScript - redirecting to status template error: " + e.getMessage(), e);
+                    logger.error("Exception from executeScript: " + e.getMessage(), e);
                 }
                 
                 // setup context
                 WebScriptRequest req = createRequest(match);
                 WebScriptResponse res = createResponse();
-                String format = req.getFormat();
-    
-                // extract status code, if specified
-                int statusCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-                StatusTemplate statusTemplate = null;
-                Map<String, Object> statusModel = null;
-                if (e instanceof WebScriptException)
-                {
-                    WebScriptException we = (WebScriptException)e;
-                    statusCode = we.getStatus();
-                    statusTemplate = we.getStatusTemplate();
-                    statusModel = we.getStatusModel();
-                }
-    
-                // retrieve status template for response rendering
-                if (statusTemplate == null)
-                {
-                    // locate status template
-                    // NOTE: search order...
-                    //   1) root located <status>.ftl
-                    //   2) root located <format>.status.ftl
-                    //   3) root located status.ftl
-                    statusTemplate = getStatusCodeTemplate(statusCode);
-                    
-                    String validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());
-                    if (validTemplatePath == null)
-                    {
-                        if (format != null && format.length() > 0)
-                        {
-                            // if we have a format try and get the format specific status template
-                            statusTemplate = getFormatStatusTemplate(format);
-                            validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());
-                        }
-                        
-                        // if we don't have a valid template path get the default status template
-                        if (validTemplatePath == null)
-                        {
-                            statusTemplate = getStatusTemplate();
-                            validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());
-                        }
-                        
-                        // throw error if a status template could not be found
-                        if (validTemplatePath == null)
-                        {
-                            throw new WebScriptException("Failed to find status template " + statusTemplate.getPath() + " (format: " + statusTemplate.getFormat() + ")");
-                        }
-                    }                
-                }
-    
-                // create basic model for all information known at this point, if one hasn't been pre-provided
-                if (statusModel == null || statusModel.equals(Collections.EMPTY_MAP))
-                {
-                    statusModel = new HashMap<String, Object>(8, 1.0f);
-                    statusModel.putAll(container.getTemplateParameters());
-                    statusModel.put("url", createURLModel(req));
-                    if (match != null && match.getWebScript() != null)
-                    {
-                        statusModel.put("webscript", match.getWebScript().getDescription());  
-                    }
-                }
-    
-                // add status to model
-                Status status = new Status();
-                status.setCode(statusCode);
-                status.setMessage(e.getMessage() != null ? e.getMessage() : e.toString());
-                if (exceptionLogger.isDebugEnabled())
-                {
-                    status.setException(e);
-                }
-                statusModel.put("status", status);
-    
-                // render output
-                String mimetype = container.getFormatRegistry().getMimeType(req.getAgent(), statusTemplate.getFormat());
-                if (mimetype == null)
-                {
-                    throw new WebScriptException("Web Script format '" + statusTemplate.getFormat() + "' is not registered");
-                }
-                
-                if (debug)
-                {
-                    logger.debug("Force success status header in response: " + req.forceSuccessStatus());
-                    logger.debug("Sending status " + statusCode + " (Template: " + statusTemplate.getPath() + ")");
-                    logger.debug("Rendering response: content type=" + mimetype);
-                }
-    
+
                 Cache cache = new Cache();
                 cache.setNeverCache(true);
                 res.setCache(cache);
-                res.setStatus(req.forceSuccessStatus() ? HttpServletResponse.SC_OK : statusCode);
-                res.setContentType(mimetype + ";charset=UTF-8");
-                try
-                {
-                    String validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());                
-                    TemplateProcessor statusProcessor = container.getTemplateProcessorRegistry().getTemplateProcessor(validTemplatePath);
-                    statusProcessor.process(validTemplatePath, statusModel, res.getWriter());
-                }
-                catch (Exception e1)
-                {
-                    logger.error("Internal error", e1);
-                    throw new WebScriptException("Internal error", e1);
-                }
+
+                renderErrorResponse(match, e, req, res);
+
             }
         }
         finally
@@ -350,7 +256,118 @@ public abstract class AbstractRuntime implements Runtime
             }
         }
     }
-    
+
+    /**
+     * Renders an error message to the response based on the Throwable exception passed in.
+     * @param match
+     * @param exception
+     * @param request
+     * @param response
+     */
+    protected void renderErrorResponse(Match match, Throwable exception, WebScriptRequest request, WebScriptResponse response) {
+
+        // extract status code, if specified
+        int statusCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+        final boolean debug = logger.isDebugEnabled();
+        StatusTemplate statusTemplate = null;
+        Map<String, Object> statusModel = null;
+        String format = request.getFormat();
+
+        if (exception instanceof WebScriptException)
+        {
+            WebScriptException we = (WebScriptException) exception;
+            statusCode = we.getStatus();
+            statusTemplate = we.getStatusTemplate();
+            statusModel = we.getStatusModel();
+        }
+
+        // retrieve status template for response rendering
+        if (statusTemplate == null)
+        {
+            // locate status template
+            // NOTE: search order...
+            //   1) root located <status>.ftl
+            //   2) root located <format>.status.ftl
+            //   3) root located status.ftl
+            statusTemplate = getStatusCodeTemplate(statusCode);
+
+            String validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());
+            if (validTemplatePath == null)
+            {
+                if (format != null && format.length() > 0)
+                {
+                    // if we have a format try and get the format specific status template
+                    statusTemplate = getFormatStatusTemplate(format);
+                    validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());
+                }
+
+                // if we don't have a valid template path get the default status template
+                if (validTemplatePath == null)
+                {
+                    statusTemplate = getStatusTemplate();
+                    validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());
+                }
+
+                // throw error if a status template could not be found
+                if (validTemplatePath == null)
+                {
+                    throw new WebScriptException("Failed to find status template " + statusTemplate.getPath() + " (format: " + statusTemplate.getFormat() + ")");
+                }
+            }
+        }
+
+        // create basic model for all information known at this point, if one hasn't been pre-provided
+        if (statusModel == null || statusModel.equals(Collections.EMPTY_MAP))
+        {
+            statusModel = new HashMap<String, Object>(8, 1.0f);
+            statusModel.putAll(container.getTemplateParameters());
+            statusModel.put("url", createURLModel(request));
+            if (match != null && match.getWebScript() != null)
+            {
+                statusModel.put("webscript", match.getWebScript().getDescription());
+            }
+        }
+
+        // add status to model
+        Status status = new Status();
+        status.setCode(statusCode);
+        status.setMessage(exception.getMessage() != null ? exception.getMessage() : exception.toString());
+        if (exceptionLogger.isDebugEnabled())
+        {
+            status.setException(exception);
+        }
+        statusModel.put("status", status);
+
+        // render output
+        String mimetype = container.getFormatRegistry().getMimeType(request.getAgent(), statusTemplate.getFormat());
+        if (mimetype == null)
+        {
+            throw new WebScriptException("Web Script format '" + statusTemplate.getFormat() + "' is not registered");
+        }
+
+        if (debug)
+        {
+            logger.debug("Force success status header in response: " + request.forceSuccessStatus());
+            logger.debug("Sending status " + statusCode + " (Template: " + statusTemplate.getPath() + ")");
+            logger.debug("Rendering response: content type=" + mimetype);
+        }
+
+        response.setStatus(request.forceSuccessStatus() ? HttpServletResponse.SC_OK : statusCode);
+        response.setContentType(mimetype + ";charset=UTF-8");
+
+        try
+        {
+            String validTemplatePath = container.getTemplateProcessorRegistry().findValidTemplatePath(statusTemplate.getPath());
+            TemplateProcessor statusProcessor = container.getTemplateProcessorRegistry().getTemplateProcessor(validTemplatePath);
+            statusProcessor.process(validTemplatePath, statusModel, response.getWriter());
+        }
+        catch (Exception e1)
+        {
+            logger.error("Internal error", e1);
+            throw new WebScriptException("Internal error", e1);
+        }
+    }
+
     /**
      * Before processing an error exception - hook point to allow additional processing
      * of the exception based on the runtime. This allows runtime to handle errors themselves
