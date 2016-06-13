@@ -58,6 +58,7 @@ import org.apache.http.ProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -1141,6 +1142,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
                                         params.add(new BasicNameValuePair(key, values[i]));
                                     }
                                 }
+                                ((HttpEntityEnclosingRequest)method).setEntity(new UrlEncodedFormEntity(params));
                             }
                             // ensure that the Content-Length header is not directly proxied - as the underlying
                             // HttpClient will encode the body as appropriate - cannot assume same as the original client sent
