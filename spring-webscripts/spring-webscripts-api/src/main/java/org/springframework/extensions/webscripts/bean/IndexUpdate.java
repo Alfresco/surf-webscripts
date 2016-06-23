@@ -23,9 +23,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
+import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.servlet.FormData;
+import org.springframework.extensions.webscripts.servlet.FormData.FormField;
 
 
 /**
@@ -42,10 +47,29 @@ public class IndexUpdate extends DeclarativeWebScript
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status)
     {
         List<String> tasks = new ArrayList<String>();
-
-        // reset index
-        String reset = req.getParameter("reset");
-        if (reset != null && reset.equals("on"))
+        
+        boolean resetList = false;
+        
+        // parse request content - allow POST with FormData (multipart) or request parameters (x-www-form-urlencoded)
+        Object content = req.parseContent();
+        if (content != null && !(content instanceof FormData))
+        {
+            FormData formData = (FormData)content;
+            for (FormField field : formData.getFields())
+            {
+                if (field.getName().equals("reset"))
+                {
+                    resetList = field.getValue().equals("on");
+                }
+            }
+        }
+        else
+        {
+            String reset = req.getParameter("reset");
+            resetList = (reset != null && reset.equals("on"));
+        }
+        
+        if (resetList)
         {
             // reset list of web scripts
             int previousCount = getContainer().getRegistry().getWebScripts().size();
