@@ -33,8 +33,10 @@ import org.htmlparser.Attribute;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Remark;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.tags.DoctypeTag;
 import org.htmlparser.tags.ProcessingInstructionTag;
 import org.htmlparser.util.NodeIterator;
@@ -398,6 +400,7 @@ public class StringUtils
                 
                 StringBuilder buf = new StringBuilder(result.length());
                 
+                Lexer.STRICT_REMARKS = false;
                 Parser parser = Parser.createParser(result, "UTF-8");
                 PrototypicalNodeFactory factory = new PrototypicalNodeFactory();
                 parser.setNodeFactory(factory);
@@ -635,6 +638,10 @@ public class StringUtils
                 // For example: <%<script>alert('XSS');//<%</script>
                 // MNT-14736 : detect <? which also can used to insert XSS code!
                 buf.append(encode || txt.contains("<%") || txt.contains("<?") ? encode(txt): txt);
+            }
+            else if (node instanceof Remark)
+            {
+                buf.append("<!--").append(node.getText()).append("-->");
             }
         }
     }
