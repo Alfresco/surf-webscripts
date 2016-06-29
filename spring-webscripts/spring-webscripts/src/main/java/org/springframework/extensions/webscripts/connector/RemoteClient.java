@@ -1327,8 +1327,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
             {
                 res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             }
-            
-            throw e;
+            return null;
         }
         finally
         {
