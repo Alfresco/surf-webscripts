@@ -34,6 +34,13 @@ import junit.framework.TestCase;
 public class I18NUtilTest extends TestCase
 {
     private static final String BASE_RESOURCE_NAME = "org.springframework.extensions.surf.util.testMessages";
+    private static final String BUNDLE1_RESOURCE_NAME = "org.springframework.extensions.surf.util.bundle1";
+    private static final String BUNDLE2_RESOURCE_NAME = "org.springframework.extensions.surf.util.bundle2";
+    private static final String BUNDLE_MESSAGE = "the.same.message";
+    private static final String BUNDLE_VALUE1 = "bundle1_default";
+    private static final String BUNDLE_VALUE1_FR = "bundle1_fr";
+    private static final String BUNDLE_VALUE2 = "bundle2_default";
+    private static final String BUNDLE_VALUE2_FR = "bundle2_fr";
     private static final String PARAM_VALUE = "television";
     private static final String MSG_YES = "msg_yes";    
     private static final String MSG_NO = "msg_no";
@@ -168,5 +175,20 @@ public class I18NUtilTest extends TestCase
         assertEquals(new Locale("en", "GB", ""), I18NUtil.parseLocale("en_GB"));
         assertEquals(new Locale("en", "", ""), I18NUtil.parseLocale("en"));
         assertEquals(Locale.getDefault(), I18NUtil.parseLocale(""));
+    }
+
+    public void testResourceBundleOrder()
+    {
+        String resourceBundle1 = BUNDLE1_RESOURCE_NAME;
+        String resourceBundle2 = BUNDLE2_RESOURCE_NAME;
+        I18NUtil.registerResourceBundle(resourceBundle1);
+        I18NUtil.registerResourceBundle(resourceBundle2);
+
+        // The latest bundle should override the previous
+        I18NUtil.setLocale(null);
+        assertEquals(BUNDLE_VALUE2, I18NUtil.getMessage(BUNDLE_MESSAGE));
+        I18NUtil.setLocale(new Locale("fr", "FR"));
+        assertEquals(BUNDLE_VALUE2_FR, I18NUtil.getMessage(BUNDLE_MESSAGE));
+
     }
 }

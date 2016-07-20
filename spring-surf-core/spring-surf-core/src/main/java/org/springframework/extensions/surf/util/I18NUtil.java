@@ -19,15 +19,7 @@
 package org.springframework.extensions.surf.util;
 
 import java.text.MessageFormat;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -55,7 +47,7 @@ public class I18NUtil
     /**
      * List of registered bundles
      */
-    private static Set<String> resouceBundleBaseNames = new HashSet<String>();
+    private static Set<String> resouceBundleBaseNames = new LinkedHashSet<String>();
     
     /**
      * Map of loaded bundles by Locale
