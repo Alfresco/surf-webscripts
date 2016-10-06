@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.springframework.extensions.surf.site.servlet;
+package org.springframework.extensions.webscripts.servlet;
 
 import java.io.IOException;
 import java.security.SecureRandom;
