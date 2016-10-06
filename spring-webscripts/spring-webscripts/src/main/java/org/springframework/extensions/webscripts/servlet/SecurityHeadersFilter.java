@@ -48,8 +48,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * The logic is configurable making it possible to configure which headers that shall be added.
  *
  * @author Erik Winlof
- * @since 6.0
- * NOTE: Copied from Slingshot project to Surf 6.0 on 5/10/2015
+ * @since 6.11
+ * NOTE: Copied from Slingshot project to WebScripts 6.11 on 5/11/2016
  */
 public class SecurityHeadersFilter implements Filter
 {

@@ -65,8 +65,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * is pointless and unnecessarily would decrease the performance of the webapp (even though the filter still would work).
  * 
  * @author Erik Winlof
- * @since 6.0
- * NOTE: Copied from Slingshot project to Surf 5.2 on 5/10/2015
+ * @since 6.11
+ * NOTE: Copied from Slingshot project to WebScripts 6.11 on 5/11/2016
  */
 public class CSRFFilter implements Filter
 {
