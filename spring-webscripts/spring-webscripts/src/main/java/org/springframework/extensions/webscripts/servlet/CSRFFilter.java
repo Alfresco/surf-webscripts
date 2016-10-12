@@ -74,7 +74,8 @@ public class CSRFFilter implements Filter
     
     private ServletContext servletContext = null;
     
-    private Boolean enabled = true;
+    private boolean enabled = true;
+    private boolean createSession = false;
     private List<Rule> rules = null;
     private Map<String, String> properties = new HashMap<String, String>();
 
@@ -103,6 +104,12 @@ public class CSRFFilter implements Filter
         }
         else
         {
+            // Parse Session flag
+            ConfigElement sessionConfig = csrfConfig.getConfigElement("session");
+            createSession = (sessionConfig != null && "true".equals(sessionConfig.getValue()));
+            if (createSession && logger.isDebugEnabled())
+                logger.debug("The CSRFFilter will automatically create a user Session on a path match.");
+            
             // Parse properties
             ConfigElement propertiesConfig = csrfConfig.getConfigElement("properties");
             if (propertiesConfig != null)
@@ -252,31 +259,23 @@ public class CSRFFilter implements Filter
      */
     protected Action createAction(String name) throws ServletException
     {
-        if (name.equals("generateToken"))
+        switch (name)
         {
-            return new GenerateTokenAction();
+            case "generateToken":
+                return new GenerateTokenAction();
+            case "assertToken":
+                return new AssertTokenAction();
+            case "clearToken":
+                return new ClearTokenAction();
+            case "assertReferer":
+                return new AssertRefererAction();
+            case "assertOrigin":
+                return new AssertOriginAction();
+            case "throwError":
+                return new ThrowErrorAction();
+            default:
+                return null;
         }
-        else if (name.equals("assertToken"))
-        {
-            return new AssertTokenAction();
-        }
-        else if (name.equals("clearToken"))
-        {
-            return new ClearTokenAction();
-        }
-        else if (name.equals("assertReferer"))
-        {
-            return new AssertRefererAction();
-        }
-        else if (name.equals("assertOrigin"))
-        {
-            return new AssertOriginAction();
-        }
-        else if (name.equals("throwError"))
-        {
-            return new ThrowErrorAction();
-        }
-        return null;
     }
 
     /**
@@ -299,7 +298,7 @@ public class CSRFFilter implements Filter
         {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession(createSession);
             
             for (Rule rule : rules)
             {
@@ -593,7 +592,7 @@ public class CSRFFilter implements Filter
     }
 
     /**
-     * Action that will generate a token in the session adn set it in the cookie.
+     * Action that will generate a token in the session and set it in the cookie.
      */
     private class GenerateTokenAction extends Action
     {
