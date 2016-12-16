@@ -221,7 +221,9 @@ public class EndPointProxyController extends AbstractController
             {
                 userId = (String)session.getAttribute(USER_ID);
             }
-            if (userId != null && this.connectorService.getCredentialVault(req.getSession(), userId).hasCredentials(endpointId))
+            if (userId != null &&
+                    (this.connectorService.getCredentialVault(req.getSession(), userId).hasCredentials(endpointId) ||
+                            descriptor.getExternalAuth()))
             {
                 // build an authenticated connector - as we have a userId
                 connector = this.connectorService.getConnector(endpointId, userId, req.getSession());
