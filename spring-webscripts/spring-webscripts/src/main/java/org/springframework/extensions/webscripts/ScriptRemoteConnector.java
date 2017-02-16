@@ -283,8 +283,13 @@ public final class ScriptRemoteConnector
      */
     private static Map<String, String> buildDefaultHeaders()
     {
-        Map<String, String> headers = new HashMap<String, String>(1, 1.0f);
+        Map<String, String> headers = new HashMap<String, String>(2, 1.0f);
+        
+        // add Language as some APIs won't work without one
         headers.put("Accept-Language", I18NUtil.getLocale().toString().replace('_', '-'));
+        // add User Agent as some APIs won't work without one
+        headers.put("User-Agent", "Mozilla");
+        
         return headers;
     }
 }
