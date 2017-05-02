@@ -572,9 +572,11 @@ public class StringUtils
                                                     // there are no valid protocols starting with "J" - assume attack
                                                     // the "background" attribute is also vulnerable - no web colors start with "J"
                                                     // on IE6 "vbscript" can be used - no colors or protocols start with "VB"
+                                                    // MNT-17753 - data:html with base64 encoded data URIs
                                                     if (test.startsWith("&#") ||
                                                         test.substring(0, 1).toUpperCase().charAt(0) == 'J' ||
-                                                        test.substring(0, 2).toUpperCase().startsWith("VB"))
+                                                        test.substring(0, 2).toUpperCase().startsWith("VB") ||
+                                                        (test.startsWith("data:") && test.contains("base64")))
                                                     {
                                                         value = "\"\"";
                                                     }
