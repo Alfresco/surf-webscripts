@@ -4,7 +4,7 @@ We are happy to accept your patches! This document explains what you have to do 
 
 If you are interested in making a large contribution, please reach out to us before starting work so that we can discuss the likelihood of our accepting the contribution.
 
-Surf Webscripts project is made available under the terms of LGPL.
+Surf Webscripts project is licensed under the Apache License, Version 2.0.
 
 ## Get Surf Webscripts ready for patching
 1. Fork the project.
@@ -19,7 +19,7 @@ For consistency, please follow these guidelines.
 1. Raise a ticket in the [ALF project at issues.alfresco.com](https://issues.alfresco.com/jira/projects/ALF/issues/ALF-21766?filter=allopenissues) for the issue that you want to address (whether a contribution or a bug). As part of raising a ticket, you will have to accept the [Alfresco Contribution Agreement](https://community.alfresco.com/docs/DOC-7070-alfresco-contribution-agreement). Make sure that the ticket is well documented according to its type and it has all the information that is required. There is more information about reporting an ALF issue [here](https://community.alfresco.com/docs/DOC-6263-reporting-an-issue).
 2. Create a new branch for the work that you're about to do. If you're fixing a bug, we recommend that you name your branch following the pattern: `fix/<ticket-id>_<ShortDescription>`. The pattern for adding a new feature is: `feature/<ticket-id>_<ShortDescription>`.
 3. When writing your code, be sure to follow the [Coding Standards for Alfresco Content Services](https://community.alfresco.com/docs/DOC-4658-coding-standards). The `ide-config` folder in this project contains files that can be uploaded into your IDE to standardize the formatting. You must use Windows line ending characters (CRLF).
-4. Make sure that the licenses of any libraries that you use in your implementation are compatible with LGPLv3.
+4. Make sure that the licenses of any libraries that you use in your implementation are compatible with Apache Version 2.
 5. When committing your work, please add a clear commit message (e.g. [Pull Request Commit Messages](https://community.alfresco.com/docs/DOC-6269-submitting-contributions#jive_content_id_Pull_Request_Commit_Messages)).
 6. Include basic and clear documentation for your contribution.
 7. Modify or add unit tests to cover your contribution. When writing the unit tests be very careful to respect the following:
