@@ -14,8 +14,10 @@
    <packaging>pom</packaging>
 
    <scm>
-      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf-webscripts/trunk</connection>
-      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf-webscripts/trunk</developerConnection>
+      <connection>scm:git:git@github.com:Alfresco/surf-webscripts.git</connection>
+      <developerConnection>scm:git:git@github.com:Alfresco/surf-webscripts.git</developerConnection>
+      <url>https://github.com/Alfresco/surf-webscripts</url>
+      <tag>HEAD</tag>
    </scm>
 
    <distributionManagement>
