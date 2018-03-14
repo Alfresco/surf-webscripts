@@ -65,13 +65,13 @@ public class JSONUtilsTest extends TestCase
         
         JsonNode obj = objectMapper.readTree(value);
         assertNotNull(obj);
-        assertEquals(1, obj.get("number"));
-        assertEquals("string", obj.get("string"));
+        assertEquals(1, obj.get("number").intValue());
+        assertEquals("string", obj.get("string").textValue());
         assertNotNull("date", obj.get("date"));
-        assertEquals(3.142, obj.get("number2"));
-        assertEquals("UTC", obj.get("date").get("zone"));
-        assertEquals("hello", obj.get("myObject").get("hello"));
-        assertEquals(123, obj.get("myObject").get("goodbye"));
+        assertEquals(3.142, obj.get("number2").doubleValue());
+        assertEquals("UTC", obj.get("date").get("zone").textValue());
+        assertEquals("hello", obj.get("myObject").get("hello").textValue());
+        assertEquals(123, obj.get("myObject").get("goodbye").intValue());
         
         result = executeScript(SCRIPT_2, model, true);
         value = Context.toString(result);
@@ -79,8 +79,8 @@ public class JSONUtilsTest extends TestCase
         System.out.println(value);
         
         obj = objectMapper.readTree(value);
-        assertEquals("a value", obj.get("a"));
-        assertEquals("b value", obj.get("b"));
+        assertEquals("a value", obj.get("a").textValue());
+        assertEquals("b value", obj.get("b").textValue());
         
         result = executeScript(SCRIPT_3, model, true);
         value = Context.toString(result);
@@ -89,12 +89,12 @@ public class JSONUtilsTest extends TestCase
         obj = objectMapper.readTree(value);
         ArrayNode arr = (ArrayNode) obj;
         assertEquals(5, arr.size());
-        assertEquals("one", arr.get(0));
-        assertEquals(12, arr.get(1));
-        assertEquals(3.142, arr.get(2));
-        assertEquals(true, arr.get(3));
-        assertEquals("hello", arr.get(4).get("hello"));
-        assertEquals(123, arr.get(4).get("goodbye"));
+        assertEquals("one", arr.get(0).textValue());
+        assertEquals(12, arr.get(1).intValue());
+        assertEquals(3.142, arr.get(2).doubleValue());
+        assertEquals(true, arr.get(3).booleanValue());
+        assertEquals("hello", arr.get(4).get("hello").textValue());
+        assertEquals(123, arr.get(4).get("goodbye").intValue());
         
         ObjectNode testObject = objectMapper.createObjectNode();
         testObject.put("string", "myString");
@@ -282,7 +282,7 @@ public class JSONUtilsTest extends TestCase
         "jsonUtils.toJSONString(array);";
     private static final String SCRIPT_4 =
         "var obj = new Object();" +
-        "obj.value = json.getString(\"string\");" +
+        "obj.value = json.get(\"string\");" +
         "jsonUtils.toJSONString(obj);";
     private static final String SCRIPT_5 =
         "var obj = jsonUtils.toObject(json);" +
