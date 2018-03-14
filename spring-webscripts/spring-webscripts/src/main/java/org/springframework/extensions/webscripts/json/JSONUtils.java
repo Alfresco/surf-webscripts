@@ -18,14 +18,20 @@
 
 package org.springframework.extensions.webscripts.json;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.POJONode;
+import com.fasterxml.jackson.databind.node.ValueNode;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.IdScriptableObject;
 import org.mozilla.javascript.NativeArray;
@@ -58,7 +64,10 @@ import org.springframework.extensions.webscripts.annotation.ScriptParameter;
 public class JSONUtils
 {
     private static final String TYPE_DATE = "Date";
-    
+
+    // Initialise once, can be used by JSONReader
+    static final ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * Converts a given JavaScript native object and converts it to the relevant JSON string.
      * 
@@ -80,7 +89,7 @@ public class JSONUtils
     }
     
     /**
-     * Converts the given JavaScript native object to a org.json.simple.JSONObject Java Object.
+     * Converts the given JavaScript native object to a com.fasterxml.jackson.databind.JsonNode Java Object.
      * This is a specialized method only used by routines that will later expect a JSONObject.
      * 
      * @param object JavaScript native object
@@ -89,14 +98,14 @@ public class JSONUtils
      */
     @ScriptMethod
     (
-            help="Converts the given JavaScript native object to a org.json.simple.JSONObject Java Object.",
-            output="the created org.json.simple.JSONObject Java Object"
+            help="Converts the given JavaScript native object to a com.fasterxml.jackson.databind.JsonNode Java Object.",
+            output="the created com.fasterxml.jackson.databind.JsonNode Java Object"
     )
-    public JSONObject toJSONObject(Object object) throws IOException
+    public JsonNode toJSONObject(Object object) throws IOException
     {
         StringBuilderWriter buffer = new StringBuilderWriter(128);
         valueToJSONString(object, new JSONWriter(buffer));
-        return (JSONObject)JSONValue.parse(buffer.toString());
+        return objectMapper.readTree(buffer.toString());
     }
     
     /**
@@ -111,25 +120,33 @@ public class JSONUtils
             code="//JavaScript Sample Code\nmodel.postCode = jsonUtils.toObject(json).postCode;",
             output="the created native JS object that represents the JSON object or array"
     )
-    public ScriptableObject toObject(@ScriptParameter(help="A valid json string") String jsonString)
+    public ScriptableObject toObject(@ScriptParameter(help="A valid json string") String jsonString) throws IOException
     {
         ScriptableObject result = null;
         
         // Parse JSON string
-        final Object jsonObject = JSONValue.parse(jsonString);
-        
-        // Create native object
-        if (jsonObject != null)
+        try
         {
-            if (jsonObject instanceof JSONObject)
+            final Object jsonObject = objectMapper.readTree(jsonString);
+
+            // Create native object
+            if (jsonObject != null)
             {
-                result = toObject((JSONObject) jsonObject);
-            }
-            else if (jsonObject instanceof JSONArray)
-            {
-                result = toObject((JSONArray) jsonObject);
+                if (jsonObject instanceof ObjectNode)
+                {
+                    result = toObject((ObjectNode) jsonObject);
+                }
+                else if (jsonObject instanceof ArrayNode)
+                {
+                    result = toObject((ArrayNode) jsonObject);
+                }
             }
         }
+        catch(JsonParseException | JsonMappingException je)
+        {
+            // return null instead of throwing exception
+        }
+
         return result;
     }
     
@@ -145,31 +162,55 @@ public class JSONUtils
             code="//JavaScript Sample Code\nmodel.postCode = jsonUtils.toObject(json).postCode;",
             output="the created native object"
     )
-    public NativeObject toObject(@ScriptParameter(help="The json object") JSONObject jsonObject)
+    public NativeObject toObject(@ScriptParameter(help="The json object") ObjectNode jsonObject)
     {
         // Create native object 
         final NativeObject object = new NativeObject();
-        
-        for (final Object key : ((JSONObject)jsonObject).keySet())
+        Iterator<Map.Entry<String,JsonNode>> fields = jsonObject.fields();
+        while (fields.hasNext())
         {
-            final Object value = ((JSONObject)jsonObject).get(key);
-            if (value instanceof JSONObject)
+            Map.Entry<String,JsonNode> element = fields.next();
+            if (element.getValue() instanceof ObjectNode)
             {
-                object.put((String)key, object, toObject((JSONObject)value));
+                object.put(element.getKey(), object, toObject((ObjectNode)element.getValue()));
             }
-            else if (value instanceof JSONArray)
+            else if (element.getValue() instanceof ArrayNode)
             {
-                object.put((String)key, object, toObject((JSONArray)value));
+                object.put(element.getKey(), object, toObject((ArrayNode)element.getValue()));
             }
-            else
+            else if (element.getValue() instanceof ValueNode)
             {
-                object.put((String)key, object, value);
+                object.put(element.getKey(), object, toObject((ValueNode)element.getValue()));
             }
         }
         
         return object;
     }
-    
+
+    /**
+     * Takes a JSON object and converts it to a Java object.
+     *
+     * @param jsonObject        the json object
+     * @return Object     the extracted Java object
+     */
+        private Object toObject(ValueNode jsonObject)
+    {
+        switch(jsonObject.getNodeType())
+        {
+            case NUMBER:
+                return jsonObject.numberValue();
+            case STRING:
+                return jsonObject.textValue();
+            case BOOLEAN:
+                return jsonObject.booleanValue();
+            case POJO:
+                return ((POJONode) jsonObject).getPojo();
+            case NULL:
+            default:
+                return null;
+        }
+    }
+
     /**
      * Takes a JSON array and converts it to a native JS array.
      * 
@@ -182,24 +223,24 @@ public class JSONUtils
             code="//JavaScript Sample Code\nmodel.postCode = jsonUtils.toObject(json).postCode;",
             output="the created native array"
     )
-    public NativeArray toObject(@ScriptParameter(help="The json array") JSONArray jsonArray)
+    public NativeArray toObject(@ScriptParameter(help="The json array") ArrayNode jsonArray)
     {
         Object[] array = new Object[jsonArray.size()];
         
         for (int i = 0; i < jsonArray.size(); i++)
         {
             final Object value = jsonArray.get(i);
-            if (value instanceof JSONObject)
+            if (value instanceof ObjectNode)
             {
-                array[i] = toObject((JSONObject)value);
+                array[i] = toObject((ObjectNode)value);
             }
-            else if (value instanceof JSONArray)
+            else if (value instanceof ArrayNode)
             {
-                array[i] = toObject((JSONArray)value);
+                array[i] = toObject((ArrayNode)value);
             }
             else
             {
-                array[i] = value;
+                array[i] = toObject((ValueNode)value);
             }
         }
         

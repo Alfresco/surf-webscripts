@@ -62,20 +62,12 @@
       </dependency>
 
       <dependency>
-         <groupId>org.json</groupId>
-         <artifactId>json</artifactId>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-core</artifactId>
       </dependency>
-      
       <dependency>
-          <groupId>com.googlecode.json-simple</groupId>
-          <artifactId>json-simple</artifactId>
-          <version>1.1.1</version>
-          <exclusions>
-              <exclusion>
-                  <groupId>junit</groupId>
-                  <artifactId>junit</artifactId>
-              </exclusion>
-          </exclusions>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-databind</artifactId>
       </dependency>
 
       <dependency>

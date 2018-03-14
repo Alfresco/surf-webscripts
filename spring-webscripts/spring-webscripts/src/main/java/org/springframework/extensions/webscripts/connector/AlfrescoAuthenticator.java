@@ -18,12 +18,13 @@
 
 package org.springframework.extensions.webscripts.connector;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.text.MessageFormat;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.extensions.config.RemoteConfigElement;
 import org.springframework.extensions.config.RemoteConfigElement.EndpointDescriptor;
 import org.springframework.extensions.surf.exception.AuthenticationException;
@@ -51,7 +52,9 @@ public class AlfrescoAuthenticator extends AbstractAuthenticator
     private static final String MIMETYPE_APPLICATION_JSON = "application/json";
     
     public final static String CS_PARAM_ALF_TICKET = "alfTicket";
-    
+
+    // Initialise once
+    private static final ObjectMapper mapper = new ObjectMapper();
     
     /* (non-Javadoc)
      * @see org.alfresco.connector.AbstractAuthenticator#authenticate(java.lang.String, org.alfresco.connector.Credentials, org.alfresco.connector.ConnectorSession)
@@ -94,17 +97,17 @@ public class AlfrescoAuthenticator extends AbstractAuthenticator
                 String ticket;
                 try
                 {
-                    JSONObject json = new JSONObject(response.getResponse());
-                    ticket = json.getJSONObject("data").getString("ticket");
-                } 
-                catch (JSONException jErr)
+                    JsonNode json = mapper.readTree(response.getResponse());
+                    ticket = json.get("data").get("ticket").asText();
+                }
+                catch (IOException ioe)
                 {
                     // the ticket that came back could not be parsed
                     // this will cause the entire handshake to fail
                     throw new AuthenticationException(
-                            "Unable to retrieve login ticket from Alfresco", jErr);
+                            "Unable to retrieve login ticket from Alfresco", ioe);
                 }
-                
+
                 if (logger.isDebugEnabled())
                     logger.debug("Parsed ticket: " + ticket);
                 

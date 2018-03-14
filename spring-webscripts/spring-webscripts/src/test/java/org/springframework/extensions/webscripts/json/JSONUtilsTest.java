@@ -18,13 +18,15 @@
 
 package org.springframework.extensions.webscripts.json;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.NativeArray;
@@ -42,7 +44,8 @@ import org.springframework.extensions.webscripts.processor.JSScriptProcessor.Pre
  */
 public class JSONUtilsTest extends TestCase
 {
-    private static WrapFactory wrapFactory = new PresentationWrapFactory(); 
+    private static WrapFactory wrapFactory = new PresentationWrapFactory();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     
     @Override
     protected void setUp() throws Exception
@@ -60,40 +63,40 @@ public class JSONUtilsTest extends TestCase
         
         System.out.println(value);
         
-        JSONObject obj = new JSONObject(value);
+        JsonNode obj = objectMapper.readTree(value);
         assertNotNull(obj);
-        assertEquals(1, obj.getInt("number"));
-        assertEquals("string", obj.getString("string"));
-        assertNotNull("date", obj.getJSONObject("date"));
-        assertEquals(3.142, obj.getDouble("number2"));
-        assertEquals("UTC", obj.getJSONObject("date").get("zone"));
-        assertEquals("hello", obj.getJSONObject("myObject").get("hello"));
-        assertEquals(123, obj.getJSONObject("myObject").get("goodbye"));
+        assertEquals(1, obj.get("number"));
+        assertEquals("string", obj.get("string"));
+        assertNotNull("date", obj.get("date"));
+        assertEquals(3.142, obj.get("number2"));
+        assertEquals("UTC", obj.get("date").get("zone"));
+        assertEquals("hello", obj.get("myObject").get("hello"));
+        assertEquals(123, obj.get("myObject").get("goodbye"));
         
         result = executeScript(SCRIPT_2, model, true);
         value = Context.toString(result);
         
         System.out.println(value);
         
-        obj = new JSONObject(value);
-        assertEquals("a value", obj.getString("a"));
-        assertEquals("b value", obj.getString("b"));
+        obj = objectMapper.readTree(value);
+        assertEquals("a value", obj.get("a"));
+        assertEquals("b value", obj.get("b"));
         
         result = executeScript(SCRIPT_3, model, true);
         value = Context.toString(result);
         
         System.out.println(value);
+        obj = objectMapper.readTree(value);
+        ArrayNode arr = (ArrayNode) obj;
+        assertEquals(5, arr.size());
+        assertEquals("one", arr.get(0));
+        assertEquals(12, arr.get(1));
+        assertEquals(3.142, arr.get(2));
+        assertEquals(true, arr.get(3));
+        assertEquals("hello", arr.get(4).get("hello"));
+        assertEquals(123, arr.get(4).get("goodbye"));
         
-        JSONArray arr = new JSONArray(value);
-        assertEquals(5, arr.length());
-        assertEquals("one", arr.getString(0));
-        assertEquals(12, arr.getInt(1));
-        assertEquals(3.142, arr.getDouble(2));
-        assertEquals(true, arr.getBoolean(3));
-        assertEquals("hello", arr.getJSONObject(4).getString("hello"));
-        assertEquals(123, arr.getJSONObject(4).getInt("goodbye"));
-        
-        JSONObject testObject = new JSONObject();
+        ObjectNode testObject = objectMapper.createObjectNode();
         testObject.put("string", "myString");
         model.put("json", testObject);        
         
@@ -108,17 +111,17 @@ public class JSONUtilsTest extends TestCase
     {
         Map<String, Object> model = new HashMap<String, Object>(1);
         model.put("jsonUtils", new JSONUtils());
-        
-        JSONObject testObject = new JSONObject();
+
+        ObjectNode testObject = objectMapper.createObjectNode();
         testObject.put("string", "myString");
         testObject.put("int", 10);
         testObject.put("number", 3.142);
-        JSONObject subObj = new JSONObject();
+        ObjectNode subObj = objectMapper.createObjectNode();
         subObj.put("sunValue", "tad-ahhhh");
-        testObject.put("comp1", subObj);
-        JSONArray subArr = new JSONArray();
-        subArr.put("myArrayVal");
-        testObject.put("comp2", subArr);
+        testObject.set("comp1", subObj);
+        ArrayNode subArr = objectMapper.createArrayNode();
+        subArr.add("myArrayVal");
+        testObject.set("comp2", subArr);
         model.put("json", testObject); 
         model.put("jsonString", testObject.toString());        
         
@@ -150,9 +153,9 @@ public class JSONUtilsTest extends TestCase
     {
         Map<String, Object> model = new HashMap<String, Object>(1);
         model.put("jsonUtils", new JSONUtils());
-        
-        JSONArray testArr = new JSONArray();
-        testArr.put("myArrayVal");
+
+        ArrayNode testArr = objectMapper.createArrayNode();
+        testArr.add("myArrayVal");
         model.put("json", testArr);
         model.put("jsonString", testArr.toString());
         
