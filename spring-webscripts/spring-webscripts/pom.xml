@@ -24,11 +24,10 @@
          <version>${project.version}</version>
       </dependency>
       
-      <!-- Dependency on Alfresco patched version of Rhino available in artifact.alfresco.com -->
       <dependency>
          <groupId>org.mozilla</groupId>
          <artifactId>rhino</artifactId>
-         <version>1.7R4-alfresco-patched</version>
+         <version>1.7.9</version>
       </dependency>
 
       <dependency>
