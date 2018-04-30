@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +79,7 @@ public class CSRFFilter implements Filter
     private boolean createSession = false;
     private List<Rule> rules = null;
     private Map<String, String> properties = new HashMap<String, String>();
+    private String PROPERTY_PREFIX = "csrf.filter.";
 
     /**
      * Parses the filter rule config.
@@ -956,6 +958,28 @@ public class CSRFFilter implements Filter
                     referer = params.get(PARAM_REFERER);
                 }
             }
+
+            // Override the xml by alfresco-global.properties
+            Properties globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            if (globalProperties != null)
+            {
+                for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
+                {
+                    String property = (String) globalEntry.getKey();
+                    if (property.startsWith(PROPERTY_PREFIX))
+                    {
+                        if (property.replaceFirst(PROPERTY_PREFIX, "").equals(PARAM_REFERER))
+                        {
+                            referer = (String) globalEntry.getValue();
+                        }
+                        else if (property.replaceFirst(PROPERTY_PREFIX, "")
+                                .equals(PARAM_REFERER + "." + PARAM_ALWAYS))
+                        {
+                            always = Boolean.valueOf((String) globalEntry.getValue());
+                        }
+                    }
+                }
+            }
         }
 
         public void run(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, HttpSession httpSession) throws ServletException
@@ -1062,6 +1086,28 @@ public class CSRFFilter implements Filter
                 if (params.containsKey(PARAM_ORIGIN))
                 {
                     origin = params.get(PARAM_ORIGIN);
+                }
+            }
+
+            // Override the xml by alfresco-global.properties
+            Properties globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            if (globalProperties != null)
+            {
+                for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
+                {
+                    String property = (String) globalEntry.getKey();
+                    if (property.startsWith(PROPERTY_PREFIX))
+                    {
+                        if (property.replaceFirst(PROPERTY_PREFIX, "").equals(PARAM_ORIGIN))
+                        {
+                            origin = (String) globalEntry.getValue();
+                        }
+                        else if (property.replaceFirst(PROPERTY_PREFIX, "")
+                                .equals(PARAM_ORIGIN + "." + PARAM_ALWAYS))
+                        {
+                            always = Boolean.valueOf((String) globalEntry.getValue());
+                        }
+                    }
                 }
             }
         }
