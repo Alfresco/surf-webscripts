@@ -44,6 +44,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.extensions.config.Config;
 import org.springframework.extensions.config.ConfigElement;
@@ -960,7 +961,19 @@ public class CSRFFilter implements Filter
             }
 
             // Override the xml by alfresco-global.properties
-            Properties globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            Properties globalProperties = null;
+            try
+            {
+                globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            }
+            catch (NoSuchBeanDefinitionException exc)
+            {
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug("global-properties bean is missing" + exc);
+                }
+            }
+            
             if (globalProperties != null)
             {
                 for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
@@ -1090,7 +1103,19 @@ public class CSRFFilter implements Filter
             }
 
             // Override the xml by alfresco-global.properties
-            Properties globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            Properties globalProperties = null;
+            try
+            {
+                globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            }
+            catch (NoSuchBeanDefinitionException exc)
+            {
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug("global-properties bean is missing" + exc);
+                }
+            }
+            
             if (globalProperties != null)
             {
                 for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
