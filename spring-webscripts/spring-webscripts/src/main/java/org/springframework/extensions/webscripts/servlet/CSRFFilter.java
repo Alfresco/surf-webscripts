@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +45,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.extensions.config.Config;
 import org.springframework.extensions.config.ConfigElement;
@@ -233,7 +235,7 @@ public class CSRFFilter implements Filter
                     throw new ServletException(message);
                 }
                 action.setName(actionName);
-                parameters = new HashMap<String, String>();
+                 parameters = new HashMap<String, String>();
                 
                 // Action parameters
                 actionParameterConfigs = actionConfig.getChildren("param");
@@ -960,7 +962,19 @@ public class CSRFFilter implements Filter
             }
 
             // Override the xml by alfresco-global.properties
-            Properties globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            Properties globalProperties = null;
+            try
+            {
+                globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            }
+            catch (NoSuchBeanDefinitionException exc)
+            {
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug("global-properties bean is missing" + exc);
+                }
+            }
+            
             if (globalProperties != null)
             {
                 for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
@@ -1044,7 +1058,6 @@ public class CSRFFilter implements Filter
         }
     }
 
-
     /**
      * An action that asserts the request's 'Origin' header matches the current server name or the "origin" param .
      */
@@ -1090,7 +1103,19 @@ public class CSRFFilter implements Filter
             }
 
             // Override the xml by alfresco-global.properties
-            Properties globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            Properties globalProperties = null;
+            try
+            {
+                globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+            }
+            catch (NoSuchBeanDefinitionException exc)
+            {
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug("global-properties bean is missing" + exc);
+                }
+            }
+            
             if (globalProperties != null)
             {
                 for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
