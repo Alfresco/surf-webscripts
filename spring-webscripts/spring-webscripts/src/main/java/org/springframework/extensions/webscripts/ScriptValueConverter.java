@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.IdScriptableObject;
 import org.mozilla.javascript.NativeArray;
@@ -151,7 +150,7 @@ public final class ScriptValueConverter
             }
             value = list;
         }
-        else if (value instanceof Map && !(value instanceof JSONObject))
+        else if (value instanceof Map)
         {
             // ensure each value in the Map is unwrapped (which may have been an unwrapped NativeMap!)
             final Map<Object, Object> map = (Map<Object, Object>)value;

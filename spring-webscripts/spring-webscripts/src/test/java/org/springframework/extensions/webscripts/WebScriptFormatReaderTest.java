@@ -18,11 +18,12 @@
 
 package org.springframework.extensions.webscripts;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.json.JSONObject;
 import org.springframework.extensions.webscripts.TestWebScriptServer.PostRequest;
 import org.springframework.extensions.webscripts.TestWebScriptServer.PutRequest;
 import org.springframework.extensions.webscripts.TestWebScriptServer.Request;
@@ -62,7 +63,8 @@ public class WebScriptFormatReaderTest extends TestCase
      */
     public void testJson() throws Exception
     {
-        JSONObject json = new JSONObject();
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode json = objectMapper.createObjectNode();
         json.put("company", "Alfresco Software Inc.");
         json.put("building", "Park House");
         json.put("street", "Park Street");

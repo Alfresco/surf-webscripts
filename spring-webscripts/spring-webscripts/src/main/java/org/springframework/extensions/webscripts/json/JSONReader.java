@@ -21,8 +21,6 @@ package org.springframework.extensions.webscripts.json;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.Format;
 import org.springframework.extensions.webscripts.FormatReader;
@@ -31,7 +29,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 /**
- * Convert application/json to org.json.JSONObject or org.json.JSONArray
+ * Convert application/json to Json
  * 
  * @author Roy Wetherall
  */
@@ -68,14 +66,7 @@ public class JSONReader implements FormatReader<Object>
         try
         {
             String jsonString = content.getContent();
-            if (jsonString.startsWith("[") == true)
-            {
-                result = new JSONArray(jsonString);
-            }
-            else
-            {    
-                result = new JSONObject(jsonString);
-            }
+            result = JSONUtils.objectMapper.readTree(jsonString);
         }
         catch (Exception exception)
         {
