@@ -966,8 +966,10 @@ public class CSRFFilter implements Filter
             try
             {
                 globalProperties = (Properties) getApplicationContext().getBean("global-properties");
-            }catch (NoSuchBeanDefinitionException exc){
-                if (logger.isWarnEnabled())
+            }
+            catch (NoSuchBeanDefinitionException exc)
+            {
+                if (logger.isDebugEnabled())
                 {
                     logger.debug("global-properties bean is missing" + exc);
                 }
@@ -1105,8 +1107,10 @@ public class CSRFFilter implements Filter
             try
             {
                 globalProperties = (Properties) getApplicationContext().getBean("global-properties");
-            }catch (NoSuchBeanDefinitionException exc){
-                if (logger.isWarnEnabled())
+            }
+            catch (NoSuchBeanDefinitionException exc)
+            {
+                if (logger.isDebugEnabled())
                 {
                     logger.debug("global-properties bean is missing" + exc);
                 }
