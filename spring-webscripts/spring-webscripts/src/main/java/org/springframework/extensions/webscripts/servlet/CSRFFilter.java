@@ -81,6 +81,9 @@ public class CSRFFilter implements Filter
     private List<Rule> rules = null;
     private Map<String, String> properties = new HashMap<String, String>();
     private String PROPERTY_PREFIX = "csrf.filter.";
+    private String PARAM_ENABLED = "enabled";
+    // Global properties
+    private Properties globalProperties = null;
 
     /**
      * Parses the filter rule config.
@@ -94,12 +97,40 @@ public class CSRFFilter implements Filter
         servletContext = config.getServletContext();
         
         ApplicationContext context = getApplicationContext();
-        
+
+        // Override the xml by alfresco-global.properties
+        try
+        {
+            globalProperties = (Properties) getApplicationContext().getBean("global-properties");
+        }
+        catch (NoSuchBeanDefinitionException exc)
+        {
+            if (logger.isDebugEnabled())
+            {
+                logger.debug("global-properties bean is missing" + exc);
+            }
+        }
+
+        if (globalProperties != null)
+        {
+            for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
+            {
+                String property = (String) globalEntry.getKey();
+                if (property.startsWith(PROPERTY_PREFIX))
+                {
+                    if (property.replaceFirst(PROPERTY_PREFIX, "").equals(PARAM_ENABLED))
+                    {
+                        enabled = Boolean.parseBoolean((String) globalEntry.getValue());
+                    }
+                }
+            }
+        }
+
         ConfigService configService = (ConfigService)context.getBean("web.config");
-        
+
         // Retrieve the remote configuration
         Config csrfConfig = (Config) configService.getConfig("CSRFPolicy");
-        if (csrfConfig == null)
+        if (csrfConfig == null || !enabled)
         {
             enabled = false;
             if (logger.isDebugEnabled())
@@ -961,19 +992,6 @@ public class CSRFFilter implements Filter
             }
 
             // Override the xml by alfresco-global.properties
-            Properties globalProperties = null;
-            try
-            {
-                globalProperties = (Properties) getApplicationContext().getBean("global-properties");
-            }
-            catch (NoSuchBeanDefinitionException exc)
-            {
-                if (logger.isDebugEnabled())
-                {
-                    logger.debug("global-properties bean is missing" + exc);
-                }
-            }
-            
             if (globalProperties != null)
             {
                 for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
@@ -1103,19 +1121,6 @@ public class CSRFFilter implements Filter
             }
 
             // Override the xml by alfresco-global.properties
-            Properties globalProperties = null;
-            try
-            {
-                globalProperties = (Properties) getApplicationContext().getBean("global-properties");
-            }
-            catch (NoSuchBeanDefinitionException exc)
-            {
-                if (logger.isDebugEnabled())
-                {
-                    logger.debug("global-properties bean is missing" + exc);
-                }
-            }
-            
             if (globalProperties != null)
             {
                 for (Map.Entry<Object, Object> globalEntry : globalProperties.entrySet())
