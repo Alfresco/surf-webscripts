@@ -530,12 +530,22 @@ public class StringUtils
                                     // strip any non-alpha character from attribute name - can be used to form XSS attacks
                                     // i.e. allow onclick= by using /onclick= or "onclick=
                                     String safeName = nameUpper.replaceAll("[^A-Z_]", "");
-
+                                    safeName = safeName.trim();
+                                    
                                     // found a tag attribute for output
                                     // test for known attributes to remove
                                     if (!safeName.startsWith(ATTR_ON_PREFIX) && !attrBlackList.contains(safeName))
                                     {
                                         String value = attr.getRawValue();
+                                        
+                                        // if value starts and ends with single quote, remove white spaces inside them.
+                                        // Actions between single quotes, with white space as prefix, 
+                                        // can be interpreted by the browser, an XSS atack can be executed
+                                        if(value != null && value.startsWith("'") && value.endsWith("'")){
+                                            // we have a value defined
+                                            value = value.replace("\'", "").trim(); // remove quotes and trim
+                                            value = "'" + value + "'"; // place back single quotes, as original string
+                                        }
                                         
                                         //Check for forbidden values on particular attribute
                                         if (attrValueBlackList.containsKey(safeName))
