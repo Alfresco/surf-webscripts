@@ -652,10 +652,9 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
     
     /**
      * Determine whether the given URL points to a resource in a jar file,
-     * that is, has protocol "jar", "zip", "vfszip", "wsjar" or "code-source".
-     * <p>"zip" and "wsjar" and "vfszip" are used by BEA WebLogic Server and IBM WebSphere
-     * and JBoss, respectively, but can be treated like jar files. The same applies to
-     * "code-source" URLs on Oracle OC4J, provided that the path contains a jar separator.
+     * that is, has protocol "jar", "zip", "vfszip" or "wsjar".
+     * <p>"zip" and "wsjar" are used by WebLogic Server and WebSphere, respectively,
+     * but can be treated like jar files.
      * 
      * @param url the URL to check
      * 
@@ -668,8 +667,7 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
                 ResourceUtils.URL_PROTOCOL_VFSZIP.equals(protocol) ||
                 ResourceUtils.URL_PROTOCOL_ZIP.equals(protocol) ||
                 ResourceUtils.URL_PROTOCOL_VFS.equals(protocol) ||
-                ResourceUtils.URL_PROTOCOL_WSJAR.equals(protocol) ||
-                (ResourceUtils.URL_PROTOCOL_CODE_SOURCE.equals(protocol) && url.getPath().contains(ResourceUtils.JAR_URL_SEPARATOR)));
+                ResourceUtils.URL_PROTOCOL_WSJAR.equals(protocol));
     }
 
     /**
