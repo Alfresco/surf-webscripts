@@ -6,6 +6,9 @@
 
 <div id="appbody">
 
+<!-- MNT-20195: import error utility file. (LM-190130) -->
+<#import "error.utils.ftl" as errorLib />
+
 <table>
  <tr>
     <td><img src="${url.context}/images/logo/AlfrescoLogo32.png" alt="Alfresco" /></td>
@@ -16,13 +19,16 @@
 <table>
  <tr><td><b>Error:</b><td>${status.codeName} (${status.code}) - ${status.codeDescription}
  <tr><td>&nbsp;
+ <!-- 
+ 	MNT-20195: hide server, time and stacktrace info, show error log id or message.
+ 	LM-190310: code changes on line 26-31.
+ -->
+ <#assign errorId = errorLib.getErrorId(status.message)>
+ <#if errorId?has_content>
+ <tr><td><b>Error Log Number:</b><td>${errorId}
+ <#else>
  <tr><td><b>Message:</b><td>${status.message!"<i>&lt;Not specified&gt;</i>"}
- <#if status.exception?exists>
-   <tr><td>&nbsp;     
-   <@recursestack status.exception/>
  </#if>
- <tr><td><b>Server</b>:<td>Alfresco ${server.edition?html} v${server.version?html} schema ${server.schema?html}
- <tr><td><b>Time</b>:<td>${date?datetime}
  <tr><td>&nbsp;
 </table>
 

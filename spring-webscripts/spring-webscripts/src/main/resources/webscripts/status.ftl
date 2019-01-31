@@ -1,3 +1,6 @@
+<#-- MNT-20195: import new utility file. (LM-190130) -->
+<#import "error.utils.ftl" as errorLib />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
    <head>
@@ -20,16 +23,15 @@
          <table>
             <tr><td><b>${status.code} Description:</b></td><td> ${status.codeDescription}</td></tr>
             <tr><td>&nbsp;</td></tr>
-            <tr><td><b>Message:</b></td><td><#if status.message??>${status.message?html}<#else><i>&lt;Not specified&gt;</i></#if></td></tr>
-            <#if status.exception?exists>
-            <tr><td></td><td>&nbsp;</td></tr>
-            <@recursestack status.exception/>
-            </#if>
-            <tr><td><b>Server</b>:</td><td>${server.edition?html} v${server.version?html} schema ${server.schema?html}</td></tr>
-            <tr><td><b>Time</b>:</td><td>${date?datetime}</td></tr>
-            <tr><td></td><td>&nbsp;</td></tr>
-            <#if webscript?exists>
-            <tr><td><b>Diagnostics</b>:</td><td><a href="${url.serviceContext}/script/${webscript.id}">Inspect Web Script (${webscript.id})</a></td></tr>
+            <!-- 
+            	MNT-20195: hide stack trace, server and timestamp, show error log number or error message.
+            	LM-190130: code changes on line 30-35.
+            -->
+            <#assign errorId = errorLib.getErrorId(status.message)>
+            <#if errorId?has_content>
+               <tr><td><b>Error Log Number: </b></td><td>${errorId}</td></tr>
+            <#else>
+               <tr><td><b>Message:</b></td><td><#if status.message??>${status.message?html}<#else><i>&lt;Not specified&gt;</i></#if></td></tr>
             </#if>
          </table>
       </div>

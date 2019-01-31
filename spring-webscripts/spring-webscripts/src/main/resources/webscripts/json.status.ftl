@@ -7,19 +7,19 @@
     "description" : "${status.codeDescription}"
   },  
   
-  <#-- Exception details -->
-  "message" : "${jsonUtils.encodeJSONString(status.message)}",  
-  "exception" : "<#if status.exception??>${jsonUtils.encodeJSONString(status.exception.class.name)}<#if status.exception.message??> - ${jsonUtils.encodeJSONString(status.exception.message)}</#if></#if>",
-  
-  <#-- Exception call stack --> 
-  "callstack" : 
-  [ 
-  	  <#if status.exception??>""<@recursestack exception=status.exception/></#if> 
-  ],
-  
-  <#-- Server details and time stamp -->
-  "server" : "${server.edition?xml} v${server.version?xml} schema ${server.schema?xml}",
-  "time" : "${date?datetime}"
+  <#--
+  	MNT-20195: hide Exception details, call stack, Server details and timestamp. Show either error log number or error message.
+  	LM-190130: code changes on line 28-36.
+  -->
+  <#import "error.utils.ftl" as errorLib />
+  <#assign errorId = errorLib.getErrorId(status.message)>
+  <#if errorId?has_content>
+  <#-- Error Log Number -->
+  "errorLogNumber": "${errorId}"
+  <#else>
+  <#-- Exception message -->
+  "message" : "${jsonUtils.encodeJSONString(status.message)}"
+  </#if>
 }
 
 <#macro recursestack exception>
