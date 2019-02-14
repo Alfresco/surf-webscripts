@@ -7,12 +7,9 @@
     "description" : "${status.codeDescription}"
   },  
   
-  <#--
-  	MNT-20195: hide Exception details, call stack, Server details and timestamp. Show either error log number or error message.
-  	LM-190130: code changes on line 28-36.
-  -->
-  <#import "error.utils.ftl" as errorLib />
-  <#assign errorId = errorLib.getErrorId(status.message)>
+  <#-- MNT-20195 (LM-190214): hide Exception details, call stack, Server details and timestamp. Show either error log number or error message. -->
+  <#import "errorcode.lib.ftl" as codeLib />
+  <#assign errorId = codeLib.getErrorCode(status.message)>
   <#if errorId?has_content>
   <#-- Error Log Number -->
   "errorLogNumber": "${errorId}"
