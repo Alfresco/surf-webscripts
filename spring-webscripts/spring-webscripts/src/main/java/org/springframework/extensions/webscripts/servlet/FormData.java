@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.surf.exception.WebScriptsPlatformException;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.surf.util.InputStreamContent;
-
+import org.springframework.extensions.webscripts.WebScriptException;
 
 /**
  * Form Data
@@ -125,7 +125,8 @@ public class FormData implements Serializable
             }
             catch(FileUploadException e)
             {
-                fields = new FormField[0];
+                // REPO-24
+                throw new WebScriptException(507, "File uploading failed. Maybe no disk space available.", e);
             }
             
         }
