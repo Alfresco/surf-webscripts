@@ -161,7 +161,15 @@ public class FormData implements Serializable
     {
         if (parameters == null)
         {
-            FormField[] fields = getFields();
+            FormField[] fields = null;
+            try
+            {
+                fields = getFields();
+            }
+            catch (Exception e)
+            {
+                fields = new FormField[0];
+            }
             parameters = new HashMap<String, String[]>(fields.length);
             for (FormField field : fields)
             {
