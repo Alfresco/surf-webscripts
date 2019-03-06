@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.alfresco.surf</groupId>
 		<artifactId>spring-surf-webscripts-parent</artifactId>
-		<version>6.21-SNAPSHOT</version>
+		<version>repo-24-6.20-1</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
