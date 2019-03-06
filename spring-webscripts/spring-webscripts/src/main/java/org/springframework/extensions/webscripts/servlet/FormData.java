@@ -125,8 +125,12 @@ public class FormData implements Serializable
             }
             catch(FileUploadException e)
             {
-                // REPO-24
-                throw new WebScriptException(507, "File uploading failed. Maybe no disk space available.", e);
+                if(e.getMessage().contains("no multipart boundary was found"))
+                {
+                    throw new WebScriptException(415, e.getMessage(), e);
+                }
+
+                throw new WebScriptException(507, e.getMessage(), e);
             }
             
         }
@@ -166,7 +170,7 @@ public class FormData implements Serializable
             {
                 fields = getFields();
             }
-            catch (Exception e)
+            catch (WebScriptException e)
             {
                 fields = new FormField[0];
             }
