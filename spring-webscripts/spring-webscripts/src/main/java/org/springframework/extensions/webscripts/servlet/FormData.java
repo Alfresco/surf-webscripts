@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.surf.exception.WebScriptsPlatformException;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.surf.util.InputStreamContent;
-
+import org.springframework.extensions.webscripts.WebScriptException;
 
 /**
  * Form Data
@@ -125,7 +125,12 @@ public class FormData implements Serializable
             }
             catch(FileUploadException e)
             {
-                fields = new FormField[0];
+                if(e.getMessage().contains("no multipart boundary was found"))
+                {
+                    throw new WebScriptException(415, e.getMessage(), e);
+                }
+
+                throw new WebScriptException(507, e.getMessage(), e);
             }
             
         }
@@ -160,7 +165,15 @@ public class FormData implements Serializable
     {
         if (parameters == null)
         {
-            FormField[] fields = getFields();
+            FormField[] fields = null;
+            try
+            {
+                fields = getFields();
+            }
+            catch (WebScriptException e)
+            {
+                fields = new FormField[0];
+            }
             parameters = new HashMap<String, String[]>(fields.length);
             for (FormField field : fields)
             {
