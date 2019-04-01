@@ -668,8 +668,7 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
                 ResourceUtils.URL_PROTOCOL_VFSZIP.equals(protocol) ||
                 ResourceUtils.URL_PROTOCOL_ZIP.equals(protocol) ||
                 ResourceUtils.URL_PROTOCOL_VFS.equals(protocol) ||
-                ResourceUtils.URL_PROTOCOL_WSJAR.equals(protocol) ||
-                (ResourceUtils.URL_PROTOCOL_CODE_SOURCE.equals(protocol) && url.getPath().contains(ResourceUtils.JAR_URL_SEPARATOR)));
+                ResourceUtils.URL_PROTOCOL_WSJAR.equals(protocol));
     }
 
     /**
