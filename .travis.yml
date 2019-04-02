@@ -16,7 +16,7 @@ matrix:
       script: travis_retry mvn test
     - name: "WhiteSource scan"
       # only build on master and if it is not a PR
-      if: fork = false AND branch = master AND type NOT IN (push, pull_request)
+      if: fork = false AND branch = master AND env(TRAVIS_PULL_REQUEST) = false
       script:
         # Download the latest version of WhiteSource FS Agent
         - curl -LJO https://github.com/whitesource/fs-agent-distribution/raw/master/standAlone/whitesource-fs-agent.jar
