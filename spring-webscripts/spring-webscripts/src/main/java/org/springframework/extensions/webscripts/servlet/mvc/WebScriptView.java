@@ -103,16 +103,6 @@ public class WebScriptView extends AbstractUrlBasedView
         WebScriptViewRuntime runtime = new WebScriptViewRuntime(getUrl(), container, authenticatorFactory, request, response, serverProperties);
         runtime.executeScript();
     }
-
-    /**
-     * Expose forward request attributes.
-     * 
-     * @param request the request
-     */
-    protected void exposeForwardRequestAttributes(HttpServletRequest request)
-    {
-        WebUtils.exposeForwardRequestAttributes(request);
-    }    
     
     /**
      * Apply Client and Repository language locale based on the 'Accept-Language' request header
