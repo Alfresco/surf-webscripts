@@ -29,7 +29,6 @@ import java.util.List;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.config.Registry;
@@ -42,6 +41,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.dom4j.Element;
 import org.springframework.extensions.config.element.ConfigElementAdapter;
+import org.springframework.util.StringUtils;
 
 /**
  * Describes the connection, authentication and endpoint properties stored
