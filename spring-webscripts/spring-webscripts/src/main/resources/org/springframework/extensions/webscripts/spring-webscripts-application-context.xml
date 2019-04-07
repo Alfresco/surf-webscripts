@@ -72,7 +72,6 @@
             <prop key="json">application/json</prop>
             <prop key="opensearchdescription">application/opensearchdescription+xml</prop>
             <prop key="mediawiki">text/plain</prop>
-            <prop key="portlet">text/html</prop>
             <prop key="fbml">text/html</prop>
             <prop key="php">text/html</prop>
             <prop key="js">text/javascript</prop>
