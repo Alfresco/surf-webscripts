@@ -105,9 +105,14 @@ public interface WebScriptResponse
     public OutputStream getOutputStream() throws IOException;
     
     /**
-     * Clears response buffer
+     * Clears any data that exists in the buffer as well as the status code and headers
      */
     public void reset();
+
+    /**
+     * Clears the content of the underlying buffer in the response without clearing headers or status code
+     */
+    public void resetBuffer();
         
     /**
      * Encode a script URL

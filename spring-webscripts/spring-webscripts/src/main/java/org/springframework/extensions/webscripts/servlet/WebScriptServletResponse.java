@@ -211,6 +211,20 @@ public class WebScriptServletResponse extends WebScriptResponseImpl
     {
         try
         {
+            res.reset();
+        }
+        catch(IllegalStateException e)
+        {
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.alfresco.web.scripts.WebScriptResponse#resetBuffer()
+     */
+    public void resetBuffer()
+    {
+        try
+        {
             res.resetBuffer();
         }
         catch(IllegalStateException e)
