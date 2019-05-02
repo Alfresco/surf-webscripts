@@ -211,7 +211,7 @@ public class WebScriptServletResponse extends WebScriptResponseImpl
     {
         try
         {
-            res.reset();
+            res.resetBuffer();
         }
         catch(IllegalStateException e)
         {
