@@ -257,8 +257,6 @@ public class WebScriptServletResponse extends WebScriptResponseImpl
         {
             res.setHeader(header.getKey(), header.getValue());
         }
-
-
     }
 
     /* (non-Javadoc)
