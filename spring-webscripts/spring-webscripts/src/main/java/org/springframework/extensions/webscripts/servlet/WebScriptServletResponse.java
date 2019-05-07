@@ -229,33 +229,34 @@ public class WebScriptServletResponse extends WebScriptResponseImpl
      */
     public void reset(String exceptHeadersPattern)
     {
-        Pattern pattern = Pattern.compile(exceptHeadersPattern);
-        Collection<String> headers = res.getHeaderNames();
-        // temporary store headers if they exist in the response
-        Map<String, String> savedHeaders = new HashMap<>();
-        for(String header : headers)
+        if(exceptHeadersPattern == null || exceptHeadersPattern.isEmpty())
         {
-            Matcher matcher = pattern.matcher(header);
-            if(matcher.find())
+            reset();
+        }
+        else
+        {
+            Pattern pattern = Pattern.compile(exceptHeadersPattern);
+            Collection<String> headers = res.getHeaderNames();
+            // temporary store headers if they exist in the response
+            Map<String, String> savedHeaders = new HashMap<>();
+            for(String header : headers)
             {
-                String headerValue = res.getHeader(header);
-                if(headerValue != null)
+                Matcher matcher = pattern.matcher(header);
+                if(matcher.find())
                 {
-                    savedHeaders.put(header, headerValue);
+                    String headerValue = res.getHeader(header);
+                    if(headerValue != null)
+                    {
+                        savedHeaders.put(header, headerValue);
+                    }
                 }
             }
-        }
-        try
-        {
-            res.reset();
-        }
-        catch(IllegalStateException e)
-        {
-        }
-        // write headers back
-        for(Map.Entry<String, String> header : savedHeaders.entrySet())
-        {
-            res.setHeader(header.getKey(), header.getValue());
+            reset();
+            // write headers back
+            for(Map.Entry<String, String> header : savedHeaders.entrySet())
+            {
+                res.setHeader(header.getKey(), header.getValue());
+            }
         }
     }
 
