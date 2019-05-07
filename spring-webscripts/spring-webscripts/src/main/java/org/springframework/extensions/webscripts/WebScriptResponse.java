@@ -21,7 +21,7 @@ package org.springframework.extensions.webscripts;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-
+import java.util.Collection;
 
 /**
  * Web Script Response
@@ -105,9 +105,17 @@ public interface WebScriptResponse
     public OutputStream getOutputStream() throws IOException;
     
     /**
-     * Clears response buffer
+     * Clears response buffer including status and headers
      */
     public void reset();
+
+    /**
+     * Clears response including status and headers except the specified headers.
+     * REPO-4388 allow certain headers not to be reset
+     *
+     * @param exceptHeadersPattern Headers which will not be reset with using a regex pattern.
+     */
+    public void reset(String exceptHeadersPattern);
         
     /**
      * Encode a script URL
