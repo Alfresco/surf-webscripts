@@ -35,7 +35,7 @@ public class WebScriptServletResponseTest
     @Test
     public void testWebScriptServletResponseReset()
     {
-        // test if
+        // test if preserveHeadersPattern is null
         MockHttpServletResponse mockedResponse = new MockHttpServletResponse();
         mockedResponse.addHeader("headerA", "valueA");
         WebScriptServletResponse response = new WebScriptServletResponse(null, mockedResponse);
