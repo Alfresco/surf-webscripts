@@ -24,7 +24,6 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -227,15 +226,15 @@ public class WebScriptServletResponse extends WebScriptResponseImpl
     /* (non-Javadoc)
      * @see org./alfresco.web.scripts.WebScriptResponse#resetjava.lang.String)
      */
-    public void reset(String exceptHeadersPattern)
+    public void reset(String preserveHeadersPattern)
     {
-        if(exceptHeadersPattern == null || exceptHeadersPattern.isEmpty())
+        if(preserveHeadersPattern == null || preserveHeadersPattern.isEmpty())
         {
             reset();
         }
         else
         {
-            Pattern pattern = Pattern.compile(exceptHeadersPattern);
+            Pattern pattern = Pattern.compile(preserveHeadersPattern);
             Collection<String> headers = res.getHeaderNames();
             // temporary store headers if they exist in the response
             Map<String, String> savedHeaders = new HashMap<>();

@@ -113,9 +113,9 @@ public interface WebScriptResponse
      * Clears response including status and headers except the specified headers.
      * REPO-4388 allow certain headers not to be reset
      *
-     * @param exceptHeadersPattern Headers which will not be reset with using a regex pattern.
+     * @param preserveHeadersPattern Headers which will not be reset with using a regex pattern.
      */
-    public void reset(String exceptHeadersPattern);
+    public void reset(String preserveHeadersPattern);
         
     /**
      * Encode a script URL
