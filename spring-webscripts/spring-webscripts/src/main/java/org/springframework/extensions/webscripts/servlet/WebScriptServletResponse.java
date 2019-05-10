@@ -22,7 +22,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -217,7 +222,43 @@ public class WebScriptServletResponse extends WebScriptResponseImpl
         {
         }
     }
-    
+
+    /* (non-Javadoc)
+     * @see org./alfresco.web.scripts.WebScriptResponse#resetjava.lang.String)
+     */
+    public void reset(String preserveHeadersPattern)
+    {
+        if(preserveHeadersPattern == null || preserveHeadersPattern.isEmpty())
+        {
+            reset();
+        }
+        else
+        {
+            Pattern pattern = Pattern.compile(preserveHeadersPattern);
+            Collection<String> headers = res.getHeaderNames();
+            // temporary store headers if they exist in the response
+            Map<String, String> savedHeaders = new HashMap<>();
+            for(String header : headers)
+            {
+                Matcher matcher = pattern.matcher(header);
+                if(matcher.find())
+                {
+                    String headerValue = res.getHeader(header);
+                    if(headerValue != null)
+                    {
+                        savedHeaders.put(header, headerValue);
+                    }
+                }
+            }
+            reset();
+            // write headers back
+            for(Map.Entry<String, String> header : savedHeaders.entrySet())
+            {
+                res.setHeader(header.getKey(), header.getValue());
+            }
+        }
+    }
+
     /* (non-Javadoc)
      * @see org.alfresco.web.scripts.WebScriptResponse#getWriter()
      */
