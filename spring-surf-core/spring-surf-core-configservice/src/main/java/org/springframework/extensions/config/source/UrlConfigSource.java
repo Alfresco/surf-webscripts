@@ -228,7 +228,6 @@ public class UrlConfigSource extends BaseConfigSource implements ServletContextA
             {
                 if (logger.isDebugEnabled())
                     logger.debug("The malformed URL has occurred: " + sourceString, e);
-                e.printStackTrace();
             }
             catch (IOException ioe)
             {
