@@ -113,6 +113,9 @@ import org.springframework.extensions.webscripts.ScriptRemote;
 public class RemoteClient extends AbstractClient implements Cloneable
 {
     private static Log logger = LogFactory.getLog(RemoteClient.class);
+
+    // Generic exception message:
+    protected static final String GENERIC_ERROR_MESSAGE = "The stack details have been removed for security reasons.";
     
     // HTTP headers
     protected static final String HEADER_TRANSFER_ENCODING  = "Transfer-Encoding";
@@ -1275,14 +1278,14 @@ public class RemoteClient extends AbstractClient implements Cloneable
         catch (ConnectTimeoutException|SocketTimeoutException timeErr)
         {
             // caught a socket timeout IO exception - apply internal error code
-            logger.info("Exception calling (" + requestMethod + ") " + url.toString());
+            logger.info("Exception calling (" + requestMethod + ") " + url.toString(), timeErr);
             status.setCode(HttpServletResponse.SC_REQUEST_TIMEOUT);
-            status.setException(timeErr);
-            status.setMessage(timeErr.getMessage());
+            status.setException(new RuntimeException(GENERIC_ERROR_MESSAGE));
+            status.setMessage(GENERIC_ERROR_MESSAGE);
             if (res != null)
             {
                 //return a Request Timeout error
-                res.setStatus(HttpServletResponse.SC_REQUEST_TIMEOUT, timeErr.getMessage());
+                res.setStatus(HttpServletResponse.SC_REQUEST_TIMEOUT, GENERIC_ERROR_MESSAGE);
             }
             
             throw timeErr;
@@ -1290,14 +1293,14 @@ public class RemoteClient extends AbstractClient implements Cloneable
         catch (UnknownHostException|ConnectException hostErr)
         {
             // caught an unknown host IO exception 
-            logger.info("Exception calling (" + requestMethod + ") " + url.toString());
+            logger.info("Exception calling (" + requestMethod + ") " + url.toString(), hostErr);
             status.setCode(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-            status.setException(hostErr);
-            status.setMessage(hostErr.getMessage());
+            status.setException(new RuntimeException(GENERIC_ERROR_MESSAGE));
+            status.setMessage(GENERIC_ERROR_MESSAGE);
             if (res != null)
             {
                 // return server error code
-                res.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE, hostErr.getMessage());
+                res.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE, GENERIC_ERROR_MESSAGE);
             }
             
             throw hostErr;
@@ -1305,13 +1308,13 @@ public class RemoteClient extends AbstractClient implements Cloneable
         catch (IOException ioErr)
         {
             // caught a general IO exception - apply generic error code so one gets returned
-            logger.info("Exception calling (" + requestMethod + ") " + url.toString());
+            logger.info("Exception calling (" + requestMethod + ") " + url.toString(), ioErr);
             status.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            status.setException(ioErr);
-            status.setMessage(ioErr.getMessage());
+            status.setException(new RuntimeException(GENERIC_ERROR_MESSAGE));
+            status.setMessage(GENERIC_ERROR_MESSAGE);
             if (res != null)
             {
-                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ioErr.getMessage());
+                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, GENERIC_ERROR_MESSAGE);
             }
             
             throw ioErr;
@@ -1319,13 +1322,13 @@ public class RemoteClient extends AbstractClient implements Cloneable
         catch (RuntimeException e)
         {
             // caught an exception - apply generic error code so one gets returned
-            logger.debug("Exception calling (" + requestMethod + ") " + url.toString());
+            logger.debug("Exception calling (" + requestMethod + ") " + url.toString(), e);
             status.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            status.setException(e);
-            status.setMessage(e.getMessage());
+            status.setException(new RuntimeException(GENERIC_ERROR_MESSAGE));
+            status.setMessage(GENERIC_ERROR_MESSAGE);
             if (res != null)
             {
-                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, GENERIC_ERROR_MESSAGE);
             }
             return null;
         }

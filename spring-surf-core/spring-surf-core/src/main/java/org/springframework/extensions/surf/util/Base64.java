@@ -18,6 +18,9 @@
 
 package org.springframework.extensions.surf.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Encodes and decodes to and from Base64 notation.
  *
@@ -67,6 +70,7 @@ package org.springframework.extensions.surf.util;
  */
 public class Base64
 {
+    private static Log logger = LogFactory.getLog(Base64.class);
     
 /* ********  P U B L I C   F I E L D S  ******** */   
     
@@ -358,7 +362,11 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            e.printStackTrace();
+            if (logger.isDebugEnabled())
+            {
+                logger.debug(e.getMessage(), e);
+            }
+
             return null;
         }   // end catch
         finally
@@ -487,7 +495,11 @@ public class Base64
             }   // end try
             catch( java.io.IOException e )
             {
-                e.printStackTrace();
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug(e.getMessage(), e);
+                }
+
                 return null;
             }   // end catch
             finally
@@ -637,12 +649,16 @@ public class Base64
 
             return 3;
             }catch( Exception e){
-                System.out.println(""+source[srcOffset]+ ": " + ( DECODABET[ source[ srcOffset     ] ]  ) );
-                System.out.println(""+source[srcOffset+1]+  ": " + ( DECODABET[ source[ srcOffset + 1 ] ]  ) );
-                System.out.println(""+source[srcOffset+2]+  ": " + ( DECODABET[ source[ srcOffset + 2 ] ]  ) );
-                System.out.println(""+source[srcOffset+3]+  ": " + ( DECODABET[ source[ srcOffset + 3 ] ]  ) );
+                if (logger.isDebugEnabled())
+                {
+                    logger.debug(""+source[srcOffset]+ ": " + ( DECODABET[ source[ srcOffset     ] ]  ) + "\n" +
+                                    ""+source[srcOffset+1]+  ": " + ( DECODABET[ source[ srcOffset + 1 ] ]  ) + "\n" +
+                                    ""+source[srcOffset+2]+  ": " + ( DECODABET[ source[ srcOffset + 2 ] ]  ) + "\n" +
+                                    ""+source[srcOffset+3]+  ": " + ( DECODABET[ source[ srcOffset + 3 ] ]  ) );
+                }
+
                 return -1;
-            }   //e nd catch
+            }   //end catch
         }
     }   // end decodeToBytes
     
@@ -811,12 +827,20 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            e.printStackTrace();
+            if (logger.isDebugEnabled())
+            {
+                logger.debug(e.getMessage(), e);
+            }
+
             obj = null;
         }   // end catch
         catch( java.lang.ClassNotFoundException e )
         {
-            e.printStackTrace();
+            if (logger.isDebugEnabled())
+            {
+                logger.debug(e.getMessage(), e);
+            }
+
             obj = null;
         }   // end catch
         finally
@@ -944,7 +968,10 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            System.err.println( "Error decoding from file " + filename );
+            if (logger.isDebugEnabled())
+            {
+                logger.debug("Error decoding from file " + filename);
+            }
         }   // end catch: IOException
         finally
         {
@@ -992,7 +1019,10 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            System.err.println( "Error encoding from file " + filename );
+            if (logger.isDebugEnabled())
+            {
+                logger.debug("Error encoding from file " + filename);
+            }
         }   // end catch: IOException
         finally
         {
