@@ -28,6 +28,7 @@ public interface Credentials
 {
     public final static String CREDENTIAL_USERNAME = "cleartextUsername";
     public final static String CREDENTIAL_PASSWORD = "cleartextPassword";
+    public final static String CREDENTIAL_ACCESS_TOKEN = "accessToken";
 
     /**
      * Gets the endpoint id.

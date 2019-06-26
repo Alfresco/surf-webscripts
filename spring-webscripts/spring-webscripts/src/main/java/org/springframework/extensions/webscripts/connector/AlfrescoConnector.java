@@ -59,14 +59,21 @@ public class AlfrescoConnector extends HttpConnector
         // from the connector context is a special case for Flash based apps that do
         // not share the same session and get at user connector session information
         String alfTicket = null;
+        String accessToken = null;
         
         if (context != null)
         {
             alfTicket = context.getParameters().get(PARAM_TICKETNAME_ALF_TICKET);
         }
-        
-        if (getCredentials() != null)
+
+        Credentials credentials = getCredentials();
+        if (credentials != null)
         {
+            if (credentials.getProperty(Credentials.CREDENTIAL_ACCESS_TOKEN) != null)
+            {
+                accessToken = (String) credentials.getProperty(Credentials.CREDENTIAL_ACCESS_TOKEN);
+            }
+
             // if this connector is managing session info
             if (getConnectorSession() != null)
             {
@@ -74,8 +81,12 @@ public class AlfrescoConnector extends HttpConnector
                 alfTicket = (String)getConnectorSession().getParameter(AlfrescoAuthenticator.CS_PARAM_ALF_TICKET);
             }
         }
-        
-        if (alfTicket != null)
+
+        if (accessToken != null)
+        {
+            remoteClient.setAccessToken(accessToken);
+        }
+        else if (alfTicket != null)
         {
             remoteClient.setTicket(alfTicket);
             remoteClient.setTicketName(PARAM_TICKETNAME_ALF_TICKET);
