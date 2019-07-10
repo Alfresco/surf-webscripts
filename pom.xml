@@ -13,23 +13,20 @@
    <description>WebScripts modules</description>
    <packaging>pom</packaging>
 
-   <scm>
-      <connection>scm:git:git@github.com:Alfresco/surf-webscripts.git</connection>
-      <developerConnection>scm:git:git@github.com:Alfresco/surf-webscripts.git</developerConnection>
-      <url>https://github.com/Alfresco/surf-webscripts</url>
-      <tag>HEAD</tag>
-   </scm>
+    <scm>
+        <connection>scm:git:https://github.com/Alfresco/surf-webscripts.git</connection>
+        <developerConnection>scm:git:https://github.com/Alfresco/surf-webscripts.git</developerConnection>
+        <url>https://github.com/Alfresco/surf-webscripts</url>
+        <tag>HEAD</tag>
+    </scm>
 
-   <distributionManagement>
-      <repository>
-          <id>alfresco-internal</id>
-          <url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
-      </repository>
-      <snapshotRepository>
-          <id>alfresco-internal-snapshots</id>
-          <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
-      </snapshotRepository>      
-   </distributionManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>alfresco-public</id>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
 
    <modules>
       <!-- Surf Platform Services -->
@@ -121,51 +118,7 @@
 
    <properties>
       <spring.version>3.2.14.RELEASE</spring.version>
+       <maven.build.sourceVersion>1.8</maven.build.sourceVersion>
    </properties>
-   
 
-   <build>
-      <plugins>
-         <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-               <execution>
-                  <phase>initialize</phase>
-                  <id>parse-version</id>
-                  <goals>
-                     <goal>parse-version</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-      </plugins>
-    
-    <pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Specification-Version>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</Specification-Version>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Build-Date>${maven.build.timestamp}</Build-Date>
-                            <Build-Name>${bamboo_planName}</Build-Name>
-                            <Build-Key>${bamboo_fullBuildKey}</Build-Key>
-                            <Build-Number>${bamboo_buildNumber}</Build-Number>
-                            <Build-Revision>${bamboo_repository_revision_number}</Build-Revision>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <tagNameFormat>@{project.version}</tagNameFormat>
-                </configuration>        
-            </plugin>
-        </plugins>
-    </pluginManagement>
-  </build>
 </project>
