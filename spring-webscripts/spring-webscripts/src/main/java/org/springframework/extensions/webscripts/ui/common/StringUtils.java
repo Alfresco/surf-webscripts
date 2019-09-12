@@ -109,7 +109,6 @@ public class StringUtils
         tagWhiteList.add("HEAD");
         tagWhiteList.add("BODY");
         tagWhiteList.add("META");
-        tagWhiteList.add("BASE");
         tagWhiteList.add("TITLE");
         tagWhiteList.add("LINK");
         tagWhiteList.add("CENTER");
