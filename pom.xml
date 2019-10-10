@@ -111,4 +111,22 @@
        <maven.build.sourceVersion>11</maven.build.sourceVersion>
    </properties>
 
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+                <execution>
+                    <phase>initialize</phase>
+                    <id>parse-version</id>
+                    <goals>
+                        <goal>parse-version</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+      </plugins>
+   </build>
+
 </project>
