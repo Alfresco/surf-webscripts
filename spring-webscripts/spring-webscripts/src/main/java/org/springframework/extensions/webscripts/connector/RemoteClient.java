@@ -160,6 +160,9 @@ public class RemoteClient extends AbstractClient implements Cloneable
     // Authentication state - applied to each request if set
     private String username;
     private String password;
+    // In case we're using Access Token
+    private String accessToken;
+
     private boolean commitResponseOnAuthenticationError = true;
     private boolean exceptionOnError = false;
     
@@ -437,6 +440,15 @@ public class RemoteClient extends AbstractClient implements Cloneable
     {
         this.username = user;
         this.password = pass;
+    }
+
+    /**
+     *
+     * @param accessToken
+     */
+    public void setAccessToken(String accessToken)
+    {
+        this.accessToken = accessToken;
     }
 
     /**
@@ -1071,6 +1083,10 @@ public class RemoteClient extends AbstractClient implements Cloneable
                     String auth = this.username + ':' + this.password;
                     method.addHeader("Authorization", "Basic " + Base64.encodeBytes(auth.getBytes(), Base64.DONT_BREAK_LINES));
                     if (debug) logger.debug("Applied HTTP Basic Authorization for user: " + this.username);
+                }
+                else if (this.accessToken != null)
+                {
+                    method.addHeader("Authorization", "Bearer " + this.accessToken);
                 }
                 
                 // prepare the POST/PUT entity data if input supplied

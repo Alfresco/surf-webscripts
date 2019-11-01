@@ -188,7 +188,8 @@ public class HttpConnector extends AbstractConnector
         {
             String user = (String) getCredentials().getProperty(Credentials.CREDENTIAL_USERNAME);
             String pass = (String) getCredentials().getProperty(Credentials.CREDENTIAL_PASSWORD);
-            if (pass == null)
+            String accessToken = (String) getCredentials().getProperty(Credentials.CREDENTIAL_ACCESS_TOKEN);
+            if (pass == null && accessToken == null)
             {
                 headers.put("X-Alfresco-Remote-User", user);
             }
@@ -214,9 +215,14 @@ public class HttpConnector extends AbstractConnector
         {
             String user = (String) getCredentials().getProperty(Credentials.CREDENTIAL_USERNAME);
             String pass = (String) getCredentials().getProperty(Credentials.CREDENTIAL_PASSWORD);
+            String accessToken = (String) getCredentials().getProperty(Credentials.CREDENTIAL_ACCESS_TOKEN);
             if (pass != null)
             {
                 remoteClient.setUsernamePassword(user, pass);
+            }
+            else if (accessToken != null)
+            {
+                remoteClient.setAccessToken(accessToken);
             }
         }
     }
