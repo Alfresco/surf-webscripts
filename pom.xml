@@ -106,7 +106,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>5.2.3.RELEASE</spring.version>
+      <spring.version>5.2.4.RELEASE</spring.version>
       <maven.build.sourceVersion>11</maven.build.sourceVersion>
    </properties>
 
