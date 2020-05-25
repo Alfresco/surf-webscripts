@@ -551,27 +551,28 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
             else
             {
                 // Otherwise, we allow unset properties to drift through from
-                // the
-                // systemProperties set and potentially set
+                // the systemProperties set and potentially set
                 // ones to be overriden by system properties
-                Set<String> propNames = new HashSet<String>((Set<String>) (Set) props.keySet());
                 Map<String, String> envVariables = System.getenv();
-                propNames.addAll(envVariables.keySet());
-                for (String systemProperty : propNames)
+
+                if (this.systemPropertiesMode == PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE)
                 {
-                    if (this.systemPropertiesMode == PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_FALLBACK
-                            && props.containsKey(systemProperty))
+                    for (String systemPropName : envVariables.keySet())
                     {
-                        // It's already there
-                        continue;
-                    }
-                    // Get the system value and assign if present
-                    String systemPropertyValue = System.getProperty(systemProperty);
-                    if (systemPropertyValue != null)
-                    {
-                        props.put(systemProperty, systemPropertyValue);
+                        props.put(systemPropName, System.getProperty(systemPropName));
                     }
                 }
+                else
+                {
+                    for (String systemPropName : envVariables.keySet())
+                    {
+                        if (!props.contains(systemPropName))
+                        {
+                            props.put(systemPropName, System.getProperty(systemPropName));
+                        }
+                    }
+                }
+
             }
 
             return props;
