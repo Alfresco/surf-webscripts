@@ -22,10 +22,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -511,6 +513,7 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
     public static class PropertyConfigurer extends PropertyPlaceholderConfigurer
     {
 		private PlaceholderResolvingStringValueResolver resolver;
+		private int systemPropertiesMode = PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_FALLBACK;
         
         /**
          * Initialise
@@ -526,6 +529,54 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
             {
                 throw new ConfigException("Failed to retrieve properties", e);
             }
+        }
+        
+        public void setSystemPropertiesMode(int systemPropertiesMode)
+        {
+            this.systemPropertiesMode = systemPropertiesMode;
+        }
+
+        // override properties with system variables
+        @SuppressWarnings("deprecation")
+        protected Properties mergeProperties() throws IOException
+        {
+            // First do the default merge
+            Properties props = super.mergeProperties();
+
+            // Now resolve all the merged properties
+            if (this.systemPropertiesMode == PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_NEVER)
+            {
+                return props;
+            }
+            else
+            {
+                // Otherwise, we allow unset properties to drift through from
+                // the systemProperties set and potentially set
+                // ones to be overriden by system properties
+                Map<String, String> envVariables = System.getenv();
+                
+                boolean keepExistingPropertyValues = this.systemPropertiesMode == PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_FALLBACK;
+
+                for (String systemPropName : envVariables.keySet())
+                {
+                    if (keepExistingPropertyValues && props.containsKey(systemPropName))
+                    {
+                        // It's already there
+                        continue;
+                    }
+
+                    // Get the system value and assign if present
+                    String systemPropertyValue = System.getProperty(systemPropName);
+                    
+                    if (systemPropertyValue != null)
+                    {
+                        props.put(systemPropName, systemPropertyValue);
+                    }
+                }
+
+            }
+
+            return props;
         }
 
         /**
@@ -563,3 +614,4 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
 		}
 	}
 }
+
