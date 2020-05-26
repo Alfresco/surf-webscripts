@@ -554,22 +554,23 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
                 // the systemProperties set and potentially set
                 // ones to be overriden by system properties
                 Map<String, String> envVariables = System.getenv();
+                
+                boolean keepExistingPropertyValues = this.systemPropertiesMode == PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_FALLBACK;
 
-                if (this.systemPropertiesMode == PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE)
+                for (String systemPropName : envVariables.keySet())
                 {
-                    for (String systemPropName : envVariables.keySet())
+                    if (keepExistingPropertyValues && props.containsKey(systemPropName))
                     {
-                        props.put(systemPropName, System.getProperty(systemPropName));
+                        // It's already there
+                        continue;
                     }
-                }
-                else
-                {
-                    for (String systemPropName : envVariables.keySet())
+
+                    // Get the system value and assign if present
+                    String systemPropertyValue = System.getProperty(systemPropName);
+                    
+                    if (systemPropertyValue != null)
                     {
-                        if (!props.contains(systemPropName))
-                        {
-                            props.put(systemPropName, System.getProperty(systemPropName));
-                        }
+                        props.put(systemPropName, systemPropertyValue);
                     }
                 }
 
