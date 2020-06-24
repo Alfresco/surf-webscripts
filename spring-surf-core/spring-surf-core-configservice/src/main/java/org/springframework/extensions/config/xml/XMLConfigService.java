@@ -211,7 +211,7 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
         try
         {
             // get the root element
-            SAXReader reader = new SAXReader();
+            SAXReader reader = SAXReader.createDefault();
             Document document = reader.read(stream);
             Element rootElement = document.getRootElement();
             currentArea = parseFragment(rootElement, parsedElementReaders, parsedEvaluators, parsedConfigSections);

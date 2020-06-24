@@ -107,7 +107,7 @@ public class ServiceInstall extends DeclarativeWebScript
             try
             {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileIS));
-                SAXReader reader = new SAXReader();
+                SAXReader reader =  SAXReader.createDefault();
                 document = reader.read(bufferedReader);
             }
             finally
