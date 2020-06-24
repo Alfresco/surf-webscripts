@@ -106,7 +106,7 @@ public abstract class AbstractBaseDescriptionDocument extends AbstractBaseDescri
      */
     public void parseDocument(InputStream doc) throws DocumentException 
     {
-        SAXReader reader = new SAXReader();
+        SAXReader reader = SAXReader.createDefault();
         Document document = reader.read(doc);
         Element rootElement = document.getRootElement();
         parse(rootElement);
