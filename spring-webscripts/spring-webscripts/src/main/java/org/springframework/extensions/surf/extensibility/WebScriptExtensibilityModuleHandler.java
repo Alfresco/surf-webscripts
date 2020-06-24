@@ -76,7 +76,7 @@ public class WebScriptExtensibilityModuleHandler
                         for (String path: store.getDocumentPaths("/", true, "*.xml"))
                         {
                             InputStream is = store.getDocument(path);
-                            SAXReader reader = new SAXReader();
+                            SAXReader reader = SAXReader.createDefault();
                             Document document;
                             try
                             {
