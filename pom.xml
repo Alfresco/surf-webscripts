@@ -8,7 +8,7 @@
    </parent>
    <groupId>org.alfresco.surf</groupId>
    <artifactId>spring-surf-webscripts-parent</artifactId>
-   <version>8.5-SNAPSHOT</version>
+   <version>7.17-SNAPSHOT</version>
    <name>WebScripts</name>
    <description>WebScripts modules</description>
    <packaging>pom</packaging>
@@ -51,7 +51,7 @@
          <version>${spring.version}</version>
          <scope>test</scope>
       </dependency>
-      
+
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>javax.servlet-api</artifactId>
@@ -106,7 +106,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>5.2.3.RELEASE</spring.version>
+      <spring.version>5.1.15.RELEASE</spring.version>
       <maven.build.sourceVersion>11</maven.build.sourceVersion>
    </properties>
 
