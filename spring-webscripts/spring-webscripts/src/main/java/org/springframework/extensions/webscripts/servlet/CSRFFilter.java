@@ -37,7 +37,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -951,7 +950,7 @@ public class CSRFFilter implements Filter
             // Clear token cookie from the client
             String userCookie = cookie + "=;";
             userCookie += " Path=" + httpServletRequest.getContextPath() + ";";
-            userCookie += " Max-Age=" + 0 + ";";
+            userCookie += " Max-Age=0;";
             if (HTTP_SECURED_SESSION_PROP)
             {
                 userCookie += " Secure; HttpOnly;";
