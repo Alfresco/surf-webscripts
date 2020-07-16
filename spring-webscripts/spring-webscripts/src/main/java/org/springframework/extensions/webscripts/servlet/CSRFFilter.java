@@ -65,7 +65,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <p>
  * It is recommended to run the filter with a filter-mapping that NOT includes client side resources since that
  * is pointless and unnecessarily would decrease the performance of the webapp (even though the filter still would work).
- * 
+ *
  * @author Erik Winlof
  * @since 6.11
  * NOTE: Copied from Slingshot project to WebScripts 6.11 on 5/11/2016
@@ -81,8 +81,8 @@ public class CSRFFilter implements Filter
     private List<Rule> rules = null;
     private Map<String, String> properties = new HashMap<String, String>();
     private String PROPERTY_PREFIX = "csrf.filter.";
-    private Boolean HTTP_SECURED_SESSION_PROP  = null;
-    private String COOKIES_SAMESITE;
+    private Boolean HTTP_SECURED_SESSION_PROP = null;
+    private String COOKIES_SAMESITE = null;
     private String PARAM_ENABLED = "enabled";
     // Global properties
     private Properties globalProperties = null;
