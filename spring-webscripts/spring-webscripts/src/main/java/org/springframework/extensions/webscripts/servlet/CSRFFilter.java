@@ -37,7 +37,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -51,6 +50,7 @@ import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.surf.util.Base64;
 import org.springframework.extensions.surf.util.URLEncoder;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
@@ -65,7 +65,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <p>
  * It is recommended to run the filter with a filter-mapping that NOT includes client side resources since that
  * is pointless and unnecessarily would decrease the performance of the webapp (even though the filter still would work).
- * 
+ *
  * @author Erik Winlof
  * @since 6.11
  * NOTE: Copied from Slingshot project to WebScripts 6.11 on 5/11/2016
@@ -81,6 +81,8 @@ public class CSRFFilter implements Filter
     private List<Rule> rules = null;
     private Map<String, String> properties = new HashMap<String, String>();
     private String PROPERTY_PREFIX = "csrf.filter.";
+    private Boolean HTTP_SECURED_SESSION_PROP = null;
+    private String COOKIES_SAMESITE = null;
     private String PARAM_ENABLED = "enabled";
     // Global properties
     private Properties globalProperties = null;
@@ -94,6 +96,9 @@ public class CSRFFilter implements Filter
     @Override
     public void init(FilterConfig config) throws ServletException
     {
+        HTTP_SECURED_SESSION_PROP = Boolean.parseBoolean(System.getProperty("http.secured.session"));
+        COOKIES_SAMESITE = System.getProperty("cookies.sameSite");
+        
         servletContext = config.getServletContext();
         
         ApplicationContext context = getApplicationContext();
@@ -763,17 +768,25 @@ public class CSRFFilter implements Filter
 
             // Expose the new token as a cookie to the client
             int TIMEOUT = 60*60*24*7;
-            Cookie userCookie = new Cookie(cookie, URLEncoder.encode(newToken));
+            String userCookie = cookie + "=" + URLEncoder.encode(newToken) + ";";
             if (httpServletRequest.getContextPath().isEmpty())
             {
-                userCookie.setPath("/");
+                userCookie += " Path=/;";
             }
             else
             {
-                userCookie.setPath(httpServletRequest.getContextPath());
+                userCookie += " Path=" + httpServletRequest.getContextPath() + ";";
             }
-            userCookie.setMaxAge(TIMEOUT);
-            httpServletResponse.addCookie(userCookie);
+            userCookie += " Max-Age=" + TIMEOUT + ";";
+            if (HTTP_SECURED_SESSION_PROP)
+            {
+                userCookie += " Secure; HttpOnly;";
+            }
+            if (COOKIES_SAMESITE != null)
+            {
+                userCookie += " SameSite="+COOKIES_SAMESITE+";";
+            }
+            httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,userCookie);
         }
     }
 
@@ -938,10 +951,18 @@ public class CSRFFilter implements Filter
             }
             
             // Clear token cookie from the client
-            Cookie userCookie = new Cookie(cookie, "");
-            userCookie.setPath(httpServletRequest.getContextPath());
-            userCookie.setMaxAge(0);
-            httpServletResponse.addCookie(userCookie);
+            String userCookie = cookie + "=;";
+            userCookie += " Path=" + httpServletRequest.getContextPath() + ";";
+            userCookie += " Max-Age=0;";
+            if (HTTP_SECURED_SESSION_PROP)
+            {
+                userCookie += " Secure; HttpOnly;";
+            }
+            if (COOKIES_SAMESITE != null)
+            {
+                userCookie += " SameSite=" + COOKIES_SAMESITE + ";";
+            }
+            httpServletResponse.addHeader(HttpHeaders.SET_COOKIE,userCookie);
         }
     }
 
