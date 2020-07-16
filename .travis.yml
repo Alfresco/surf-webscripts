@@ -12,6 +12,7 @@ branches:
   only:
     - master
     - /support\/.*/
+    - SFDCENG-*
 
 stages:
   - test
