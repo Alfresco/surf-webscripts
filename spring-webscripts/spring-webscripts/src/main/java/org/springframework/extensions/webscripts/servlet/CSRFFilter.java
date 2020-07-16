@@ -81,8 +81,8 @@ public class CSRFFilter implements Filter
     private List<Rule> rules = null;
     private Map<String, String> properties = new HashMap<String, String>();
     private String PROPERTY_PREFIX = "csrf.filter.";
-    private static final Boolean HTTP_SECURED_SESSION_PROP = Boolean.parseBoolean(System.getProperty("http.secured.session"));
-    private static final String COOKIES_SAMESITE = System.getProperty("cookies.sameSite");
+    private Boolean HTTP_SECURED_SESSION_PROP  = null;
+    private String COOKIES_SAMESITE;
     private String PARAM_ENABLED = "enabled";
     // Global properties
     private Properties globalProperties = null;
@@ -96,6 +96,9 @@ public class CSRFFilter implements Filter
     @Override
     public void init(FilterConfig config) throws ServletException
     {
+        HTTP_SECURED_SESSION_PROP = Boolean.parseBoolean(System.getProperty("http.secured.session"));
+        COOKIES_SAMESITE = System.getProperty("cookies.sameSite");
+        
         servletContext = config.getServletContext();
         
         ApplicationContext context = getApplicationContext();
