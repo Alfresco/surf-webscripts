@@ -780,7 +780,7 @@ public class CSRFFilter implements Filter
             userCookie += " Max-Age=" + TIMEOUT + ";";
             if (HTTP_SECURED_SESSION_PROP)
             {
-                userCookie += " Secure; HttpOnly;";
+                userCookie += " Secure;";
             }
             if (COOKIES_SAMESITE != null)
             {
@@ -956,7 +956,7 @@ public class CSRFFilter implements Filter
             userCookie += " Max-Age=0;";
             if (HTTP_SECURED_SESSION_PROP)
             {
-                userCookie += " Secure; HttpOnly;";
+                userCookie += " Secure;";
             }
             if (COOKIES_SAMESITE != null)
             {
