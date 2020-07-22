@@ -20,13 +20,7 @@ package org.springframework.extensions.webscripts.servlet;
 
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +45,7 @@ import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.surf.util.Base64;
 import org.springframework.extensions.surf.util.URLEncoder;
+import org.springframework.extensions.surf.util.URLDecoder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
@@ -333,7 +328,9 @@ public class CSRFFilter implements Filter
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             HttpSession session = request.getSession(createSession);
-            
+
+            this.preProcessHttpBasicAuth(request, response, session);
+
             for (Rule rule : rules)
             {
                 if (matchRequest(rule, request, session))
@@ -346,14 +343,57 @@ public class CSRFFilter implements Filter
                             action.run(request, response, session);
                         }
                     }
+                    this.postProcessHttpBasicAuth(request, response, session);
                     filterChain.doFilter(servletRequest, servletResponse);
                     return;
                 }
             }
+
+            this.postProcessHttpBasicAuth(request, response, session);
         }
         
         // Proceed as usual
         filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    protected void preProcessHttpBasicAuth(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+    {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null)
+        {
+            String[] authParts = authHeader.split(" ");
+            if (authParts.length == 2 && authParts[0].equalsIgnoreCase("basic"))
+            {
+                String decodedAuthHeader = new String(Base64.decode(authParts[1]));
+                String[] decodedAuthParts = decodedAuthHeader.split(":");
+                if (decodedAuthParts.length == 2)
+                {
+                    session.setAttribute("_alf_USER_ID", decodedAuthParts[0]);
+                }
+            }
+
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null)
+            {
+                for (Cookie cookie: cookies)
+                {
+                    if (cookie.getName().equals("Alfresco-CSRFToken"))
+                    {
+                        session.setAttribute("Alfresco-CSRFToken", Arrays.asList(URLDecoder.decode(cookie.getValue())));
+                    }
+                }
+            }
+        }
+    }
+
+    protected void postProcessHttpBasicAuth(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+    {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null)
+        {
+            session.removeAttribute("_alf_USER_ID");
+            session.removeAttribute("Alfresco-CSRFToken");
+        }
     }
     
     @Override
