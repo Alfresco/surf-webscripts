@@ -18,23 +18,6 @@
  */
 package org.springframework.extensions.webscripts.servlet;
 
-import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpDelete;
@@ -46,10 +29,21 @@ import org.springframework.extensions.config.Config;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.surf.util.Base64;
+import org.springframework.extensions.surf.util.URLDecoder;
 import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.http.HttpHeaders;
-import org.springframework.extensions.surf.util.URLDecoder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import javax.servlet.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A CSRF Filter class for the web-tier checking that certain requests supply a secret token that is compared
