@@ -18,40 +18,32 @@
  */
 package org.springframework.extensions.webscripts.servlet;
 
-import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.extensions.config.Config;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.surf.util.Base64;
+import org.springframework.extensions.surf.util.URLDecoder;
 import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import javax.servlet.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A CSRF Filter class for the web-tier checking that certain requests supply a secret token that is compared
@@ -98,7 +90,7 @@ public class CSRFFilter implements Filter
     {
         HTTP_SECURED_SESSION_PROP = Boolean.parseBoolean(System.getProperty("http.secured.session"));
         COOKIES_SAMESITE = System.getProperty("cookies.sameSite");
-        
+
         servletContext = config.getServletContext();
         
         ApplicationContext context = getApplicationContext();
@@ -338,7 +330,9 @@ public class CSRFFilter implements Filter
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             HttpSession session = request.getSession(createSession);
-            
+
+            this.preprocessOnHttpBasicAuth(request, session);
+
             for (Rule rule : rules)
             {
                 if (matchRequest(rule, request, session))
@@ -351,16 +345,91 @@ public class CSRFFilter implements Filter
                             action.run(request, response, session);
                         }
                     }
+                    this.postprocessOnHttpBasicAuth(request, session);
                     filterChain.doFilter(servletRequest, servletResponse);
                     return;
                 }
             }
+
+            this.postprocessOnHttpBasicAuth(request, session);
         }
         
         // Proceed as usual
         filterChain.doFilter(servletRequest, servletResponse);
     }
-    
+
+    /**
+     * If the request is using HTTP Basic Authentication
+     * then we set the _alf_USER_ID and Alfresco-CSRFToken into session, so the CSRF rules will be applied to the request
+     *
+     * @param request The servlet request
+     * @param session The session
+     */
+    protected void preprocessOnHttpBasicAuth(HttpServletRequest request, HttpSession session)
+    {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null)
+        {
+            // Get the name used for CSRF token from configuration
+            String tokenName = properties.getOrDefault("token", "Alfresco-CSRFToken");
+
+            String[] authParts = authHeader.split(" ");
+            if (authParts.length == 2 && authParts[0].equalsIgnoreCase("basic"))
+            {
+                String decodedAuthHeader = new String(Base64.decode(authParts[1]));
+                String[] decodedAuthParts = decodedAuthHeader.split(":");
+                if (decodedAuthParts.length == 2)
+                {
+                    session.setAttribute("_alf_USER_ID", decodedAuthParts[0]);
+                }
+            }
+
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null)
+            {
+                for (Cookie cookie: cookies)
+                {
+                    if (cookie.getName().equals(tokenName))
+                    {
+                        session.setAttribute(tokenName, Arrays.asList(URLDecoder.decode(cookie.getValue())));
+                    }
+                }
+            }
+
+            // Avoid to apply rules that don't validate the CSRF token, when we're doing a POST, PUT or DELETE
+            // by setting an invalid CSRF token
+            // This forces to check for the CSRF token validity, when the request has the token header but no CSRF token within the cookie
+            if (session.getAttribute(tokenName) == null &&
+                (request.getMethod().equals(HttpPost.METHOD_NAME) ||
+                    request.getMethod().equals(HttpPut.METHOD_NAME) ||
+                    request.getMethod().equals(HttpDelete.METHOD_NAME)
+                )
+            )
+            {
+                session.setAttribute(tokenName, "");
+            }
+        }
+    }
+
+    /**
+     * If the request is using HTTP Basic Authentication
+     * then clean the session attributes set in preprocessOnHttpBasicAuth
+     * @param request
+     * @param session
+     */
+    protected void postprocessOnHttpBasicAuth(HttpServletRequest request, HttpSession session)
+    {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null)
+        {
+            // Get the name used for CSRF token from configuration
+            String tokenName = properties.getOrDefault("token", "Alfresco-CSRFToken");
+
+            session.removeAttribute("_alf_USER_ID");
+            session.removeAttribute(tokenName);
+        }
+    }
+
     @Override
     public void destroy()
     {
