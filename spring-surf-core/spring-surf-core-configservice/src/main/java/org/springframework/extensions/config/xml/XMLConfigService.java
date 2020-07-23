@@ -51,6 +51,7 @@ import org.springframework.extensions.config.xml.elementreader.ConfigElementRead
 import org.springframework.extensions.config.xml.elementreader.GenericElementReader;
 import org.springframework.util.PropertyPlaceholderHelper;
 import org.springframework.util.StringValueResolver;
+import java.lang.reflect.Constructor;
 
 /**
  * XML based configuration service.
@@ -210,7 +211,7 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
         try
         {
             // get the root element
-            SAXReader reader = new SAXReader();
+            SAXReader reader = SAXReader.createDefault();
             Document document = reader.read(stream);
             Element rootElement = document.getRootElement();
             currentArea = parseFragment(rootElement, parsedElementReaders, parsedEvaluators, parsedConfigSections);
@@ -436,23 +437,28 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
      * @param className
      *            Class name of the element reader
      */
+    @SuppressWarnings("unchecked")
     private ConfigElementReader createConfigElementReader(String elementName, String className)
     {
         ConfigElementReader elementReader = null;
-
         try
         {
-            @SuppressWarnings("unchecked")
             Class clazz = Class.forName(className);
-            elementReader = (ConfigElementReader) clazz.newInstance();
+            if ((GenericElementReader.class).isAssignableFrom(clazz))
+            {
+                Constructor clazzConst = clazz.getDeclaredConstructor(PropertyConfigurer.class);
+                elementReader = (ConfigElementReader) clazzConst.newInstance(propertyConfigurer);
+            }
+            else
+            {
+                elementReader = (ConfigElementReader) clazz.newInstance();
+            }
         }
         catch (Throwable e)
         {
-            throw new ConfigException("Could not instantiate element reader for '" + elementName + "' with class: "
-                    + className, e);
+            throw new ConfigException("Could not instantiate element reader for '" + elementName + "' with class: " + className, e);
 
         }
-
         return elementReader;
     }
 
@@ -553,20 +559,20 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
                 // Otherwise, we allow unset properties to drift through from
                 // the systemProperties set and potentially set
                 // ones to be overriden by system properties
-                Map<String, String> envVariables = System.getenv();
+                Map<Object, Object> envVariables = System.getProperties();
                 
                 boolean keepExistingPropertyValues = this.systemPropertiesMode == PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_FALLBACK;
 
-                for (String systemPropName : envVariables.keySet())
+                for (Object systemPropName : envVariables.keySet())
                 {
                     if (keepExistingPropertyValues && props.containsKey(systemPropName))
                     {
                         // It's already there
                         continue;
                     }
-
+                    
                     // Get the system value and assign if present
-                    String systemPropertyValue = System.getProperty(systemPropName);
+                    String systemPropertyValue = System.getProperty((String) systemPropName);
                     
                     if (systemPropertyValue != null)
                     {
