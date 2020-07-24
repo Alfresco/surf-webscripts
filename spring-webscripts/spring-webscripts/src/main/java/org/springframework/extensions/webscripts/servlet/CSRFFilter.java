@@ -406,7 +406,7 @@ public class CSRFFilter implements Filter
                 )
             )
             {
-                session.setAttribute(tokenName, "");
+                session.setAttribute(tokenName, Arrays.asList(""));
             }
         }
     }
