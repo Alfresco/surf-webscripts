@@ -76,6 +76,8 @@ public class CSRFFilter implements Filter
     private Boolean HTTP_SECURED_SESSION_PROP = null;
     private String COOKIES_SAMESITE = null;
     private String PARAM_ENABLED = "enabled";
+    private final String PARAM_TOKEN = "token";
+
     // Global properties
     private Properties globalProperties = null;
 
@@ -371,27 +373,35 @@ public class CSRFFilter implements Filter
         if (authHeader != null)
         {
             // Get the name used for CSRF token from configuration
-            String tokenName = properties.getOrDefault("token", "Alfresco-CSRFToken");
+            String tokenName = properties.getOrDefault(PARAM_TOKEN, "Alfresco-CSRFToken");
 
-            String[] authParts = authHeader.split(" ");
-            if (authParts.length == 2 && authParts[0].equalsIgnoreCase("basic"))
+            // Set the _alf_USER_ID only if the attribute doesn't already exist in session
+            if (session.getAttribute("_alf_USER_ID") == null)
             {
-                String decodedAuthHeader = new String(Base64.decode(authParts[1]));
-                String[] decodedAuthParts = decodedAuthHeader.split(":");
-                if (decodedAuthParts.length == 2)
+                String[] authParts = authHeader.split(" ");
+                if (authParts.length == 2 && authParts[0].equalsIgnoreCase("basic"))
                 {
-                    session.setAttribute("_alf_USER_ID", decodedAuthParts[0]);
+                    String decodedAuthHeader = new String(Base64.decode(authParts[1]));
+                    String[] decodedAuthParts = decodedAuthHeader.split(":");
+                    if (decodedAuthParts.length == 2)
+                    {
+                        session.setAttribute("_alf_USER_ID", decodedAuthParts[0]);
+                    }
                 }
             }
 
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null)
+            // Set the CSRF token only if the attribute doesn't already exists in the session
+            if (session.getAttribute(tokenName) == null)
             {
-                for (Cookie cookie: cookies)
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null)
                 {
-                    if (cookie.getName().equals(tokenName))
+                    for (Cookie cookie: cookies)
                     {
-                        session.setAttribute(tokenName, Arrays.asList(URLDecoder.decode(cookie.getValue())));
+                        if (cookie.getName().equals(tokenName))
+                        {
+                            session.setAttribute(tokenName, Arrays.asList(URLDecoder.decode(cookie.getValue())));
+                        }
                     }
                 }
             }
@@ -423,7 +433,7 @@ public class CSRFFilter implements Filter
         if (authHeader != null)
         {
             // Get the name used for CSRF token from configuration
-            String tokenName = properties.getOrDefault("token", "Alfresco-CSRFToken");
+            String tokenName = properties.getOrDefault(PARAM_TOKEN, "Alfresco-CSRFToken");
 
             session.removeAttribute("_alf_USER_ID");
             session.removeAttribute(tokenName);
