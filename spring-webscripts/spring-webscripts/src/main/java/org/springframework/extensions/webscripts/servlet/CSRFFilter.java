@@ -33,6 +33,7 @@ import org.springframework.extensions.surf.util.URLDecoder;
 import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -386,6 +387,7 @@ public class CSRFFilter implements Filter
                     if (decodedAuthParts.length == 2)
                     {
                         session.setAttribute("_alf_USER_ID", decodedAuthParts[0]);
+                        request.setAttribute("CSRF_set__alf_USER_ID", true);
                     }
                 }
             }
@@ -401,6 +403,7 @@ public class CSRFFilter implements Filter
                         if (cookie.getName().equals(tokenName))
                         {
                             session.setAttribute(tokenName, Arrays.asList(URLDecoder.decode(cookie.getValue())));
+                            request.setAttribute("CSRF_set_token", true);
                         }
                     }
                 }
@@ -417,6 +420,7 @@ public class CSRFFilter implements Filter
             )
             {
                 session.setAttribute(tokenName, Arrays.asList(""));
+                request.setAttribute("CSRF_set_token", true);
             }
         }
     }
@@ -435,8 +439,16 @@ public class CSRFFilter implements Filter
             // Get the name used for CSRF token from configuration
             String tokenName = properties.getOrDefault(PARAM_TOKEN, "Alfresco-CSRFToken");
 
-            session.removeAttribute("_alf_USER_ID");
-            session.removeAttribute(tokenName);
+            if (request.getAttribute("CSRF_set__alf_USER_ID") != null)
+            {
+                request.removeAttribute("CSRF_set__alf_USER_ID");
+                session.removeAttribute("_alf_USER_ID");
+            }
+            if (request.getAttribute("CSRF_set_token") != null)
+            {
+                request.removeAttribute("CSRF_set_token");
+                session.removeAttribute(tokenName);
+            }
         }
     }
 
