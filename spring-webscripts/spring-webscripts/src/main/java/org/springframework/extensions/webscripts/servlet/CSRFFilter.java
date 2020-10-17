@@ -830,6 +830,10 @@ public class CSRFFilter implements Filter
                     httpSession.setAttribute(session, sessionTokens);
                     httpSession.setAttribute(SESSION_ATTRIBUTE_TOKEN_REFRESHED, new Date().getTime());
                 }
+                else if (httpSession.getAttribute(SESSION_ATTRIBUTE_TOKEN_REFRESHED) == null)
+                {
+                    httpSession.setAttribute(SESSION_ATTRIBUTE_TOKEN_REFRESHED, new Date().getTime());
+                }
                 else
                 {
                     Long now = new Date().getTime();
