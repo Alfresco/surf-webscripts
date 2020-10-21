@@ -1,5 +1,5 @@
-<#-- MNT-20195: import new utility file. (LM-190130) -->
-<#import "error.utils.ftl" as errorLib />
+<#-- MNT-20195 (LM-190130): import errorcode lib. -->
+<#import "errorcode.lib.ftl" as codeLib />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,11 +23,8 @@
    <table>
       <tr><td><b>${status.code} Description:</b></td><td> ${status.codeDescription}</td></tr>
       <tr><td>&nbsp;</td></tr>
-      <!--
-          MNT-20195: hide stack trace, server and timestamp, show error log number or error message.
-          LM-190130: code changes on line 30-35.
-      -->
-      <#assign errorId = errorLib.getErrorId(status.message)>
+      <!-- MNT-20195 (LM-190214): hide stack trace, server and timestamp, show error log number/error message. -->
+      <#assign errorId = codeLib.getErrorCode(status.message)>
       <#if errorId?has_content>
          <tr><td><b>Error Log Number: </b></td><td>${errorId}</td></tr>
       <#else>

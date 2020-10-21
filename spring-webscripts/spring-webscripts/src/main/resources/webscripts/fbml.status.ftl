@@ -6,8 +6,8 @@
 
 <div id="appbody">
 
-    <!-- MNT-20195: import error utility file. (LM-190130) -->
-    <#import "error.utils.ftl" as errorLib />
+    <!-- MNT-20195 (LM-190214): import errorcode lib. -->
+    <#import "errorcode.lib.ftl" as errorLib />
 
     <table>
         <tr>
@@ -19,11 +19,8 @@
     <table>
         <tr><td><b>Error:</b><td>${status.codeName} (${status.code}) - ${status.codeDescription}
         <tr><td>&nbsp;
-                <!--
-                    MNT-20195: hide server, time and stacktrace info, show error log id or message.
-                    LM-190310: code changes on line 26-31.
-                -->
-                <#assign errorId = errorLib.getErrorId(status.message)>
+                <!-- MNT-20195 (LM-190214): hide server, time and stacktrace info, show error error / error message. -->
+                <#assign errorId = errorLib.getErrorCode(status.message)>
                 <#if errorId?has_content>
         <tr><td><b>Error Log Number:</b><td>${errorId}
                 <#else>

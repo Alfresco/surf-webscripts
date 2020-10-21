@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<#-- MNT-20195: import new utility file. (LM-190130) -->
-<#import "error.utils.ftl" as errorLib />
+<#-- MNT-20195 (LM-190214): import errorcode lib -->
+<#import "errorcode.lib.ftl" as errorLib />
 
 <response>
     <status>
@@ -8,11 +8,8 @@
         <name>${status.codeName}</name>
         <description>${status.codeDescription}</description>
     </status>
-    <#--
-        MNT-20195: hide stack trace, server and time, show error log number or error message.
-        LM-190130: code changes on line 15-20.
-    -->
-    <#assign errorId = errorLib.getErrorId(status.message)>
+    <#-- MNT-20195 (LM-190214): hide stack trace, server and time, show error log number or error message. -->
+    <#assign errorId = errorLib.getErrorCode(status.message)>
     <#if errorId?has_content>
         <errorLogNumber>${errorId}</errorLogNumber>
     <#else>
