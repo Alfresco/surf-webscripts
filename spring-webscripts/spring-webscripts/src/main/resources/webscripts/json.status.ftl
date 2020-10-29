@@ -12,7 +12,7 @@
 <#assign errorId = codeLib.getErrorCode(status.message)>
 <#if errorId?has_content>
 <#-- Error Log Number -->
-    "errorLogNumber": "${errorId}"
+    "message": "${errorId}"
 <#else>
 <#-- Exception message -->
     "message" : "${jsonUtils.encodeJSONString(status.message)}"
