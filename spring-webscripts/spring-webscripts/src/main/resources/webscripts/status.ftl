@@ -26,7 +26,7 @@
       <!-- MNT-20195 (LM-190214): hide stack trace, server and timestamp, show error log number/error message. -->
       <#assign errorId = codeLib.getErrorCode(status.message)>
       <#if errorId?has_content>
-         <tr><td><b>Message: </b></td><td>${errorId}</td></tr>
+         <tr><td><b>Error Log Number: </b></td><td>${errorId}</td></tr>
       <#else>
          <tr><td><b>Message:</b></td><td><#if status.message??>${status.message?html}<#else><i>&lt;Not specified&gt;</i></#if></td></tr>
       </#if>

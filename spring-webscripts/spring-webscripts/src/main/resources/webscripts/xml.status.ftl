@@ -11,7 +11,7 @@
     <#-- MNT-20195 (LM-190214): hide stack trace, server and time, show error log number or error message. -->
     <#assign errorId = errorLib.getErrorCode(status.message)>
     <#if errorId?has_content>
-        <message>${errorId}</message>
+        <errorLogNumber>${errorId}</errorLogNumber>
     <#else>
         <message>${status.message!""}</message>
     </#if>
