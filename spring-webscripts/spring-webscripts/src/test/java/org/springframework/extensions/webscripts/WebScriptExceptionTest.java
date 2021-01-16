@@ -33,8 +33,6 @@ import org.springframework.extensions.webscripts.TestWebScriptServer.Response;
  */
 public class WebScriptExceptionTest extends TestCase
 {
-    private static final String URL_EXCEPTION = "/test/exception?a=1";
-
     private static final TestWebScriptServer TEST_SERVER = TestWebScriptServer.getTestServer();
 
     /**
@@ -45,18 +43,28 @@ public class WebScriptExceptionTest extends TestCase
      */
     public void testScriptStatusTemplate() throws Exception
     {
+        String url = "/test/exception?a=1";
         String res = "Failed /alfresco/service/test/exception - args 1";
-        sendRequest(new GetRequest(URL_EXCEPTION), 500, res);
+        Response resp = sendRequest(new GetRequest(url));
+        assertEquals("Unexpected status code", Status.STATUS_INTERNAL_SERVER_ERROR, resp.getStatus());
+        assertEquals("Unexpected response", res, resp.getContentAsString());
+    }
+
+    public void testScriptStatus404() throws Exception
+    {
+        String url = "/admin/support";
+        String res = "Script url " + url + " does not map to a Web Script.";
+        Response resp = sendRequest(new GetRequest(url));
+        assertEquals("Unexpected status code", Status.STATUS_NOT_FOUND, resp.getStatus());
+        assertTrue(resp.getContentAsString().contains(res));
     }
 
     /**
      * @param req Request
-     * @param expectedStatus int
-     * @param expectedResponse String
      * @return Response
      * @throws IOException
      */
-    private Response sendRequest(Request req, int expectedStatus, String expectedResponse) throws IOException
+    private Response sendRequest(Request req) throws IOException
     {
         System.out.println();
         System.out.println("* Request: " + req.getMethod() + " " + req.getFullUri() + (req.getBody() == null ? "" : "\n" + req.getBody()));
@@ -65,14 +73,6 @@ public class WebScriptExceptionTest extends TestCase
 
         System.out.println();
         System.out.println("* Response: " + res.getStatus() + " " + req.getMethod() + " " + req.getFullUri() + "\n" + res.getContentAsString());
-        if (expectedStatus > 0)
-        {
-            assertEquals("Unexpected status code", expectedStatus, res.getStatus());
-        }
-        if (expectedResponse != null)
-        {
-            assertEquals("Unexpected response", expectedResponse, res.getContentAsString());
-        }
         return res;
     }
 }

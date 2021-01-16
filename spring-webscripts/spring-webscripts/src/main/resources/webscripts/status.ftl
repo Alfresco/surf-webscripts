@@ -8,7 +8,6 @@
       <div>
          <table>
             <tr>
-               <td><img src="${url.context}/images/logo/AlfrescoLogo32.png" alt="Alfresco" /></td>
                <td><span class="title">Web Script Status ${status.code} - ${status.codeName}</span></td>
             </tr>
          </table>
@@ -25,7 +24,6 @@
             <tr><td></td><td>&nbsp;</td></tr>
             <@recursestack status.exception/>
             </#if>
-            <tr><td><b>Server</b>:</td><td>${server.edition?html} v${server.version?html} schema ${server.schema?html}</td></tr>
             <tr><td><b>Time</b>:</td><td>${date?datetime}</td></tr>
             <tr><td></td><td>&nbsp;</td></tr>
             <#if webscript?exists>
