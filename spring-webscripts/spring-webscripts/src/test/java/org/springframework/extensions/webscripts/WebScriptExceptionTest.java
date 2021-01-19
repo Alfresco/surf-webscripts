@@ -53,7 +53,7 @@ public class WebScriptExceptionTest extends TestCase
     public void testScriptStatus404() throws Exception
     {
         String url = "/admin/support";
-        String res = "Script url " + url + " does not map to a Web Script.";
+        String res = "Web Script Status 404 - Not Found";
         Response resp = sendRequest(new GetRequest(url));
         assertEquals("Unexpected status code", Status.STATUS_NOT_FOUND, resp.getStatus());
         assertTrue(resp.getContentAsString().contains(res));
