@@ -19,6 +19,7 @@
 package org.springframework.extensions.webscripts.servlet.mvc;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -100,15 +101,15 @@ public class EndPointProxyController extends AbstractController
     // Service cached values
     protected RemoteConfigElement config;
     
-    private String forbiddenPattern;
+    private List<String> forbiddenUriPatterns;
 
     /**
      *
-     * @param forbiddenPattern the forbidden URI pattern
+     * @param forbiddenUriPatterns the forbidden URI patterns list
      */
-    public void setForbiddenPattern(String forbiddenPattern)
+    public void setForbiddenUriPatterns(List<String> forbiddenUriPatterns)
     {
-        this.forbiddenPattern = forbiddenPattern;
+        this.forbiddenUriPatterns = forbiddenUriPatterns;
     }
 
     /**
@@ -186,9 +187,15 @@ public class EndPointProxyController extends AbstractController
 
         // TODO: perform additional sanitization to prevent header injection, request splitting etc.
 
-        if (uri.matches(forbiddenPattern))
+        if (forbiddenUriPatterns != null && !forbiddenUriPatterns.isEmpty())
         {
-            throw new WebScriptsPlatformException("Forbidden URI pattern: " + forbiddenPattern);
+            for (String forbiddenPattern : forbiddenUriPatterns)
+            {
+                if (forbiddenPattern != null && uri.matches(forbiddenPattern))
+                {
+                    throw new WebScriptsPlatformException("Forbidden URI pattern: " + forbiddenPattern);
+                }
+            }
         }
 
         // handle Flash uploader specific jsession parameter for conforming to servlet spec on later TomCat 6/7 versions
