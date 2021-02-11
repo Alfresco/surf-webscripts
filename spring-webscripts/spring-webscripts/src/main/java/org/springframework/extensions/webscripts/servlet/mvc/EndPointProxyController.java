@@ -100,7 +100,17 @@ public class EndPointProxyController extends AbstractController
     // Service cached values
     protected RemoteConfigElement config;
     
-    
+    private String forbiddenPattern;
+
+    /**
+     *
+     * @param forbiddenPattern the forbidden URI pattern
+     */
+    public void setForbiddenPattern(String forbiddenPattern)
+    {
+        this.forbiddenPattern = forbiddenPattern;
+    }
+
     /**
      * Sets the config service.
      * 
@@ -170,7 +180,17 @@ public class EndPointProxyController extends AbstractController
     {
         // get the portion of the uri beyond the handler mapping (resolved by Spring)
         String uri = (String) req.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-        
+
+        // Canonicalize:
+        uri = (new java.net.URI(uri)).normalize().getPath();
+
+        // TODO: perform additional sanitization to prevent header injection, request splitting etc.
+
+        if (uri.matches(forbiddenPattern))
+        {
+            throw new WebScriptsPlatformException("Forbidden URI pattern: " + forbiddenPattern);
+        }
+
         // handle Flash uploader specific jsession parameter for conforming to servlet spec on later TomCat 6/7 versions
         int jsessionid;
         if ((jsessionid = uri.indexOf(JSESSIONID)) != -1)
