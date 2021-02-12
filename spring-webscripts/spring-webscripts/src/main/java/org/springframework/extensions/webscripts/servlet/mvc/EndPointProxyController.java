@@ -101,15 +101,25 @@ public class EndPointProxyController extends AbstractController
     // Service cached values
     protected RemoteConfigElement config;
     
-    private List<String> forbiddenUriPatterns;
+    private List<String> uriBlacklist;
+    private List<String> uriWhitelist;
 
     /**
      *
-     * @param forbiddenUriPatterns the forbidden URI patterns list
+     * @param uriBlacklist the forbidden URI patterns list
      */
-    public void setForbiddenUriPatterns(List<String> forbiddenUriPatterns)
+    public void setUriBlacklist(List<String> uriBlacklist)
     {
-        this.forbiddenUriPatterns = forbiddenUriPatterns;
+        this.uriBlacklist = uriBlacklist;
+    }
+
+    /**
+     *
+     * @param uriWhitelist the forbidden URI patterns list
+     */
+    public void setUriWhitelist(List<String> uriWhitelist)
+    {
+        this.uriWhitelist = uriWhitelist;
     }
 
     /**
@@ -187,17 +197,16 @@ public class EndPointProxyController extends AbstractController
 
         // TODO: perform additional sanitization to prevent header injection, request splitting etc.
 
-        if (forbiddenUriPatterns != null && !forbiddenUriPatterns.isEmpty())
+        if (isInWhitelist(uri) && !isInBlacklist(uri))
         {
-            for (String forbiddenPattern : forbiddenUriPatterns)
-            {
-                if (forbiddenPattern != null && uri.matches(forbiddenPattern))
-                {
-                    throw new WebScriptsPlatformException("Forbidden URI pattern: " + forbiddenPattern);
-                }
-            }
+            return handleRequestInternalPrivate(req, res, uri);
         }
 
+        throw new WebScriptsPlatformException("Invalid URI: " + uri);
+    }
+
+    private ModelAndView handleRequestInternalPrivate(HttpServletRequest req, HttpServletResponse res, String uri) throws Exception
+    {
         // handle Flash uploader specific jsession parameter for conforming to servlet spec on later TomCat 6/7 versions
         int jsessionid;
         if ((jsessionid = uri.indexOf(JSESSIONID)) != -1)
@@ -371,6 +380,38 @@ public class EndPointProxyController extends AbstractController
         }
         
         return null;
+    }
+
+    private boolean isInWhitelist(String uri)
+    {
+        if (uriWhitelist != null && !uriWhitelist.isEmpty())
+        {
+            for (String allowedPattern : uriWhitelist)
+            {
+                if (allowedPattern != null && uri.matches(allowedPattern))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isInBlacklist(String uri)
+    {
+        if (uriBlacklist != null && !uriBlacklist.isEmpty())
+        {
+            for (String forbiddenPattern : uriBlacklist)
+            {
+                if (forbiddenPattern != null && uri.matches(forbiddenPattern))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void authorizedResponseStatus(HttpServletResponse res)
