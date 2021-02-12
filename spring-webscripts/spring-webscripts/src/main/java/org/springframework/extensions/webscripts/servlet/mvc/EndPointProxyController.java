@@ -18,10 +18,7 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,18 +97,11 @@ public class EndPointProxyController extends AbstractController
     
     // Service cached values
     protected RemoteConfigElement config;
-    
-    private List<String> uriBlacklist;
-    private List<String> uriWhitelist;
 
-    /**
-     *
-     * @param uriBlacklist the forbidden URI patterns list
-     */
-    public void setUriBlacklist(List<String> uriBlacklist)
-    {
-        this.uriBlacklist = uriBlacklist;
-    }
+    // By default allow any URI:
+    private List<String> uriWhitelist = Collections.singletonList("^.*$");
+
+    private List<String> uriBlacklist;
 
     /**
      *
@@ -120,6 +110,15 @@ public class EndPointProxyController extends AbstractController
     public void setUriWhitelist(List<String> uriWhitelist)
     {
         this.uriWhitelist = uriWhitelist;
+    }
+
+    /**
+     *
+     * @param uriBlacklist the forbidden URI patterns list
+     */
+    public void setUriBlacklist(List<String> uriBlacklist)
+    {
+        this.uriBlacklist = uriBlacklist;
     }
 
     /**
