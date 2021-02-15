@@ -194,18 +194,11 @@ public class EndPointProxyController extends AbstractController
         // Canonicalize:
         uri = (new java.net.URI(uri)).normalize().getPath();
 
+        // Strip unwanted bits to prevent issue like new line injection:
+        uri = uri.replaceAll("[^/a-zA-Z0-9.-]", "");
+
         // TODO: perform additional sanitization to prevent header injection, request splitting etc.
 
-        if (isInWhitelist(uri) && !isInBlacklist(uri))
-        {
-            return handleRequestInternalPrivate(req, res, uri);
-        }
-
-        throw new WebScriptsPlatformException("Invalid URI: " + uri);
-    }
-
-    private ModelAndView handleRequestInternalPrivate(HttpServletRequest req, HttpServletResponse res, String uri) throws Exception
-    {
         // handle Flash uploader specific jsession parameter for conforming to servlet spec on later TomCat 6/7 versions
         int jsessionid;
         if ((jsessionid = uri.indexOf(JSESSIONID)) != -1)
@@ -358,18 +351,32 @@ public class EndPointProxyController extends AbstractController
                 logger.debug(" - method: " + context.getMethod());
                 logger.debug(" - url: " + url);
             }
-            
-            // call through using our connector to proxy
-            Response response = connector.call(url, context, req, res);
-            
-            if (logger.isDebugEnabled())
+
+            if (isInWhitelist(uri) && !isInBlacklist(uri))
             {
-                logger.debug("Return code: " + response.getStatus().getCode());
-                if (response.getStatus().getCode() == 500)
+                // call through using our connector to proxy
+                Response response = connector.call(url, context, req, res);
+
+                if (logger.isDebugEnabled())
                 {
-                    logger.debug("Error detected: " + response.getStatus().getMessage() + "\n" +
+                    logger.debug("Return code: " + response.getStatus().getCode());
+                    if (response.getStatus().getCode() == 500)
+                    {
+                        logger.debug("Error detected: " + response.getStatus().getMessage() + "\n" +
                             response.getStatus().getException().toString());
+                    }
                 }
+            }
+            else
+            {
+                if (isInBlacklist(uri) && logger.isDebugEnabled())
+                {
+                    logger.debug("[SECURITY] An attempt to access a forbidden resource was blocked: " + url);
+                }
+
+                res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden URI: " + uri);
+
+                return null;
             }
         }
         catch (Throwable err)
