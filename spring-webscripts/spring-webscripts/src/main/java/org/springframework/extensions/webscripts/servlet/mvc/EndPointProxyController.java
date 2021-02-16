@@ -80,6 +80,8 @@ public class EndPointProxyController extends AbstractController
     
     private static final String JSESSIONID = ";jsessionid=";
     private static final String USER_ID = "_alf_USER_ID";
+    private static final String ANY_URI_PATTERN = "^.*$";
+    private static final String SOLR_PATTERN = "^.*/api/solr/.*$";
     
     // Spring bean references
     protected ConfigService configService;
@@ -100,10 +102,17 @@ public class EndPointProxyController extends AbstractController
     // Service cached values
     protected RemoteConfigElement config;
 
+    private List<Pattern> uriPatternsWhitelist = new ArrayList<>();
     // By default allow any URI:
-    private List<Pattern> uriPatternsWhitelist = Collections.singletonList(Pattern.compile("^.*$"));
+    {
+        uriPatternsWhitelist.add(Pattern.compile(ANY_URI_PATTERN));
+    }
 
-    private List<Pattern> uriPatternsBlacklist;
+    private List<Pattern> uriPatternsBlacklist = new ArrayList<>();
+    // By default protect SOLR:
+    {
+        uriPatternsBlacklist.add(Pattern.compile(SOLR_PATTERN));
+    }
 
     /**
      *
@@ -113,7 +122,7 @@ public class EndPointProxyController extends AbstractController
     {
         if (uriWhitelist != null && !uriWhitelist.isEmpty())
         {
-            uriPatternsWhitelist = new ArrayList<>();
+            uriPatternsWhitelist.clear();
 
             for (String uriPattern : uriWhitelist)
             {
@@ -130,8 +139,6 @@ public class EndPointProxyController extends AbstractController
     {
         if (uriBlacklist != null && !uriBlacklist.isEmpty())
         {
-            uriPatternsBlacklist = new ArrayList<>();
-
             for (String uriPattern : uriBlacklist)
             {
                 uriPatternsBlacklist.add(Pattern.compile(uriPattern));
