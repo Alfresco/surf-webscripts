@@ -19,6 +19,8 @@
 package org.springframework.extensions.webscripts.servlet.mvc;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -99,9 +101,9 @@ public class EndPointProxyController extends AbstractController
     protected RemoteConfigElement config;
 
     // By default allow any URI:
-    private List<String> uriWhitelist = Collections.singletonList("^.*$");
+    private List<Pattern> uriPatternsWhitelist = Collections.singletonList(Pattern.compile("^.*$"));
 
-    private List<String> uriBlacklist;
+    private List<Pattern> uriPatternsBlacklist;
 
     /**
      *
@@ -109,7 +111,15 @@ public class EndPointProxyController extends AbstractController
      */
     public void setUriWhitelist(List<String> uriWhitelist)
     {
-        this.uriWhitelist = uriWhitelist;
+        if (uriWhitelist != null && !uriWhitelist.isEmpty())
+        {
+            uriPatternsWhitelist = new ArrayList<>();
+
+            for (String uriPattern : uriWhitelist)
+            {
+                uriPatternsWhitelist.add(Pattern.compile(uriPattern));
+            }
+        }
     }
 
     /**
@@ -118,7 +128,15 @@ public class EndPointProxyController extends AbstractController
      */
     public void setUriBlacklist(List<String> uriBlacklist)
     {
-        this.uriBlacklist = uriBlacklist;
+        if (uriBlacklist != null && !uriBlacklist.isEmpty())
+        {
+            uriPatternsBlacklist = new ArrayList<>();
+
+            for (String uriPattern : uriBlacklist)
+            {
+                uriPatternsBlacklist.add(Pattern.compile(uriPattern));
+            }
+        }
     }
 
     /**
@@ -390,29 +408,28 @@ public class EndPointProxyController extends AbstractController
 
     private boolean isInWhitelist(String uri)
     {
-        if (uriWhitelist != null && !uriWhitelist.isEmpty())
-        {
-            for (String allowedPattern : uriWhitelist)
-            {
-                if (allowedPattern != null && uri.matches(allowedPattern))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return isMatchInList(uri, uriPatternsWhitelist);
     }
 
     private boolean isInBlacklist(String uri)
     {
-        if (uriBlacklist != null && !uriBlacklist.isEmpty())
+        return isMatchInList(uri, uriPatternsBlacklist);
+    }
+
+    private boolean isMatchInList(String uri, List<Pattern> patternsList)
+    {
+        if (patternsList != null && !patternsList.isEmpty())
         {
-            for (String forbiddenPattern : uriBlacklist)
+            for (Pattern pattern : patternsList)
             {
-                if (forbiddenPattern != null && uri.matches(forbiddenPattern))
+                if (pattern != null)
                 {
-                    return true;
+                    Matcher matcher = pattern.matcher(uri);
+
+                    if (matcher.matches())
+                    {
+                        return true;
+                    }
                 }
             }
         }
