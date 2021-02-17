@@ -18,9 +18,11 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.net.URISyntaxException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,6 +82,8 @@ public class EndPointProxyController extends AbstractController
     
     private static final String JSESSIONID = ";jsessionid=";
     private static final String USER_ID = "_alf_USER_ID";
+    private static final String ANY_URI_PATTERN = "^.*$";
+    private static final String SOLR_PATTERN = "^.*/api/solr/.*$";
     
     // Spring bean references
     protected ConfigService configService;
@@ -99,8 +103,72 @@ public class EndPointProxyController extends AbstractController
     
     // Service cached values
     protected RemoteConfigElement config;
-    
-    
+
+    private List<Pattern> compiledPatternsWhitelist = new ArrayList<>();
+    // By default allow any URI:
+    {
+        compiledPatternsWhitelist.add(Pattern.compile(ANY_URI_PATTERN));
+    }
+
+    private List<Pattern> compiledPatternsBlacklist = new ArrayList<>();
+    // By default protect SOLR:
+    {
+        compiledPatternsBlacklist.add(Pattern.compile(SOLR_PATTERN));
+    }
+
+    private void tryPopulateCompiledPatternsList(List<String> uriPatternsList, List<Pattern> compiledPatternsList)
+    {
+        for (String uriPattern : uriPatternsList)
+        {
+            if (uriPattern != null)
+            {
+                try
+                {
+                    Pattern pattern = Pattern.compile(uriPattern);
+                    compiledPatternsList.add(pattern);
+                }
+                catch (PatternSyntaxException pse)
+                {
+                    if (logger.isDebugEnabled())
+                    {
+                        logger.debug("Invalid syntax expression: " + uriPattern);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param uriWhitelist the allowed URI patterns list
+     */
+    public void setUriWhitelist(List<String> uriWhitelist)
+    {
+        if (uriWhitelist != null && !uriWhitelist.isEmpty())
+        {
+            compiledPatternsWhitelist.clear();
+
+            tryPopulateCompiledPatternsList(uriWhitelist, compiledPatternsWhitelist);
+
+            if (compiledPatternsWhitelist.isEmpty())
+            {
+                compiledPatternsWhitelist.add(Pattern.compile(ANY_URI_PATTERN));
+            }
+        }
+    }
+
+    /**
+     *
+     * @param uriBlacklist the forbidden URI patterns list
+     */
+    public void setUriBlacklist(List<String> uriBlacklist)
+    {
+        if (uriBlacklist != null && !uriBlacklist.isEmpty())
+        {
+            tryPopulateCompiledPatternsList(uriBlacklist, compiledPatternsBlacklist);
+        }
+    }
+
     /**
      * Sets the config service.
      * 
@@ -170,7 +238,9 @@ public class EndPointProxyController extends AbstractController
     {
         // get the portion of the uri beyond the handler mapping (resolved by Spring)
         String uri = (String) req.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-        
+
+        uri = sanitizeUri(uri);
+
         // handle Flash uploader specific jsession parameter for conforming to servlet spec on later TomCat 6/7 versions
         int jsessionid;
         if ((jsessionid = uri.indexOf(JSESSIONID)) != -1)
@@ -323,18 +393,32 @@ public class EndPointProxyController extends AbstractController
                 logger.debug(" - method: " + context.getMethod());
                 logger.debug(" - url: " + url);
             }
-            
-            // call through using our connector to proxy
-            Response response = connector.call(url, context, req, res);
-            
-            if (logger.isDebugEnabled())
+
+            if (isInWhitelist(uri) && !isInBlacklist(uri))
             {
-                logger.debug("Return code: " + response.getStatus().getCode());
-                if (response.getStatus().getCode() == 500)
+                // call through using our connector to proxy
+                Response response = connector.call(url, context, req, res);
+
+                if (logger.isDebugEnabled())
                 {
-                    logger.debug("Error detected: " + response.getStatus().getMessage() + "\n" +
+                    logger.debug("Return code: " + response.getStatus().getCode());
+                    if (response.getStatus().getCode() == 500)
+                    {
+                        logger.debug("Error detected: " + response.getStatus().getMessage() + "\n" +
                             response.getStatus().getException().toString());
+                    }
                 }
+            }
+            else
+            {
+                if (isInBlacklist(uri) && logger.isDebugEnabled())
+                {
+                    logger.debug("[SECURITY] An attempt to access a forbidden resource was blocked: " + url);
+                }
+
+                res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden URI: " + uri);
+
+                return null;
             }
         }
         catch (Throwable err)
@@ -344,6 +428,48 @@ public class EndPointProxyController extends AbstractController
         }
         
         return null;
+    }
+
+    private String sanitizeUri(String uri) throws URISyntaxException
+    {
+        // Canonicalize:
+        uri = (new java.net.URI(uri)).normalize().getPath();
+
+        // Strip unwanted bits to prevent issue like new line injection:
+        uri = uri.replaceAll("[^/a-zA-Z0-9.-]", "");
+
+        return uri;
+    }
+
+    private boolean isInWhitelist(String uri)
+    {
+        return isMatchInList(uri, compiledPatternsWhitelist);
+    }
+
+    private boolean isInBlacklist(String uri)
+    {
+        return isMatchInList(uri, compiledPatternsBlacklist);
+    }
+
+    private boolean isMatchInList(String uri, List<Pattern> patternsList)
+    {
+        if (patternsList != null && !patternsList.isEmpty())
+        {
+            for (Pattern pattern : patternsList)
+            {
+                if (pattern != null)
+                {
+                    Matcher matcher = pattern.matcher(uri);
+
+                    if (matcher.matches())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     private void authorizedResponseStatus(HttpServletResponse res)
