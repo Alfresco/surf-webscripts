@@ -18,6 +18,7 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -238,13 +239,7 @@ public class EndPointProxyController extends AbstractController
         // get the portion of the uri beyond the handler mapping (resolved by Spring)
         String uri = (String) req.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 
-        // Canonicalize:
-        uri = (new java.net.URI(uri)).normalize().getPath();
-
-        // Strip unwanted bits to prevent issue like new line injection:
-        uri = uri.replaceAll("[^/a-zA-Z0-9.-]", "");
-
-        // TODO: perform additional sanitization to prevent header injection, request splitting etc.
+        uri = sanitizeUri(uri);
 
         // handle Flash uploader specific jsession parameter for conforming to servlet spec on later TomCat 6/7 versions
         int jsessionid;
@@ -433,6 +428,17 @@ public class EndPointProxyController extends AbstractController
         }
         
         return null;
+    }
+
+    private String sanitizeUri(String uri) throws URISyntaxException
+    {
+        // Canonicalize:
+        uri = (new java.net.URI(uri)).normalize().getPath();
+
+        // Strip unwanted bits to prevent issue like new line injection:
+        uri = uri.replaceAll("[^/a-zA-Z0-9.-]", "");
+
+        return uri;
     }
 
     private boolean isInWhitelist(String uri)
