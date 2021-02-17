@@ -21,6 +21,7 @@ package org.springframework.extensions.webscripts.servlet.mvc;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -102,31 +103,55 @@ public class EndPointProxyController extends AbstractController
     // Service cached values
     protected RemoteConfigElement config;
 
-    private List<Pattern> uriPatternsWhitelist = new ArrayList<>();
+    private List<Pattern> compiledPatternsWhitelist = new ArrayList<>();
     // By default allow any URI:
     {
-        uriPatternsWhitelist.add(Pattern.compile(ANY_URI_PATTERN));
+        compiledPatternsWhitelist.add(Pattern.compile(ANY_URI_PATTERN));
     }
 
-    private List<Pattern> uriPatternsBlacklist = new ArrayList<>();
+    private List<Pattern> compiledPatternsBlacklist = new ArrayList<>();
     // By default protect SOLR:
     {
-        uriPatternsBlacklist.add(Pattern.compile(SOLR_PATTERN));
+        compiledPatternsBlacklist.add(Pattern.compile(SOLR_PATTERN));
+    }
+
+    private void tryPopulateCompiledPatternsList(List<String> uriPatternsList, List<Pattern> compiledPatternsList)
+    {
+        for (String uriPattern : uriPatternsList)
+        {
+            if (uriPattern != null)
+            {
+                try
+                {
+                    Pattern pattern = Pattern.compile(uriPattern);
+                    compiledPatternsList.add(pattern);
+                }
+                catch (PatternSyntaxException pse)
+                {
+                    if (logger.isDebugEnabled())
+                    {
+                        logger.debug("Invalid syntax expression: " + uriPattern);
+                    }
+                }
+            }
+        }
     }
 
     /**
      *
-     * @param uriWhitelist the forbidden URI patterns list
+     * @param uriWhitelist the allowed URI patterns list
      */
     public void setUriWhitelist(List<String> uriWhitelist)
     {
         if (uriWhitelist != null && !uriWhitelist.isEmpty())
         {
-            uriPatternsWhitelist.clear();
+            compiledPatternsWhitelist.clear();
 
-            for (String uriPattern : uriWhitelist)
+            tryPopulateCompiledPatternsList(uriWhitelist, compiledPatternsWhitelist);
+
+            if (compiledPatternsWhitelist.isEmpty())
             {
-                uriPatternsWhitelist.add(Pattern.compile(uriPattern));
+                compiledPatternsWhitelist.add(Pattern.compile(ANY_URI_PATTERN));
             }
         }
     }
@@ -139,10 +164,7 @@ public class EndPointProxyController extends AbstractController
     {
         if (uriBlacklist != null && !uriBlacklist.isEmpty())
         {
-            for (String uriPattern : uriBlacklist)
-            {
-                uriPatternsBlacklist.add(Pattern.compile(uriPattern));
-            }
+            tryPopulateCompiledPatternsList(uriBlacklist, compiledPatternsBlacklist);
         }
     }
 
@@ -415,12 +437,12 @@ public class EndPointProxyController extends AbstractController
 
     private boolean isInWhitelist(String uri)
     {
-        return isMatchInList(uri, uriPatternsWhitelist);
+        return isMatchInList(uri, compiledPatternsWhitelist);
     }
 
     private boolean isInBlacklist(String uri)
     {
-        return isMatchInList(uri, uriPatternsBlacklist);
+        return isMatchInList(uri, compiledPatternsBlacklist);
     }
 
     private boolean isMatchInList(String uri, List<Pattern> patternsList)
