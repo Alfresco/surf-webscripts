@@ -424,7 +424,7 @@ public class EndPointProxyController extends AbstractController
             {
                 if (isInBlacklist(uri))
                 {
-                    logger.info("An attempt to access a forbidden resource was blocked: " + url);
+                    logger.warn("An attempt to access a forbidden resource was blocked: " + url);
                 }
 
                 res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden URI: " + uri);
