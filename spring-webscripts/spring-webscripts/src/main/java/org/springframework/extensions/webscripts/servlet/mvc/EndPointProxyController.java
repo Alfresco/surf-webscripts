@@ -422,9 +422,9 @@ public class EndPointProxyController extends AbstractController
             }
             else
             {
-                if (isInBlacklist(uri) && logger.isDebugEnabled())
+                if (isInBlacklist(uri))
                 {
-                    logger.debug("[SECURITY] An attempt to access a forbidden resource was blocked: " + url);
+                    logger.warn("An attempt to access a forbidden resource was blocked: " + url);
                 }
 
                 res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden URI: " + uri);
@@ -443,12 +443,13 @@ public class EndPointProxyController extends AbstractController
 
     private String sanitizeUri(String uri) throws URISyntaxException
     {
-
+        String originalUri= uri;
         // Strip unwanted bits to prevent issue like new line injection:
         for(Pattern pattern : compiledCRLFProtection){
-            pattern.matcher(uri).replaceAll("");
+            uri=pattern.matcher(uri).replaceAll("");
         }
-
+        logger.info(originalUri);
+        logger.info(uri);
         return uri;
     }
 

@@ -13,7 +13,7 @@ branches:
     - master
     - /support\/.*/
     - fix/MNT-22154
-    
+
 stages:
   - test
   - release
