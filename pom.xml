@@ -51,7 +51,7 @@
          <version>${spring.version}</version>
          <scope>test</scope>
       </dependency>
-      
+
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>javax.servlet-api</artifactId>
@@ -106,7 +106,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>5.2.9.RELEASE</spring.version>
+      <spring.version>5.3.3</spring.version>
       <maven.build.sourceVersion>11</maven.build.sourceVersion>
    </properties>
 

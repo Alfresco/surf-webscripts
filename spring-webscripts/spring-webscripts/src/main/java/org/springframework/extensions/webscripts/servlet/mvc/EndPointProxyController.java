@@ -84,7 +84,10 @@ public class EndPointProxyController extends AbstractController
     private static final String USER_ID = "_alf_USER_ID";
     private static final String ANY_URI_PATTERN = "^.*$";
     private static final String SOLR_PATTERN = "^.*/api/solr/.*$";
-    
+    // CRLF injection protection
+    private static final String ENCODED_CRLF = "%0d|%0a";
+    private static final String ASCII_CRLF = "\\r|\\n";
+
     // Spring bean references
     protected ConfigService configService;
     protected ConnectorService connectorService;
@@ -114,6 +117,13 @@ public class EndPointProxyController extends AbstractController
     // By default protect SOLR:
     {
         compiledPatternsBlacklist.add(Pattern.compile(SOLR_PATTERN));
+    }
+
+    private List<Pattern> compiledCRLFProtection = new ArrayList<>();
+    // pre-load compiled pattern:
+    {
+        compiledCRLFProtection.add(Pattern.compile(ENCODED_CRLF));
+        compiledCRLFProtection.add(Pattern.compile(ASCII_CRLF));
     }
 
     private void tryPopulateCompiledPatternsList(List<String> uriPatternsList, List<Pattern> compiledPatternsList)
@@ -239,6 +249,7 @@ public class EndPointProxyController extends AbstractController
         // get the portion of the uri beyond the handler mapping (resolved by Spring)
         String uri = (String) req.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 
+        //Sanitization layer
         uri = sanitizeUri(uri);
 
         // handle Flash uploader specific jsession parameter for conforming to servlet spec on later TomCat 6/7 versions
@@ -411,9 +422,9 @@ public class EndPointProxyController extends AbstractController
             }
             else
             {
-                if (isInBlacklist(uri) && logger.isDebugEnabled())
+                if (isInBlacklist(uri))
                 {
-                    logger.debug("[SECURITY] An attempt to access a forbidden resource was blocked: " + url);
+                    logger.warn("An attempt to access a forbidden resource was blocked: " + url);
                 }
 
                 res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden URI: " + uri);
@@ -432,12 +443,10 @@ public class EndPointProxyController extends AbstractController
 
     private String sanitizeUri(String uri) throws URISyntaxException
     {
-        // Canonicalize:
-        uri = (new java.net.URI(uri)).normalize().getPath();
-
         // Strip unwanted bits to prevent issue like new line injection:
-        uri = uri.replaceAll("[^/a-zA-Z0-9.-]", "");
-
+        for(Pattern pattern : compiledCRLFProtection){
+            uri=pattern.matcher(uri).replaceAll("");
+        }
         return uri;
     }
 
