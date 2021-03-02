@@ -42,6 +42,7 @@ import org.springframework.extensions.surf.exception.WebScriptsPlatformException
 import org.springframework.util.ResourceUtils;
 
 import freemarker.cache.TemplateLoader;
+import java.net.URLConnection;
 
 
 /**
@@ -317,9 +318,19 @@ public class ClassPathStore extends AbstractStore implements ApplicationContextA
         long mod = -1L;
         
         Resource document = this.getDocumentResource(documentPath);
+
         if (document != null)
         {
-            mod = document.getURL().openConnection().getLastModified();
+            URLConnection con = null;
+            try
+            {
+                con  = document.getURL().openConnection();
+                mod = con.getLastModified();
+            }
+            finally
+            {
+                con.getInputStream().close();
+            }
         }
         
         return mod;
