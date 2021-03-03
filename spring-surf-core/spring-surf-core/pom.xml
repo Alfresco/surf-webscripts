@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.alfresco.surf</groupId>
 		<artifactId>spring-surf-webscripts-parent</artifactId>
-		<version>6.20.4-A2</version>
+		<version>6.20.4-A3-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	
 	<artifactId>spring-surf-core</artifactId>
-  <version>6.20.4-A2</version>
+  <version>6.20</version>
 	<name>Surf Core</name>
 	<description>Surf Core</description>
 	<url>spring-surf-core/${project.artifactId}</url>
