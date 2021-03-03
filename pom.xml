@@ -13,23 +13,19 @@
    <description>WebScripts modules</description>
    <packaging>pom</packaging>
 
-   <scm>
-      <connection>scm:git:git@github.com:Alfresco/surf-webscripts.git</connection>
-      <developerConnection>scm:git:git@github.com:Alfresco/surf-webscripts.git</developerConnection>
-      <url>https://github.com/Alfresco/surf-webscripts</url>
-      <tag>6.20</tag>
-   </scm>
+    <scm>
+        <connection>scm:git:https://github.com/Alfresco/surf-webscripts.git</connection>
+        <developerConnection>scm:git:https://github.com/Alfresco/surf-webscripts.git</developerConnection>
+        <url>https://github.com/Alfresco/surf-webscripts</url>
+        <tag>HEAD</tag>
+    </scm>
 
-   <distributionManagement>
-      <repository>
-          <id>alfresco-internal</id>
-          <url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
-      </repository>
-      <snapshotRepository>
-          <id>alfresco-internal-snapshots</id>
-          <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
-      </snapshotRepository>      
-   </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>alfresco-public</id>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
 
    <modules>
       <!-- Surf Platform Services -->
