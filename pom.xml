@@ -8,7 +8,7 @@
    </parent>
    <groupId>org.alfresco.surf</groupId>
    <artifactId>spring-surf-webscripts-parent</artifactId>
-   <version>6.20.4-SNAPSHOT</version>
+   <version>6.20.4-A1-SNAPSHOT</version>
    <name>WebScripts</name>
    <description>WebScripts modules</description>
    <packaging>pom</packaging>
