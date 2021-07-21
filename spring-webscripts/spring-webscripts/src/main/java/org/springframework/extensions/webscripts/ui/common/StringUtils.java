@@ -290,7 +290,7 @@ public class StringUtils
             }
             buf.append(sanitizedHTML);
 
-            return buf.toString();
+            return encode ? buf.toString() : Encoding.decodeHtml(buf.toString());
         }
 
         return "";
