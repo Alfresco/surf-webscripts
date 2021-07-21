@@ -20,7 +20,6 @@ package org.springframework.extensions.webscripts.servlet.mvc;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -101,7 +100,7 @@ public class WebScriptView extends AbstractUrlBasedView
         }
         else
         {
-            setLanguage(locale.getLanguage());
+            I18NUtil.setLocaleFromLanguage(locale.getLanguage());
         }
         
         // hand off to the WebScript Servlet View runtime
@@ -116,18 +115,6 @@ public class WebScriptView extends AbstractUrlBasedView
     {
         // set language locale from browser header
         String acceptLang = req.getHeader("Accept-Language");
-        setLanguage(acceptLang);
-    }
-
-    public static void setLanguage(String acceptLang)
-    {
-        // set language locale from browser header
-        if (acceptLang != null && acceptLang.length() != 0)
-        {
-            StringTokenizer t = new StringTokenizer(acceptLang, ",; ");
-            // get language and convert to java locale format
-            String language = t.nextToken().replace('-', '_');
-            I18NUtil.setLocale(I18NUtil.parseLocale(language));
-        }
+        I18NUtil.setLocaleFromLanguage(acceptLang);
     }
 }

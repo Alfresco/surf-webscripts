@@ -78,6 +78,24 @@ public class I18NUtil
     }
 
     /**
+     * Set the locale from supplied accept language value
+     *
+     * @param acceptLang
+     *            the language value
+     */
+    public static void setLocaleFromLanguage(String acceptLang)
+    {
+        // set language locale from browser header
+        if (acceptLang != null && acceptLang.length() != 0)
+        {
+            StringTokenizer t = new StringTokenizer(acceptLang, ",; ");
+            // get language and convert to java locale format
+            String language = t.nextToken().replace('-', '_');
+            setLocale(I18NUtil.parseLocale(language));
+        }
+    }
+
+    /**
      * Get the general local for the current thread, will revert to the default locale if none 
      * specified for this thread.
      * 
