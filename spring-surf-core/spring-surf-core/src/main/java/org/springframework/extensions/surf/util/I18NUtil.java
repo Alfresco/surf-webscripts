@@ -284,25 +284,35 @@ public class I18NUtil
     {
         if (localeStr == null)
         {
-            return null; 
+            return null;
         }
+
         Locale locale = Locale.getDefault();
-        
+
+        try
+        {
+            Locale.LanguageRange.parse(localeStr);
+        }
+        catch (Exception e)
+        {
+            return locale;
+        }
+
         StringTokenizer t = new StringTokenizer(localeStr.toLowerCase(), "_-");
         int tokens = t.countTokens();
         if (tokens == 1)
         {
-           locale = new Locale(t.nextToken());
+            locale = new Locale(t.nextToken());
         }
         else if (tokens == 2)
         {
-           locale = new Locale(t.nextToken(), t.nextToken());
+            locale = new Locale(t.nextToken(), t.nextToken());
         }
         else if (tokens == 3)
         {
-           locale = new Locale(t.nextToken(), t.nextToken(), t.nextToken());
+            locale = new Locale(t.nextToken(), t.nextToken(), t.nextToken());
         }
-        
+
         return locale;
     }
     

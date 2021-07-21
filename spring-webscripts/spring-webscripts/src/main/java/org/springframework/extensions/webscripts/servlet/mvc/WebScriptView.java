@@ -18,6 +18,7 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -32,7 +33,6 @@ import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.extensions.webscripts.RuntimeContainer;
 import org.springframework.extensions.webscripts.servlet.ServletAuthenticatorFactory;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
-import org.springframework.web.util.WebUtils;
 
 /**
  * WebScript view implementation. Maintains the MVC view name as a parameter to
@@ -94,9 +94,14 @@ public class WebScriptView extends AbstractUrlBasedView
         }
         
         // locale may have been resolved by the Spring MVC dispatcher
-        if (I18NUtil.getLocaleOrNull() == null)
+        Locale locale = I18NUtil.getLocaleOrNull();
+        if (locale == null)
         {
             setLanguageFromRequestHeader(request);
+        }
+        else
+        {
+            setLanguage(locale.getLanguage());
         }
         
         // hand off to the WebScript Servlet View runtime
@@ -111,6 +116,12 @@ public class WebScriptView extends AbstractUrlBasedView
     {
         // set language locale from browser header
         String acceptLang = req.getHeader("Accept-Language");
+        setLanguage(acceptLang);
+    }
+
+    public static void setLanguage(String acceptLang)
+    {
+        // set language locale from browser header
         if (acceptLang != null && acceptLang.length() != 0)
         {
             StringTokenizer t = new StringTokenizer(acceptLang, ",; ");
