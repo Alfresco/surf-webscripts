@@ -19,10 +19,21 @@
 package org.springframework.extensions.surf.util;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.apache.commons.lang3.LocaleUtils;
 
 /**
  * Utility class providing methods to access the Locale of the current thread and to get
@@ -58,7 +69,7 @@ public class I18NUtil
      * Map of cached messaged by Locale
      */
     private static Map<Locale, Map<String, String>> cachedMessages = new HashMap<Locale, Map<String, String>>();
-    
+
     /**
      * Lock objects
      */
@@ -307,33 +318,23 @@ public class I18NUtil
 
         Locale locale = Locale.getDefault();
 
+        if (localeStr.isBlank())
+        {
+            return locale;
+        }
+
         try
         {
-            Locale.LanguageRange.parse(localeStr);
+            locale = LocaleUtils.toLocale(localeStr);
         }
         catch (Exception e)
         {
             return locale;
         }
 
-        StringTokenizer t = new StringTokenizer(localeStr.toLowerCase(), "_-");
-        int tokens = t.countTokens();
-        if (tokens == 1)
-        {
-            locale = new Locale(t.nextToken());
-        }
-        else if (tokens == 2)
-        {
-            locale = new Locale(t.nextToken(), t.nextToken());
-        }
-        else if (tokens == 3)
-        {
-            locale = new Locale(t.nextToken(), t.nextToken(), t.nextToken());
-        }
-
         return locale;
     }
-    
+
     /**
      * Register a resource bundle.
      * <p>
