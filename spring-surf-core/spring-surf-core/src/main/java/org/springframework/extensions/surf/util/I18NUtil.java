@@ -318,7 +318,7 @@ public class I18NUtil
 
         Locale locale = Locale.getDefault();
 
-        if (localeStr.isBlank())
+        if (localeStr.trim().length() == 0)
         {
             return locale;
         }
