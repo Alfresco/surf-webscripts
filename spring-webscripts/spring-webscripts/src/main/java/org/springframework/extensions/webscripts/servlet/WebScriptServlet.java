@@ -19,7 +19,6 @@
 package org.springframework.extensions.webscripts.servlet;
 
 import java.io.IOException;
-import java.util.StringTokenizer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -148,7 +147,7 @@ public class WebScriptServlet extends HttpServlet
     {
         // NOOP
     }
-    
+
     /**
      * Apply Client and Repository language locale based on the 'Accept-Language' request header
      */
@@ -156,12 +155,6 @@ public class WebScriptServlet extends HttpServlet
     {
         // set language locale from browser header
         String acceptLang = req.getHeader("Accept-Language");
-        if (acceptLang != null && acceptLang.length() != 0)
-        {
-            StringTokenizer t = new StringTokenizer(acceptLang, ",; ");
-            // get language and convert to java locale format
-            String language = t.nextToken().replace('-', '_');
-            I18NUtil.setLocale(I18NUtil.parseLocale(language));
-        }
+        I18NUtil.setLocaleFromLanguage(acceptLang);
     }
 }

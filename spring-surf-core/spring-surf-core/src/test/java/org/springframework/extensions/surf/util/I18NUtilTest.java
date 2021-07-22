@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.springframework.extensions.surf.util.I18NUtil;
+import org.apache.commons.lang3.LocaleUtils;
 
 import junit.framework.TestCase;
 
@@ -175,6 +175,14 @@ public class I18NUtilTest extends TestCase
         assertEquals(new Locale("en", "GB", ""), I18NUtil.parseLocale("en_GB"));
         assertEquals(new Locale("en", "", ""), I18NUtil.parseLocale("en"));
         assertEquals(Locale.getDefault(), I18NUtil.parseLocale(""));
+        assertEquals(new Locale("pt", "PT"), I18NUtil.parseLocale("pt_PT"));
+        assertEquals(new Locale("pt", "BR"), I18NUtil.parseLocale("pt_BR"));
+        assertEquals(Locale.UK, I18NUtil.parseLocale("en_GB"));
+        assertEquals(Locale.getDefault(), I18NUtil.parseLocale("\"><sCrIpT>alert(26118)</sCrIpT>"));
+        assertEquals(Locale.getDefault(), I18NUtil.parseLocale("alert(1)"));
+        assertEquals(Locale.getDefault(), I18NUtil.parseLocale("<button onclick=alert(1)>"));
+        assertEquals(Locale.getDefault(), I18NUtil.parseLocale("123abc"));
+        assertEquals(new Locale("abc"), I18NUtil.parseLocale("abc"));
     }
 
     public void testResourceBundleOrder()
@@ -189,6 +197,17 @@ public class I18NUtilTest extends TestCase
         assertEquals(BUNDLE_VALUE2, I18NUtil.getMessage(BUNDLE_MESSAGE));
         I18NUtil.setLocale(new Locale("fr", "FR"));
         assertEquals(BUNDLE_VALUE2_FR, I18NUtil.getMessage(BUNDLE_MESSAGE));
+    }
 
+    public void testSetLocaleFromLanguage()
+    {
+        I18NUtil.setLocaleFromLanguage("pt-PT,en;q=0.9");
+        assertEquals(new Locale("pt", "PT"), I18NUtil.getLocale());
+
+        I18NUtil.setLocaleFromLanguage("en,pt-BR;q=0.9,pt;q=0.8,en-US;q=0.7");
+        assertEquals(new Locale("en"), I18NUtil.getLocale());
+
+        I18NUtil.setLocaleFromLanguage("\"><sCrIpT>alert(26118)</sCrIpT>");
+        assertEquals(Locale.getDefault(), I18NUtil.getLocale());
     }
 }
