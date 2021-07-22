@@ -182,7 +182,7 @@ public class I18NUtilTest extends TestCase
         assertEquals(Locale.getDefault(), I18NUtil.parseLocale("alert(1)"));
         assertEquals(Locale.getDefault(), I18NUtil.parseLocale("<button onclick=alert(1)>"));
         assertEquals(Locale.getDefault(), I18NUtil.parseLocale("123abc"));
-        assertEquals(new Locale("abc").getLanguage(), I18NUtil.parseLocale("abc"));
+        assertEquals(new Locale("abc"), I18NUtil.parseLocale("abc"));
     }
 
     public void testResourceBundleOrder()
@@ -197,5 +197,17 @@ public class I18NUtilTest extends TestCase
         assertEquals(BUNDLE_VALUE2, I18NUtil.getMessage(BUNDLE_MESSAGE));
         I18NUtil.setLocale(new Locale("fr", "FR"));
         assertEquals(BUNDLE_VALUE2_FR, I18NUtil.getMessage(BUNDLE_MESSAGE));
+    }
+
+    public void testSetLocaleFromLanguage()
+    {
+        I18NUtil.setLocaleFromLanguage("pt-PT,en;q=0.9");
+        assertEquals(new Locale("pt", "PT"), I18NUtil.getLocale());
+
+        I18NUtil.setLocaleFromLanguage("en,pt-BR;q=0.9,pt;q=0.8,en-US;q=0.7");
+        assertEquals(new Locale("en"), I18NUtil.getLocale());
+
+        I18NUtil.setLocaleFromLanguage("\"><sCrIpT>alert(26118)</sCrIpT>");
+        assertEquals(Locale.getDefault(), I18NUtil.getLocale());
     }
 }
