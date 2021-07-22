@@ -19,10 +19,21 @@
 package org.springframework.extensions.surf.util;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.apache.commons.lang3.LocaleUtils;
 
 /**
  * Utility class providing methods to access the Locale of the current thread and to get
@@ -58,7 +69,7 @@ public class I18NUtil
      * Map of cached messaged by Locale
      */
     private static Map<Locale, Map<String, String>> cachedMessages = new HashMap<Locale, Map<String, String>>();
-    
+
     /**
      * Lock objects
      */
@@ -75,6 +86,24 @@ public class I18NUtil
     {
         threadLocale.set(locale);
         threadContentLocaleLang.set(null);
+    }
+
+    /**
+     * Set the locale from supplied accept language value
+     *
+     * @param acceptLang
+     *            the language value
+     */
+    public static void setLocaleFromLanguage(String acceptLang)
+    {
+        // set language locale from browser header
+        if (acceptLang != null && acceptLang.length() != 0)
+        {
+            StringTokenizer t = new StringTokenizer(acceptLang, ",; ");
+            // get language and convert to java locale format
+            String language = t.nextToken().replace('-', '_');
+            setLocale(I18NUtil.parseLocale(language));
+        }
     }
 
     /**
@@ -284,28 +313,28 @@ public class I18NUtil
     {
         if (localeStr == null)
         {
-            return null; 
+            return null;
         }
+
         Locale locale = Locale.getDefault();
-        
-        StringTokenizer t = new StringTokenizer(localeStr.toLowerCase(), "_-");
-        int tokens = t.countTokens();
-        if (tokens == 1)
+
+        if (localeStr.trim().length() == 0)
         {
-           locale = new Locale(t.nextToken());
+            return locale;
         }
-        else if (tokens == 2)
+
+        try
         {
-           locale = new Locale(t.nextToken(), t.nextToken());
+            locale = LocaleUtils.toLocale(localeStr);
         }
-        else if (tokens == 3)
+        catch (Exception e)
         {
-           locale = new Locale(t.nextToken(), t.nextToken(), t.nextToken());
+            return locale;
         }
-        
+
         return locale;
     }
-    
+
     /**
      * Register a resource bundle.
      * <p>
