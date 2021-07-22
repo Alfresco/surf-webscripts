@@ -114,7 +114,10 @@
          <artifactId>spring-webmvc</artifactId>
          <version>${spring.version}</version>
       </dependency>
-      
+      <dependency>
+         <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+         <artifactId>owasp-java-html-sanitizer</artifactId>
+      </dependency>
    </dependencies>
 
 
