@@ -26,6 +26,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.owasp.html.Encoding;
 import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.HtmlStreamEventProcessor;
+import org.owasp.html.HtmlStreamEventReceiver;
+import org.owasp.html.HtmlStreamEventReceiverWrapper;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
 
@@ -266,7 +269,7 @@ public class StringUtils
 
     /**
      * Strip unsafe HTML tags from a string - only leaves most basic formatting tags
-
+     *
      * @param s         HTML string to strip tags from
      * @param encode    if true then encode remaining html data (not in use)
      * @param overrideDocumentType if true a doctype enforcing the latest browser rendition mode will used
@@ -278,9 +281,12 @@ public class StringUtils
     {
         if (s != null)
         {
-            PolicyFactory policy = isHTMLDoc ? docPolicy.and(basePolicy) : basePolicy;
-
             String unescapedHTML = Encoding.decodeHtml(s);
+            boolean isTextEncoded = !s.equals(unescapedHTML);
+
+            PolicyFactory policy = isHTMLDoc ? docPolicy.and(basePolicy) : basePolicy;
+            policy = policy.and(getEncodePolicy(encode, isTextEncoded));
+
             String sanitizedHTML = policy.sanitize(unescapedHTML);
             StringBuffer buf = new StringBuffer();
 
@@ -290,10 +296,56 @@ public class StringUtils
             }
             buf.append(sanitizedHTML);
 
-            return encode ? buf.toString() : Encoding.decodeHtml(buf.toString());
+            /*
+             * If 'encode' or 'isTextEncoded' flags are set to true, the output in string buffer is already encoded by
+             * the sanitizer itself or the encode policy and it is returned as is.
+             *
+             * Otherwise, in order to respect when the 'encode' flag is set to false and we revert the encoding applied
+             * by the sanitizer.
+             */
+            return (encode || isTextEncoded) ? buf.toString() : Encoding.decodeHtml(buf.toString());
         }
 
         return "";
+    }
+
+    /**
+     * Builds a policy that encodes the HTML text only if both flags are supplied as true.
+     * <p>
+     * If 'encode' flag is true but 'isTextEncoded' flag is false, the text won't be encoded here as it will be encoded
+     * by the sanitizer.
+     * </p>
+     *
+     * @param encode
+     *            true if text should be encoded
+     * @param isTextEncoded
+     *            true if text that will be encoded, is already encoded (e.g., &amp; will be &amp;amp;)
+     *
+     * @return the encoding policy
+     */
+    private static PolicyFactory getEncodePolicy(boolean encode, boolean isTextEncoded)
+    {
+        return new HtmlPolicyBuilder().withPreprocessor(new HtmlStreamEventProcessor()
+        {
+            @Override
+            public HtmlStreamEventReceiver wrap(HtmlStreamEventReceiver r)
+            {
+                return new HtmlStreamEventReceiverWrapper(r)
+                {
+                    public void text(String txt)
+                    {
+                        if (txt != null && encode && isTextEncoded)
+                        {
+                            underlying.text(encode(txt));
+                        }
+                        else
+                        {
+                            underlying.text(txt);
+                        }
+                    }
+                };
+            }
+        }).toFactory();
     }
 
     /**
