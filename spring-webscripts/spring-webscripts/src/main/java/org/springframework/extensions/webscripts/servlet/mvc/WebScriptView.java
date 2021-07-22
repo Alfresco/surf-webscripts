@@ -18,8 +18,8 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
+import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +32,6 @@ import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.extensions.webscripts.RuntimeContainer;
 import org.springframework.extensions.webscripts.servlet.ServletAuthenticatorFactory;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
-import org.springframework.web.util.WebUtils;
 
 /**
  * WebScript view implementation. Maintains the MVC view name as a parameter to
@@ -94,9 +93,14 @@ public class WebScriptView extends AbstractUrlBasedView
         }
         
         // locale may have been resolved by the Spring MVC dispatcher
-        if (I18NUtil.getLocaleOrNull() == null)
+        Locale locale = I18NUtil.getLocaleOrNull();
+        if (locale == null)
         {
             setLanguageFromRequestHeader(request);
+        }
+        else
+        {
+            I18NUtil.setLocaleFromLanguage(locale.getLanguage());
         }
         
         // hand off to the WebScript Servlet View runtime
@@ -121,12 +125,6 @@ public class WebScriptView extends AbstractUrlBasedView
     {
         // set language locale from browser header
         String acceptLang = req.getHeader("Accept-Language");
-        if (acceptLang != null && acceptLang.length() != 0)
-        {
-            StringTokenizer t = new StringTokenizer(acceptLang, ",; ");
-            // get language and convert to java locale format
-            String language = t.nextToken().replace('-', '_');
-            I18NUtil.setLocale(I18NUtil.parseLocale(language));
-        }
+        I18NUtil.setLocaleFromLanguage(acceptLang);
     }
 }
