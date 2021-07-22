@@ -32,6 +32,7 @@ import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.extensions.webscripts.RuntimeContainer;
 import org.springframework.extensions.webscripts.servlet.ServletAuthenticatorFactory;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
+import org.springframework.web.util.WebUtils;
 
 /**
  * WebScript view implementation. Maintains the MVC view name as a parameter to
