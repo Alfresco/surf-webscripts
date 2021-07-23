@@ -323,6 +323,21 @@ public class I18NUtil
             return locale;
         }
 
+        StringTokenizer t = new StringTokenizer(localeStr, "_-");
+        int tokens = t.countTokens();
+        if (tokens == 1)
+        {
+            localeStr = t.nextToken();
+        }
+        else if (tokens == 2)
+        {
+            localeStr = t.nextToken() + "_" + t.nextToken();
+        }
+        else if (tokens == 3)
+        {
+            localeStr = t.nextToken() + "_" + t.nextToken() + "_" + t.nextToken();
+        }
+
         try
         {
             locale = LocaleUtils.toLocale(localeStr);
