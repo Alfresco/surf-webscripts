@@ -22,8 +22,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.commons.lang3.LocaleUtils;
-
 import junit.framework.TestCase;
 
 /**
@@ -183,6 +181,9 @@ public class I18NUtilTest extends TestCase
         assertEquals(Locale.getDefault(), I18NUtil.parseLocale("<button onclick=alert(1)>"));
         assertEquals(Locale.getDefault(), I18NUtil.parseLocale("123abc"));
         assertEquals(new Locale("abc"), I18NUtil.parseLocale("abc"));
+        assertEquals(Locale.ITALY, I18NUtil.parseLocale("it_IT"));
+        assertEquals(Locale.ITALY, I18NUtil.parseLocale("it_IT_"));
+        assertEquals(new Locale("pt"), I18NUtil.parseLocale("pt_"));
     }
 
     public void testResourceBundleOrder()
