@@ -37,9 +37,11 @@ public interface Description extends BaseDescriptionDocument
      */
     public enum RequiredAuthentication
     {
+        // The order of the constants are important. Starts with no-auth (none) and ends with admin (which is the super-user/root)
         none,
         guest,
         user,
+        sysadmin, // Authentication for System specific operations without the need to have access to customers content
         admin
     }
     
