@@ -5,12 +5,12 @@
    <parent>
       <groupId>org.alfresco.surf</groupId>
       <artifactId>spring-surf-webscripts-parent</artifactId>
-      <version>6.20.8</version>
+      <version>6.20.9-SNAPSHOT</version>
       <relativePath>../../pom.xml</relativePath>
    </parent>
    
    <artifactId>spring-webscripts</artifactId>
-  <version>6.20.8</version>
+  <version>6.20</version>
    <name>Surf Web Scripts</name>
    <description>Surf Web Scripts</description>
    <url>spring-webscripts/${project.artifactId}</url>
