@@ -37,6 +37,13 @@ public class StringUtilsTest extends TestCase
     private final String HTML_SNIPPET3 = "<%<script>alert('XSS');//<%</script>";
     private final String HTML_SNIPPET4 = "<style>div { background-image: url('img.jpg'); }</style>";
 
+    private final String HTML_SNIPPET5 = "<a href=\"http://example.com/attack.html\" style=\"display: block; z-index: 100000; opacity: 0.5; position: fixed; top: 0px; left: 0; width: 1000000px; height: 100000px; background-color: red;\"> </a> ";
+    private final String HTML_SNIPPET6 = "<DIV STYLE=\"this-is-js-property: alert 'XSS';\">";
+    private final String HTML_SNIPPET7 = "<DIV STYLE=\"background-image: url(javascript:alert('XSS'))\">";
+    private final String HTML_SNIPPET8 = "<DIV STYLE=\"width: expression(alert('XSS'));\">";
+    private final String HTML_SNIPPET9 = "<table><tbody><tr><td style=\"border:1px solid\">&amp;nbsp;text</td><td>&amp;nbsp;text</td></tr></tbody></table>";
+    private final String HTML_SNIPPET10 = "<table><tbody><tr><td style=\"border:1px solid; background-image: url('img.jpg');\">&amp;nbsp;text</td><td>&amp;nbsp;text</td></tr></tbody></table>";
+
     private final String HTML_DOC1 = "<!DOCTYPE>\n"
             + "<html>\n"
             + "<body>\n"
@@ -107,5 +114,31 @@ public class StringUtilsTest extends TestCase
         assertFalse(test9.contains("background-image"));
         assertFalse(test9.contains("url"));
         assertFalse(test9.contains("img.jpg"));
+    }
+
+    public void testStripHTMLWithStyles() throws Exception
+    {
+        String test1 = StringUtils.stripUnsafeHTMLTags(HTML_SNIPPET5);
+        assertTrue(test1.contains("style"));
+
+        String test2 = StringUtils.stripUnsafeHTMLTags(HTML_SNIPPET6);
+        assertFalse(test2.contains("style"));
+        assertFalse(test2.contains("XSS"));
+
+        String test3 = StringUtils.stripUnsafeHTMLTags(HTML_SNIPPET7);
+        assertFalse(test3.contains("style"));
+        assertFalse(test3.contains("XSS"));
+        assertFalse(test3.contains("alert"));
+
+        String test4 = StringUtils.stripUnsafeHTMLTags(HTML_SNIPPET8);
+        assertFalse(test4.contains("style"));
+        assertFalse(test4.contains("XSS"));
+        assertFalse(test4.contains("alert"));
+
+        String test5 = StringUtils.stripUnsafeHTMLTags(HTML_SNIPPET9);
+        assertEquals(test5, HTML_SNIPPET9);
+
+        String test6 = StringUtils.stripUnsafeHTMLTags(HTML_SNIPPET10);
+        assertFalse(test6.contains("background-image"));
     }
 }

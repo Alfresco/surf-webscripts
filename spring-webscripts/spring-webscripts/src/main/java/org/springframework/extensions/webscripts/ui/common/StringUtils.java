@@ -60,7 +60,8 @@ public class StringUtils
                 .and(Sanitizers.BLOCKS)
                 .and(Sanitizers.LINKS)
                 .and(Sanitizers.IMAGES)
-                .and(Sanitizers.TABLES);
+                .and(Sanitizers.TABLES)
+                .and(Sanitizers.STYLES);
 
         // This policy will be used when striping a HTML doc (i.e.: in stripUnsafeHTMLDocument method context)
         docPolicy = new HtmlPolicyBuilder()
