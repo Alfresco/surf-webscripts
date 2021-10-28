@@ -279,6 +279,23 @@ public class StringUtils
      */
     public static String stripUnsafeHTMLTags(String s, boolean encode, boolean overrideDocumentType, boolean isHTMLDoc)
     {
+        return stripUnsafeHTMLTags(s, encode, overrideDocumentType, isHTMLDoc, true);
+    }
+
+    /**
+     * Strip unsafe HTML tags from a string - only leaves most basic formatting tags
+     *
+     * @param s         HTML string to strip tags from
+     * @param encode    if true then encode remaining html data (not in use)
+     * @param overrideDocumentType if true a doctype enforcing the latest browser rendition mode will used
+     * @param isHTMLDoc if true elements as html, head, body will be allowed in the sanitization
+     * @param runTwice if true, performs a second iteration against the first sanitation result
+     *
+     * @return safe string
+     */
+    public static String stripUnsafeHTMLTags(String s, boolean encode, boolean overrideDocumentType, boolean isHTMLDoc,
+            boolean runTwice)
+    {
         if (s != null)
         {
             String unescapedHTML = Encoding.decodeHtml(s);
@@ -303,7 +320,15 @@ public class StringUtils
              * Otherwise, in order to respect when the 'encode' flag is set to false and we revert the encoding applied
              * by the sanitizer.
              */
-            return (encode || isTextEncoded) ? buf.toString() : Encoding.decodeHtml(buf.toString());
+            String result = (encode || isTextEncoded) ? buf.toString() : Encoding.decodeHtml(buf.toString());
+
+            if (runTwice)
+            {
+                result = encode ? Encoding.decodeHtml(result) : result;
+                return stripUnsafeHTMLTags(result, encode, overrideDocumentType, isHTMLDoc, false);
+            }
+
+            return result;
         }
 
         return "";
