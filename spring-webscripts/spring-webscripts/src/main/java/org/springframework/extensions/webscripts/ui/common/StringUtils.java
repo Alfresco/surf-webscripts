@@ -24,6 +24,7 @@ import java.io.StringReader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.owasp.html.AttributePolicy;
 import org.owasp.html.Encoding;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.HtmlStreamEventProcessor;
@@ -53,6 +54,25 @@ public class StringUtils
 
     protected  static PolicyFactory basePolicy, docPolicy;
 
+    /** attribute policy to only match integer values - org.owasp.html.Sanitizers */
+    private static final AttributePolicy INTEGER = new AttributePolicy() {
+        public String apply(
+            String elementName, String attributeName, String value) {
+          int n = value.length();
+          if (n == 0) { return null; }
+          for (int i = 0; i < n; ++i) {
+            char ch = value.charAt(i);
+            if (ch == '.') {
+              if (i == 0) { return null; }
+              return value.substring(0, i);  // truncate to integer.
+            } else if (!('0' <= ch && ch <= '9')) {
+              return null;
+            }
+          }
+          return value;
+        }
+      };
+
     static
     {
         // Base policy that will be always used
@@ -61,7 +81,12 @@ public class StringUtils
                 .and(Sanitizers.LINKS)
                 .and(Sanitizers.IMAGES)
                 .and(Sanitizers.TABLES)
-                .and(Sanitizers.STYLES);
+                .and(Sanitizers.STYLES)
+                .and(new HtmlPolicyBuilder()
+                        .allowElements("hr", "pre", "table")
+                        .allowAttributes("border", "cellpadding", "cellspacing").matching(INTEGER)
+                        .onElements("table")
+                        .toFactory());
 
         // This policy will be used when striping a HTML doc (i.e.: in stripUnsafeHTMLDocument method context)
         docPolicy = new HtmlPolicyBuilder()

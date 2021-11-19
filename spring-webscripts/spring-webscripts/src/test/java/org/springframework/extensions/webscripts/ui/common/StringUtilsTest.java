@@ -51,6 +51,8 @@ public class StringUtilsTest extends TestCase
     private final String HTML_SNIPPET16 = "<XSS STYLE=\"xss:expression(alert('XSS'))\">";
     private final String HTML_SNIPPET17 = "<IMG style=\"xss:expr/*XSS*/ession(alert('XSS'))\">";
 
+    private final String HTML_SNIPPET18 = "<table border=\"javascript:alert(10)\" cellpading=\"javascript:alert(10)\" cellspacing=\"10\"></table><pre>test</pre><hr />";
+
     private final String HTML_DOC1 = "<!DOCTYPE>\n"
             + "<html>\n"
             + "<body>\n"
@@ -136,6 +138,14 @@ public class StringUtilsTest extends TestCase
         assertFalse(test12.contains("IFRAME"));
         assertFalse(test12.contains("javascript"));
         assertFalse(test12.contains("alert"));
+
+        String test13 = StringUtils.stripUnsafeHTMLTags(HTML_SNIPPET18);
+        assertFalse(test13.contains("border"));
+        assertFalse(test13.contains("cellpading"));
+        assertTrue(test13.contains("cellspacing"));
+        assertTrue(test13.contains("cellspacing"));
+        assertTrue(test13.contains("<pre>"));
+        assertTrue(test13.contains("<hr />"));
     }
 
     public void testStripHTMLWithStyles() throws Exception
