@@ -405,7 +405,7 @@ public class CSRFFilter implements Filter
                     {
                         if (cookie.getName().equals(tokenName))
                         {
-                            session.setAttribute(tokenName, Arrays.asList(URLDecoder.decode(cookie.getValue())));
+                            session.setAttribute(tokenName, new ArrayList<>(List.of(URLDecoder.decode(cookie.getValue()))));
                             request.setAttribute(ISSET_TOKEN, true);
                         }
                     }
@@ -422,7 +422,7 @@ public class CSRFFilter implements Filter
                 )
             )
             {
-                session.setAttribute(tokenName, Arrays.asList(""));
+                session.setAttribute(tokenName, new ArrayList<>(List.of("")));
                 request.setAttribute(ISSET_TOKEN, true);
             }
         }
