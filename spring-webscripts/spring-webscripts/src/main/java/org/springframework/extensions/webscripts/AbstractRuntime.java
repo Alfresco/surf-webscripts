@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2005-2009 Alfresco Software Limited.
+ * Copyright (C) 2005-2022 Alfresco Software Limited.
  *
  * This file is part of the Spring Surf Extension project.
  *
@@ -222,19 +222,8 @@ public abstract class AbstractRuntime implements Runtime
         {
             if (beforeProcessError(match, e))
             {
-                if (e instanceof WebScriptException && (((WebScriptException)e).getStatus() == HttpServletResponse.SC_NOT_FOUND || 
-                                                        ((WebScriptException)e).getStatus() == HttpServletResponse.SC_UNAUTHORIZED))
-                {
-                    // debug level output for "missing" WebScripts and API URLs entered incorrectly
-                    String errorCode = ((WebScriptException)e).getStatus() == HttpServletResponse.SC_NOT_FOUND ? "NOT FOUND" : "UNAUTHORIZED";
-                    logger.debug("Webscript did not execute. (" + errorCode + "): " + e.getMessage());
-                }
-            	// log error on server so its not swallowed and lost
-                else if (logger.isErrorEnabled())
-                {
-                    logger.error("Exception from executeScript: " + e.getMessage(), e);
-                }
-                
+                handleExecuteScriptsExceptions(debug, e);
+
                 // setup context
                 WebScriptRequest req = createRequest(match);
                 WebScriptResponse res = createResponse();
@@ -254,6 +243,40 @@ public abstract class AbstractRuntime implements Runtime
                 long endRuntime = System.nanoTime();
                 logger.debug("Processed script url ("  + method + ") " + scriptUrl + " in " + (endRuntime - startRuntime)/1000000f + "ms");
             }
+        }
+    }
+
+    private void handleExecuteScriptsExceptions(boolean debug, Throwable throwable)
+    {
+        final Map<Integer, String> handledExecuteScriptErrorCodes = Map.of(
+                HttpServletResponse.SC_NOT_FOUND, "NOT FOUND",
+                HttpServletResponse.SC_UNAUTHORIZED, "UNAUTHORIZED",
+                HttpServletResponse.SC_PRECONDITION_FAILED, "PRECONDITION FAILED");
+        if (throwable instanceof WebScriptException && (handledExecuteScriptErrorCodes.keySet().contains(((WebScriptException) throwable).getStatus())))
+        {
+            String errorCode = handledExecuteScriptErrorCodes.get(((WebScriptException) throwable).getStatus());
+            if (((WebScriptException) throwable).getStatus() != HttpServletResponse.SC_PRECONDITION_FAILED && debug) // debug level output for "missing" WebScripts and API URLs entered incorrectly
+            {
+                if (debug)
+                {
+                    logger.debug("Webscript did not execute. (" + errorCode + "): " + throwable.getMessage());
+                }
+            }
+            else // handle ArchivedIOException to lower log pollution
+            {
+                if (debug) { // log with stack trace at debug level
+                    logger.debug("ArchivedIOException caught when executing webscript ", throwable);
+                }
+                else if (logger.isInfoEnabled()) // log without stack trace at info level
+                {
+                    logger.info("ArchivedIOException caught when executing webscript. Message: " + throwable.getMessage());
+                }
+            }
+        }
+        // log error on server so its not swallowed and lost
+        else if (logger.isErrorEnabled())
+        {
+            logger.error("Exception from executeScript: " + throwable.getMessage(), throwable);
         }
     }
 
