@@ -252,24 +252,25 @@ public abstract class AbstractRuntime implements Runtime
                 HttpServletResponse.SC_NOT_FOUND, "NOT FOUND",
                 HttpServletResponse.SC_UNAUTHORIZED, "UNAUTHORIZED",
                 HttpServletResponse.SC_PRECONDITION_FAILED, "PRECONDITION FAILED");
-        if (throwable instanceof WebScriptException && (handledExecuteScriptErrorCodes.keySet().contains(((WebScriptException) throwable).getStatus())))
+        if (throwable instanceof WebScriptException && (handledExecuteScriptErrorCodes.containsKey(((WebScriptException) throwable).getStatus())))
         {
             String errorCode = handledExecuteScriptErrorCodes.get(((WebScriptException) throwable).getStatus());
-            if (((WebScriptException) throwable).getStatus() != HttpServletResponse.SC_PRECONDITION_FAILED && debug) // debug level output for "missing" WebScripts and API URLs entered incorrectly
+            if (((WebScriptException) throwable).getStatus() != HttpServletResponse.SC_PRECONDITION_FAILED) // debug level output for "missing" WebScripts and API URLs entered incorrectly
             {
                 if (debug)
                 {
                     logger.debug("Webscript did not execute. (" + errorCode + "): " + throwable.getMessage());
                 }
             }
-            else // handle ArchivedIOException to lower log pollution
+            else // handle 412 webscript error code (ArchivedIOException) to lower log pollution
             {
-                if (debug) { // log with stack trace at debug level
-                    logger.debug("ArchivedIOException caught when executing webscript ", throwable);
+                if (debug) // log with stack trace at debug level
+                {
+                    logger.debug("Precondition failed when executing webscript ", throwable);
                 }
                 else if (logger.isInfoEnabled()) // log without stack trace at info level
                 {
-                    logger.info("ArchivedIOException caught when executing webscript. Message: " + throwable.getMessage());
+                    logger.info("Precondition failed when executing webscript. Message: " + throwable.getMessage());
                 }
             }
         }
