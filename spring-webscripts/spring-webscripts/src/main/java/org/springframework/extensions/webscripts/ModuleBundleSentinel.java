@@ -36,23 +36,25 @@ public class ModuleBundleSentinel extends ResourceBundle
     private ModuleBundleSentinel()
     {
     }
-    
+
     /**
-     * <p>Static reference to the singleton instance.<p>
+     * <p>Get an instance of the ModuleBundleSentinel, using the Java guarantee that a class can only be loaded once.</p>
+     * <p>The JVM will ensure the instance is only instantiated a single time since a class can only be loaded into memory once.</p>
      */
-    private static ModuleBundleSentinel me;
-    
+
+    private static class ModuleBundleSentinelLoader
+    {
+        static final ModuleBundleSentinel INSTANCE = new ModuleBundleSentinel();
+    }
+
     /**
      * <p>Retrieves the singleton instance and creates it if it does not exist.</p>
+     * <p>This has been changed to use our ModuleBundleSentinelLoader, to make the singleton instance creation thread safe.</p>
      * @return The singleton instance.
      */
     public static ModuleBundleSentinel getInstance()
     {
-        if (me == null)
-        {
-            me = new ModuleBundleSentinel();
-        }
-        return me;
+        return ModuleBundleSentinelLoader.INSTANCE;
     }
     
     /**
