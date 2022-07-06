@@ -9,12 +9,12 @@
   
   <#-- Exception details -->
   "message" : "${jsonUtils.encodeJSONString(status.message)}",  
-  "exception" : "<#if status.exception??>${jsonUtils.encodeJSONString(status.exception.class.name)}<#if status.exception.message??> - ${jsonUtils.encodeJSONString(status.exception.message)}</#if></#if>",
+  "exception" : "",
   
   <#-- Exception call stack --> 
   "callstack" : 
-  [ 
-  	  <#if status.exception??>""<@recursestack exception=status.exception/></#if> 
+  [
+
   ],
   
   <#-- Server details and time stamp -->
