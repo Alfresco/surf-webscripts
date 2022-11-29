@@ -17,7 +17,7 @@
    </tr>
 </table>
 <table>
-   <tr><td colspan="2">${server.edition?html} v${server.version?html} schema ${server.schema?html}</td></tr>
+   <tr><td colspan="2">${server.edition?html} schema ${server.schema?html}</td></tr>
 </table>
 [/#macro]
 
