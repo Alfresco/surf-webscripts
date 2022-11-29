@@ -18,7 +18,7 @@
   ],
   
   <#-- Server details and time stamp -->
-  "server" : "schema ${server.schema?xml}",
+  "server" : "${server.edition?xml} schema ${server.schema?xml}",
   "time" : "${date?datetime}"
 }
 
