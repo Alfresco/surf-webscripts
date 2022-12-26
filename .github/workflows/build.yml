@@ -19,7 +19,7 @@ env:
   MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
   BRANCH_NAME: ${{ github.ref_name }}
   GIT_PASSWORD: ${{ secrets.BOT_GITHUB_TOKEN }}
-  GIT_EMAIL:    ${{ BOT_GITHUB_EMAIL }}
+  GIT_EMAIL: ${{ secrets.BOT_GITHUB_EMAIL }}
   GIT_USERNAME: ${{ secrets.BOT_GITHUB_USERNAME }}
 
 
