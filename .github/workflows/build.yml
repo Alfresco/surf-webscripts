@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - "support/**"
-      - "feature/**"
   pull_request:
     branches:
       - master
@@ -71,7 +70,7 @@ jobs:
           [ -d ${HOME}/.m2/ ] || mkdir -p ${HOME}/.m2/
           cp -v _ci/settings.xml ${HOME}/.m2/ || cp -v .travis.settings.xml ${HOME}/.m2/settings.xml
 
-      - name: "Prepare Staging Deploy"
+      - name: "Push to Nexus"
         run: |
           mvn install -DskipTests=true -B -V
           git checkout -B "$BRANCH_NAME"
