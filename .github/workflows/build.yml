@@ -1,10 +1,10 @@
-name: outlook build wrappers
+name: Surf Webscript
 
 on:
   push:
     branches:
       - master
-      - "support/**"
+      - "**/support/**"
   pull_request:
     branches:
       - master
@@ -13,6 +13,7 @@ on:
       commitMessage:
         description: Enter the Commit Message
         required: true
+
 env:
   MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
   MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
@@ -20,7 +21,6 @@ env:
   GIT_PASSWORD: ${{ secrets.BOT_GITHUB_TOKEN }}
   GIT_EMAIL: ${{ secrets.BOT_GITHUB_EMAIL }}
   GIT_USERNAME: ${{ secrets.BOT_GITHUB_USERNAME }}
-
 
 jobs:
   Test:
@@ -44,6 +44,13 @@ jobs:
           [ -d ${HOME}/.m2/ ] || mkdir -p ${HOME}/.m2/
           cp -v _ci/settings.xml ${HOME}/.m2/ || cp -v .travis.settings.xml ${HOME}/.m2/settings.xml
 
+      - name: "Cache the Maven packages to speed up build"
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
       - name: "Build and test"
         run: |
             mvn install -DskipTests=true -B -V
@@ -52,10 +59,12 @@ jobs:
   Release:
     runs-on: ubuntu-latest
     if: ${{ ( !contains(github.event.head_commit.message, '[no-release]')  ) && ( github.ref_name == 'master' || startsWith(github.ref_name, 'support/')) && github.event.repository.fork==false }}
+    needs: Test
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
       - name: "Set up Java"
         uses: actions/setup-java@v3
         with:
@@ -70,9 +79,20 @@ jobs:
           [ -d ${HOME}/.m2/ ] || mkdir -p ${HOME}/.m2/
           cp -v _ci/settings.xml ${HOME}/.m2/ || cp -v .travis.settings.xml ${HOME}/.m2/settings.xml
 
+      - name: "Cache the Maven packages to speed up build"
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Get branch name
+        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v1.23.0
+
       - name: "Push to Nexus"
         run: |
           mvn install -DskipTests=true -B -V
           git checkout -B "$BRANCH_NAME"
           git config user.email "${GIT_EMAIL}"
+          git config user.name "${GIT_USERNAME}"
           mvn --batch-mode -q -DscmCommentPrefix="[maven-release-plugin][skip ci] " -Dusername="${GIT_USERNAME}" -Dpassword="${GIT_PASSWORD}" -DskipTests -Darguments=-DskipTests release:clean release:prepare release:perform
