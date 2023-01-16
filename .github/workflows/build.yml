@@ -51,6 +51,9 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v1
+
       - name: "Build and test"
         run: |
             mvn install -DskipTests=true -B -V
