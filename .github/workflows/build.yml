@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - "**/support/**"
-      - "feature/"
+      - 'feature/**'
   pull_request:
     branches:
       - master
