@@ -94,7 +94,7 @@ public class WebScriptView extends AbstractUrlBasedView
         
         // locale may have been resolved by the Spring MVC dispatcher
         Locale locale = I18NUtil.getLocaleOrNull();
-        if (locale == null)
+        if (locale == null || locale.getLanguage().equals("pt") || locale.getLanguage().equals("zh"))
         {
             setLanguageFromRequestHeader(request);
         }
