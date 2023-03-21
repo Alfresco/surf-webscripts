@@ -100,7 +100,7 @@ public class WebScriptView extends AbstractUrlBasedView
         }
         else
         {
-            I18NUtil.setLocaleFromLanguage(locale.getLanguage());
+            I18NUtil.setLocaleFromLanguage(locale.toLanguageTag());
         }
         
         // hand off to the WebScript Servlet View runtime
