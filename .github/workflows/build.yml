@@ -21,6 +21,7 @@ env:
   GIT_PASSWORD: ${{ secrets.BOT_GITHUB_TOKEN }}
   GIT_EMAIL: ${{ secrets.BOT_GITHUB_EMAIL }}
   GIT_USERNAME: ${{ secrets.BOT_GITHUB_USERNAME }}
+  SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
 
 jobs:
   Test:
