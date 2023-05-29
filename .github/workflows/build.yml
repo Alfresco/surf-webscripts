@@ -25,6 +25,9 @@ env:
 jobs:
   Test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stage: [ source_clear ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -54,7 +57,12 @@ jobs:
       - name: "Build and test"
         run: |
             mvn install -DskipTests=true -B -V
-            mvn test            
+            mvn test  
+
+      - name: Run ${{ matrix.stage }}
+        if: ${{ ( matrix.stage != 'source_clear' && github.ref_name != 'company_release') || matrix.stage == 'source_clear'  }}
+        run: |
+          bash _ci/${{ matrix.stage }}.sh
 
   Release:
     runs-on: ubuntu-latest
