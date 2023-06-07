@@ -18,7 +18,7 @@
 
 package org.springframework.extensions.webscripts;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.surf.util.I18NUtil;
 
@@ -146,7 +146,7 @@ public class Status
     }
 
     /**
-     * @see javax.servlet.http.HttpServletResponse
+     * @see jakarta.servlet.http.HttpServletResponse
      *
      * @param code  status code
      */
@@ -175,7 +175,7 @@ public class Status
     }
     
     /**
-     * @see javax.servlet.http.HttpServletResponse
+     * @see jakarta.servlet.http.HttpServletResponse
      *
      * @param location  location response-header
      */

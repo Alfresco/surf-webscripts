@@ -21,7 +21,7 @@ package org.springframework.extensions.webscripts.stores;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import org.junit.Test;
 import org.springframework.extensions.webscripts.AbstractWebScriptServerTest;

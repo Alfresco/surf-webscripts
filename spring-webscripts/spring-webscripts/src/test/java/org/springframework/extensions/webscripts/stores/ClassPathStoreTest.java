@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import org.junit.Test;
 import org.springframework.extensions.webscripts.AbstractWebScriptServerTest;
