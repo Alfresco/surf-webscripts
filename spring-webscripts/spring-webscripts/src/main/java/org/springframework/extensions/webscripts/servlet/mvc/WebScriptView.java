@@ -21,8 +21,8 @@ package org.springframework.extensions.webscripts.servlet.mvc;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.config.Config;
 import org.springframework.extensions.config.ConfigService;
@@ -72,7 +72,7 @@ public class WebScriptView extends AbstractUrlBasedView
     }
     
     /* (non-Javadoc)
-     * @see org.springframework.web.servlet.view.AbstractView#renderMergedOutputModel(java.util.Map, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.springframework.web.servlet.view.AbstractView#renderMergedOutputModel(java.util.Map, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)
      */
     protected void renderMergedOutputModel(
             Map model, HttpServletRequest request, HttpServletResponse response) throws Exception 

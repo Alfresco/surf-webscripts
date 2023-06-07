@@ -21,7 +21,7 @@ package org.springframework.extensions.webscripts.connector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.config.RemoteConfigElement.ConnectorDescriptor;
 

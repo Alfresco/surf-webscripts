@@ -21,8 +21,8 @@ package org.springframework.extensions.webscripts.connector;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Describes a connector to a remote endpoint for a given user.

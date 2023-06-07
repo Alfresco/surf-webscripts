@@ -18,7 +18,7 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.webscripts.Runtime;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletResponse;

@@ -18,8 +18,8 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.config.ServerProperties;
 import org.springframework.extensions.webscripts.RuntimeContainer;
