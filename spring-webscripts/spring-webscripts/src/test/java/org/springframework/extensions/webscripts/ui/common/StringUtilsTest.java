@@ -56,13 +56,13 @@ public class StringUtilsTest extends TestCase
     private final String HTML_DOC1 = "<!DOCTYPE>\n"
             + "<html>\n"
             + "<body>\n"
-            + "        <p><button onclick=alert('CLICK')></p>\n"
+            + "        <p id=\"keep\"><button onclick=alert('CLICK')></p>\n"
             + "</body>\n"
             + "</html>";
     
     private final String HTML_DOC2 = "<html>\n"
             + "<body>\n"
-            + "        <p><button onclick=alert('CLICK')></p>\n"
+            + "        <p id=\"keep\"><button onclick=alert('CLICK')></p>\n"
             + "</body>\n"
             + "</html>";
 
@@ -81,6 +81,7 @@ public class StringUtilsTest extends TestCase
         assertTrue(test1.contains(HTML_ELEM));
         assertTrue(test1.contains(BODY_ELEM));
         assertFalse(test1.contains(ONCLICK_ATTR));
+        assertTrue(test1.contains("id"));
 
         // Test if <!DOCTYPE html> has been added to doc, if html and body elements haven't been removed and onclick was
         // cleaned
@@ -89,6 +90,7 @@ public class StringUtilsTest extends TestCase
         assertTrue(test2.contains(HTML_ELEM));
         assertTrue(test2.contains(BODY_ELEM));
         assertFalse(test2.contains(ONCLICK_ATTR));
+        assertTrue(test2.contains("id"));
 
         // Test that <!DOCTYPE html> hasn't been added to doc
         String test3 = StringUtils.stripUnsafeHTMLTags(HTML_DOC2, false, false);
