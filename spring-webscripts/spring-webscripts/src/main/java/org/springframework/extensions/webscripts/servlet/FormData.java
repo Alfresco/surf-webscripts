@@ -21,19 +21,15 @@ package org.springframework.extensions.webscripts.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
-//JAKARTA_TO_DO|ACS-5424|fileupload|Consider replacing by Servlet API//
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import jakarta.servlet.http.Part;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,6 +37,7 @@ import org.springframework.extensions.surf.exception.WebScriptsPlatformException
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.surf.util.InputStreamContent;
 import org.springframework.extensions.webscripts.WebScriptException;
+import org.springframework.http.MediaType;
 
 /**
  * Form Data
@@ -56,7 +53,6 @@ public class FormData implements Serializable
     
     private HttpServletRequest req;
     private String encoding = null;
-    private ServletFileUpload upload;
     private FormField[] fields = null;
     private Map<String, String[]> parameters = null;
 
@@ -78,7 +74,12 @@ public class FormData implements Serializable
      */
     public boolean getIsMultiPart()
     {
-        return upload.isMultipartContent(req);
+        if(!req.getMethod().equalsIgnoreCase("post"))
+        {
+            return false;
+        }
+        String contentType = req.getContentType();
+        return contentType != null && contentType.toLowerCase().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE);
     }
 
     /**
@@ -109,22 +110,21 @@ public class FormData implements Serializable
         // NOTE: This class is not thread safe - it is expected to be constructed on each thread.
         if (fields == null)
         {
-            FileItemFactory factory = new DiskFileItemFactory();
-            upload = new ServletFileUpload(factory);
             encoding = req.getCharacterEncoding();
-            upload.setHeaderEncoding(encoding);
             
             try
             {
-                List<FileItem> fileItems = upload.parseRequest(req);
+                Collection<Part> fileItems = req.getParts();
                 fields = new FormField[fileItems.size()];
-                for (int i = 0; i < fileItems.size(); i++)
+
+                Iterator<Part> iterator = fileItems.iterator();
+                for (int i = 0; iterator.hasNext(); i++)
                 {
-                    FormField formField = new FormField(fileItems.get(i));
+                    FormField formField = new FormField(iterator.next());
                     fields[i] = formField;
                 }
             }
-            catch(FileUploadException e)
+            catch(ServletException | IOException e)
             {
                 if(e.getMessage().contains("no multipart boundary was found"))
                 {
@@ -144,8 +144,7 @@ public class FormData implements Serializable
      * NOTE: Only invoke this after all required processing of FileItems is done (e.g.
      *       retrieval of content)
      */
-    public void cleanup()
-    {
+    public void cleanup() throws IOException {
         if (fields == null)
         {
             return;
@@ -204,16 +203,16 @@ public class FormData implements Serializable
     public class FormField implements Serializable
     {
         private static final long serialVersionUID = -6061565518843862346L;
-        private FileItem file;
+        private Part part;
 
         /**
          * Construct
          * 
-         * @param file FileItem
+         * @param part FileItem
          */
-        public FormField(FileItem file)
+        public FormField(Part part)
         {
-            this.file = file;
+            this.part = part;
         }
         
         /**
@@ -221,7 +220,7 @@ public class FormData implements Serializable
          */
         public String getName()
         {
-            return file.getFieldName();
+            return part.getName();
         }
         
         /**
@@ -229,7 +228,7 @@ public class FormData implements Serializable
          */
         public boolean getIsFile()
         {
-            return !file.isFormField();
+            return part.getSubmittedFileName() != null;
         }
         
         /**
@@ -238,22 +237,22 @@ public class FormData implements Serializable
          */
         public String getValue()
         {
-            try
+            try(InputStream is = part.getInputStream())
             {
                 String value;
-                if (file.isFormField())
+                if (part.getSubmittedFileName() == null)
                 {
-                    value = (encoding != null ? file.getString(encoding) : file.getString());
+                    value = (encoding != null ? new String(is.readAllBytes(), encoding) : new String(is.readAllBytes()));
                 }
                 else
                 {
                     // For large/binary files etc. we never immediately load the content directly into memory!
                     // This would be extremely bad for say large binary file uploads etc.
-                    value = file.getName();
+                    value = part.getSubmittedFileName();
                 }
                 return value;
             }
-            catch (UnsupportedEncodingException e)
+            catch (IOException e)
             {
                 throw new WebScriptsPlatformException("Unable to decode form field", e);
             }
@@ -266,7 +265,8 @@ public class FormData implements Serializable
         {
             try
             {
-                return new InputStreamContent(file.getInputStream(), getMimetype(), null);
+                // I assume anyone who uses it, closes the InputStream afterwards (?)
+                return new InputStreamContent(part.getInputStream(), getMimetype(), null);
             }
             catch (IOException e)
             {
@@ -284,7 +284,7 @@ public class FormData implements Serializable
         {
             try
             {
-                return file.getInputStream();
+                return part.getInputStream();
             }
             catch (IOException e)
             {
@@ -300,7 +300,7 @@ public class FormData implements Serializable
          */
         public String getMimetype()
         {
-            return file.getContentType();
+            return part.getContentType();
         }
 
         /**
@@ -309,7 +309,7 @@ public class FormData implements Serializable
         public String getFilename()
         {
             // workaround a bug in IE where the full path is returned
-            return FilenameUtils.getName(file.getName());
+            return FilenameUtils.getName(part.getSubmittedFileName());
         }
         
         /**
@@ -317,11 +317,10 @@ public class FormData implements Serializable
          * 
          * NOTE: This should only be invoked after processing (e.g. retrieval of content) of the form field is done
          */
-        public void cleanup()
-        {
+        public void cleanup() throws IOException {
             if (getIsFile())
             {
-                file.delete();
+                part.delete();
             }
         }
     }
