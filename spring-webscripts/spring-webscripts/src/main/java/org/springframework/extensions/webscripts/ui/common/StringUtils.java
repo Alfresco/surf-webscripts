@@ -86,6 +86,11 @@ public class StringUtils
                         .allowElements("hr", "pre", "table")
                         .allowAttributes("border", "cellpadding", "cellspacing").matching(INTEGER)
                         .onElements("table")
+                        .toFactory())
+                // MNT-23748 allow anchors for internal page links
+                .and(new HtmlPolicyBuilder()
+                        .allowAttributes("id")
+                        .globally()
                         .toFactory());
 
         // This policy will be used when striping a HTML doc (i.e.: in stripUnsafeHTMLDocument method context)
