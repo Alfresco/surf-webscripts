@@ -74,8 +74,8 @@
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload-jakarta</artifactId>
-            <version>1.5</version>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.5-jakarta</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

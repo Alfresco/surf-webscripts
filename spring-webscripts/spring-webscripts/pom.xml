@@ -32,7 +32,7 @@
 
       <dependency>
          <groupId>commons-fileupload</groupId>
-         <artifactId>commons-fileupload-jakarta</artifactId>
+         <artifactId>commons-fileupload</artifactId>
       </dependency>
 
       <dependency>
