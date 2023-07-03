@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,7 +68,7 @@ public class WebAppConfigSource extends BaseConfigSource implements ServletConte
     }
 
     /**
-     * @see org.springframework.web.context.ServletContextAware#setServletContext(javax.servlet.ServletContext)
+     * @see org.springframework.web.context.ServletContextAware#setServletContext(jakarta.servlet.ServletContext)
      */
     public void setServletContext(ServletContext servletContext)
     {

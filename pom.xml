@@ -53,11 +53,17 @@
       </dependency>
 
       <dependency>
-         <groupId>javax.servlet</groupId>
-         <artifactId>javax.servlet-api</artifactId>
-         <version>3.0.1</version>
-         <scope>provided</scope>
+          <groupId>jakarta.servlet</groupId>
+          <artifactId>jakarta.servlet-api</artifactId>
+          <version>6.0.0</version>
+          <scope>provided</scope>
       </dependency>
+       <dependency>
+           <groupId>jakarta.servlet.jsp</groupId>
+           <artifactId>jakarta.servlet.jsp-api</artifactId>
+           <version>3.1.1</version>
+           <scope>provided</scope>
+       </dependency>
    </dependencies>
 
   <dependencyManagement>
@@ -75,7 +81,7 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.5</version>
+            <version>1.5-jakarta</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -116,7 +122,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>5.3.25</spring.version>
+      <spring.version>6.0.8</spring.version>
       <java.version>17</java.version>
       <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
       <maven.compiler.source>${java.version}</maven.compiler.source>

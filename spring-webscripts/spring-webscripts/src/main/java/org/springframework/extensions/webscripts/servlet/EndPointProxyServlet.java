@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -173,7 +173,7 @@ public class EndPointProxyServlet extends HttpServlet
                 String authorization = req.getHeader("Authorization");
                 if (authorization == null || authorization.length() == 0)
                 {
-                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED,
+                    res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                             "No USER_ID found in session and requested endpoint requires authentication.");
                     res.setHeader("WWW-Authenticate", "Basic realm=\"Alfresco\"");
                     
@@ -213,7 +213,7 @@ public class EndPointProxyServlet extends HttpServlet
             }
             else
             {
-                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED,
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                         "No USER_ID found in session and requested endpoint requires authentication.");
                 return;
             }
