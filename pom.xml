@@ -53,9 +53,9 @@
       </dependency>
 
       <dependency>
-         <groupId>javax.servlet</groupId>
-         <artifactId>javax.servlet-api</artifactId>
-         <version>3.0.1</version>
+         <groupId>jakarta.servlet</groupId>
+         <artifactId>jakarta.servlet-api</artifactId>
+         <version>6.0.0</version>
          <scope>provided</scope>
       </dependency>
    </dependencies>
@@ -73,14 +73,14 @@
             <version>1.9.4</version>
         </dependency>
         <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.5</version>
+           <groupId>org.apache.commons</groupId>
+           <artifactId>commons-fileupload2-jakarta</artifactId>
+           <version>2.0.0-M1</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.13.0</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -100,7 +100,7 @@
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>2.3.30</version>
+            <version>2.3.30-jakarta-1</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
@@ -121,7 +121,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>5.3.25</spring.version>
+      <spring.version>6.0.9</spring.version>
       <java.version>17</java.version>
       <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
       <maven.compiler.source>${java.version}</maven.compiler.source>

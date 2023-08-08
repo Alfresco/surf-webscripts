@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -278,7 +278,7 @@ public class AuthenticatingConnector implements Connector
     }
 
     /* (non-Javadoc)
-     * @see org.alfresco.connector.Connector#call(java.lang.String, org.alfresco.connector.ConnectorContext, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.alfresco.connector.Connector#call(java.lang.String, org.alfresco.connector.ConnectorContext, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)
      */
     public Response call(String uri, ConnectorContext context, HttpServletRequest req, HttpServletResponse res)
     {

@@ -18,7 +18,7 @@
 
 package org.springframework.extensions.webscripts;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.util.WebUtils;
 

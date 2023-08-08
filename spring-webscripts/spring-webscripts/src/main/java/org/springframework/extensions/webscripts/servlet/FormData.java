@@ -21,18 +21,19 @@ package org.springframework.extensions.webscripts.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload2.core.FileItem;
+import org.apache.commons.fileupload2.core.FileItemFactory;
+import org.apache.commons.fileupload2.core.FileUploadException;
+import org.apache.commons.fileupload2.core.DiskFileItemFactory;
+import org.apache.commons.fileupload2.jakarta.JakartaServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,8 +55,8 @@ public class FormData implements Serializable
     private static Log logger = LogFactory.getLog(FormData.class);
     
     private HttpServletRequest req;
-    private String encoding = null;
-    private ServletFileUpload upload;
+    private Charset encoding = null;
+    private JakartaServletFileUpload upload;
     private FormField[] fields = null;
     private Map<String, String[]> parameters = null;
 
@@ -108,10 +109,10 @@ public class FormData implements Serializable
         // NOTE: This class is not thread safe - it is expected to be constructed on each thread.
         if (fields == null)
         {
-            FileItemFactory factory = new DiskFileItemFactory();
-            upload = new ServletFileUpload(factory);
-            encoding = req.getCharacterEncoding();
-            upload.setHeaderEncoding(encoding);
+            FileItemFactory factory = DiskFileItemFactory.builder().get();
+            upload = new JakartaServletFileUpload(factory);
+            encoding = getRequestCharsetEncoding();
+            upload.setHeaderCharset(encoding);
             
             try
             {
@@ -136,7 +137,23 @@ public class FormData implements Serializable
         }
         return fields;
     }
- 
+
+    private Charset getRequestCharsetEncoding()
+    {
+        final String enc = req.getCharacterEncoding();
+        if (enc == null || enc.isBlank()) return null;
+
+        try
+        {
+            return Charset.forName(enc);
+        }
+        catch (UnsupportedCharsetException e)
+        {
+            logger.warn("Failed to obtain request encoding for `" + enc + "`.");
+            return null;
+        }
+    }
+
     /**
      * Cleanup all temporary resources used by this form data
      * 
@@ -252,7 +269,7 @@ public class FormData implements Serializable
                 }
                 return value;
             }
-            catch (UnsupportedEncodingException e)
+            catch (IOException e)
             {
                 throw new WebScriptsPlatformException("Unable to decode form field", e);
             }
@@ -320,7 +337,14 @@ public class FormData implements Serializable
         {
             if (getIsFile())
             {
-                file.delete();
+                try
+                {
+                    file.delete();
+                }
+                catch (IOException e)
+                {
+                    throw new WebScriptsPlatformException("Unable to cleanup form field", e);
+                }
             }
         }
     }

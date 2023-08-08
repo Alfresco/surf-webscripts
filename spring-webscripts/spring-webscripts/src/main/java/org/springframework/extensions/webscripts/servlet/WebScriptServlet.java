@@ -20,10 +20,10 @@ package org.springframework.extensions.webscripts.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,7 +59,7 @@ public class WebScriptServlet extends HttpServlet
     protected static ServerProperties serverProperties;
 
     /* (non-Javadoc)
-     * @see javax.servlet.GenericServlet#init()
+     * @see jakarta.servlet.GenericServlet#init()
      */
     @Override
     public void init() throws ServletException
@@ -98,7 +98,7 @@ public class WebScriptServlet extends HttpServlet
     }
 
     /* (non-Javadoc) 
-     * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see jakarta.servlet.http.HttpServlet#service(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)
      */
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {

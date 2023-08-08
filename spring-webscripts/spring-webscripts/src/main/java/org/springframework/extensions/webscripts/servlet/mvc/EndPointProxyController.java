@@ -18,15 +18,16 @@
 
 package org.springframework.extensions.webscripts.servlet.mvc;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -242,7 +243,7 @@ public class EndPointProxyController extends AbstractController
     }
     
     /* (non-Javadoc)
-     * @see org.alfresco.web.framework.mvc.AbstractController#createModelAndView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.alfresco.web.framework.mvc.AbstractController#createModelAndView(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)
      */
     public ModelAndView handleRequestInternal(HttpServletRequest req, HttpServletResponse res) throws Exception
     {
@@ -375,7 +376,7 @@ public class EndPointProxyController extends AbstractController
             }
             else
             {
-                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED,
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                         "No USER_ID found in session and requested endpoint requires authentication.");
                 
                 // no further processing as authentication is required but not provided
@@ -481,10 +482,10 @@ public class EndPointProxyController extends AbstractController
         return false;
     }
 
-    private void authorizedResponseStatus(HttpServletResponse res)
+    private void authorizedResponseStatus(HttpServletResponse res) throws IOException
     {
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED,
-                "No USER_ID found in session and requested endpoint requires authentication.");
         res.setHeader("WWW-Authenticate", "Basic realm=\"Alfresco\"");
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                "No USER_ID found in session and requested endpoint requires authentication.");
     }
 }

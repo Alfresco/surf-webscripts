@@ -42,8 +42,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -1285,7 +1285,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
             if (res != null)
             {
                 //return a Request Timeout error
-                res.setStatus(HttpServletResponse.SC_REQUEST_TIMEOUT, GENERIC_ERROR_MESSAGE);
+                res.sendError(HttpServletResponse.SC_REQUEST_TIMEOUT, GENERIC_ERROR_MESSAGE);
             }
             
             throw timeErr;
@@ -1300,7 +1300,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
             if (res != null)
             {
                 // return server error code
-                res.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE, GENERIC_ERROR_MESSAGE);
+                res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, GENERIC_ERROR_MESSAGE);
             }
             
             throw hostErr;
@@ -1314,7 +1314,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
             status.setMessage(GENERIC_ERROR_MESSAGE);
             if (res != null)
             {
-                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, GENERIC_ERROR_MESSAGE);
+                res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, GENERIC_ERROR_MESSAGE);
             }
             
             throw ioErr;
@@ -1328,7 +1328,7 @@ public class RemoteClient extends AbstractClient implements Cloneable
             status.setMessage(GENERIC_ERROR_MESSAGE);
             if (res != null)
             {
-                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, GENERIC_ERROR_MESSAGE);
+                res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, GENERIC_ERROR_MESSAGE);
             }
             return null;
         }

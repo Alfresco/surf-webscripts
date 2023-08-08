@@ -90,7 +90,7 @@ public class WebScriptStatus
     }
 
     /**
-     * @see javax.servlet.http.HttpServletResponse
+     * @see jakarta.servlet.http.HttpServletResponse
      * 
      * @param code  status code
      */

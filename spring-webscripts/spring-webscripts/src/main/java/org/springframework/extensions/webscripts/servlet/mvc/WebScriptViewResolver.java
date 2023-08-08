@@ -20,7 +20,7 @@ package org.springframework.extensions.webscripts.servlet.mvc;
 
 import java.util.Locale;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;

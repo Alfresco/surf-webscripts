@@ -30,7 +30,7 @@ public class TestRemoteClient extends TestCase
    public void testRemoteClient()
    {
       RemoteClient remote = new RemoteClient();
-      remote.setEndpoint("http://www.google.com");
+      remote.setEndpoint("https://google.com");
       
       // test GET
       Response res = remote.call("/");
