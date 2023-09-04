@@ -4,7 +4,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>alfresco-super-pom</artifactId>
-      <version>12</version>
+      <version>10</version>
    </parent>
    <groupId>org.alfresco.surf</groupId>
    <artifactId>spring-surf-webscripts-parent</artifactId>
@@ -122,11 +122,7 @@
 
    <properties>
       <spring.version>5.3.25</spring.version>
-      <java.version>17</java.version>
-      <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
-      <maven.compiler.source>${java.version}</maven.compiler.source>
-      <maven.compiler.target>${java.version}</maven.compiler.target>
-      <maven.compiler.release>${java.version}</maven.compiler.release>
+      <maven.build.sourceVersion>11</maven.build.sourceVersion>
    </properties>
 
    <build>
