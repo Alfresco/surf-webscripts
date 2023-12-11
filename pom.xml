@@ -90,7 +90,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20230227</version>
+            <version>20231013</version>
         </dependency>
         <dependency>
             <groupId>commons-digester</groupId>
@@ -121,7 +121,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>6.0.9</spring.version>
+      <spring.version>6.0.14</spring.version>
       <java.version>17</java.version>
       <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
       <maven.compiler.source>${java.version}</maven.compiler.source>
