@@ -121,6 +121,7 @@
   </dependencyManagement>
 
    <properties>
+      <!-- Changed spring version -->
       <spring.version>5.3.33</spring.version>
       <maven.build.sourceVersion>11</maven.build.sourceVersion>
    </properties>
