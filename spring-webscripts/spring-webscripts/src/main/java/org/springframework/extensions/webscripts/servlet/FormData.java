@@ -27,13 +27,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-
+import org.apache.commons.fileupload2.core.DiskFileItemFactory;
 import org.apache.commons.fileupload2.core.FileItem;
 import org.apache.commons.fileupload2.core.FileItemFactory;
 import org.apache.commons.fileupload2.core.FileUploadException;
-import org.apache.commons.fileupload2.core.DiskFileItemFactory;
+import org.apache.commons.fileupload2.jakarta.JakartaFileCleaner;
 import org.apache.commons.fileupload2.jakarta.JakartaServletFileUpload;
+import org.apache.commons.io.FileCleaningTracker;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,6 +41,8 @@ import org.springframework.extensions.surf.exception.WebScriptsPlatformException
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.surf.util.InputStreamContent;
 import org.springframework.extensions.webscripts.WebScriptException;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Form Data
@@ -109,7 +111,7 @@ public class FormData implements Serializable
         // NOTE: This class is not thread safe - it is expected to be constructed on each thread.
         if (fields == null)
         {
-            FileItemFactory factory = DiskFileItemFactory.builder().get();
+            FileItemFactory factory = getFileItemFactory();
             upload = new JakartaServletFileUpload(factory);
             encoding = getRequestCharsetEncoding();
             upload.setHeaderCharset(encoding);
@@ -136,6 +138,12 @@ public class FormData implements Serializable
             
         }
         return fields;
+    }
+
+    private FileItemFactory getFileItemFactory()
+    {
+        FileCleaningTracker fileCleaningTracker = JakartaFileCleaner.getFileCleaningTracker(req.getServletContext());
+        return DiskFileItemFactory.builder().setFileCleaningTracker(fileCleaningTracker).get();
     }
 
     private Charset getRequestCharsetEncoding()
