@@ -121,7 +121,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>6.0.18</spring.version>
+      <spring.version>6.0.19</spring.version>
       <java.version>17</java.version>
       <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
       <maven.compiler.source>${java.version}</maven.compiler.source>
