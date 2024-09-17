@@ -1,0 +1,6 @@
+<web-fragment>
+   <!-- Commons FileUpload2 Jakarta - Stops reaper thread started by org.apache.commons.io.FileCleaningTracker -->
+   <listener>
+      <listener-class>org.apache.commons.fileupload2.jakarta.JakartaFileCleaner</listener-class>
+   </listener>
+</web-fragment>
