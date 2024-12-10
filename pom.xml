@@ -42,7 +42,7 @@
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <version>4.12</version>
+         <version>4.13.1</version>
          <scope>test</scope>
       </dependency>
       <dependency>
@@ -121,7 +121,7 @@
   </dependencyManagement>
 
    <properties>
-      <spring.version>6.1.13</spring.version>
+      <spring.version>6.2.0</spring.version>
       <java.version>17</java.version>
       <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
       <maven.compiler.source>${java.version}</maven.compiler.source>
