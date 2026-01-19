@@ -609,7 +609,7 @@ public class XMLConfigService extends BaseConfigService implements XMLConfigCons
 
 		public PlaceholderResolvingStringValueResolver(Properties props, String placeholderPrefix, String placeholderSuffix, String valueSeparator, boolean ignoreUnresolvablePlaceholders) 
 		{
-			this.helper = new PropertyPlaceholderHelper(placeholderPrefix, placeholderSuffix, valueSeparator, ignoreUnresolvablePlaceholders);
+			this.helper = new PropertyPlaceholderHelper(placeholderPrefix, placeholderSuffix, valueSeparator, null, ignoreUnresolvablePlaceholders);
 			this.props = props;
 		}
 
