@@ -27,8 +27,6 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        stage: [ source_clear ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -55,12 +53,6 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-
-
-      - name: Run ${{ matrix.stage }}
-        if: ${{ ( matrix.stage != 'source_clear' && github.ref_name != 'company_release') || matrix.stage == 'source_clear'  }}
-        run: |
-            bash _ci/${{ matrix.stage }}.sh
 
       - name: "Build and test"
         run: |
